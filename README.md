@@ -1,7 +1,7 @@
 # D-D-5E-character-creator
 
 D&D Character creator
-Object-Oriented program, needing a parent “character” class.
+Object-Oriented program, needing a container “character” class.
 A way to store information for created characters.
 (or have them be re-created using a main function for simplicity)
 A way to create custom parts of each character
@@ -12,3 +12,31 @@ Too many to count races, we can start with PHB and branch from there
 Last function would be to have a “create a random character”
 Would need to also specify parameters, “do they want something completely random,
 or something that could function decently in the scope of the game”
+
+Implementation 1 Design: 
+1. Create a character sheet 
+2. Have a randomized generator function 
+3. Be able to create your own features 
+4. Save - will be modeled by a main function first 
+5. Create a pop up
+
+Character 
+	Race (subrace) - add a true/false flag for using specific racial bonuses (later)
+	Class (subclass) - LVL
+	Stats - basic stats generator. Or offer the generic stat (6 static numbers) OR the point buy system(research and ignore for now). 
+	Background
+	Items - dependent on background and class
+
+
+Race - 8 options 
+		those 8 options sometimes have 2-3 sub options. 
+
+Class - 13 options - 3->8 sub options. 
+
+
+Character holds Race and Class and Background
+
+	Race is the parent class (empty header), all other races are child classes - subraces are handled inside of the child classes
+	(same logic for class choice)
+
+	Background start with similar logic, adjust for alternate bonuses.

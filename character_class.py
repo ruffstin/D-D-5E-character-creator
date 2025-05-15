@@ -1,3 +1,5 @@
+#Beta design of a character class generator for D&D 5e
+
 import random
 
 #constants 
@@ -43,17 +45,15 @@ def create_random_character(viable=True):
     if viable:
         # Slightly boost key stats based on class
         key_stat = {
-            "Barbarian": "STR", "Fighter": "STR", "Paladin": "CHA",
-            "Rogue": "DEX", "Monk": "DEX", "Ranger": "DEX",
+            "Artificer": "INT", "Barbarian": "STR", "Fighter": "STR", 
+            "Paladin": "CHA", "Rogue": "DEX", "Monk": "DEX", "Ranger": "DEX",
             "Wizard": "INT", "Sorcerer": "CHA", "Warlock": "CHA",
-            "Cleric": "WIS", "Druid": "WIS", "Bard": "CHA",
-            "Artificer": "INT"
+            "Cleric": "WIS", "Druid": "WIS", "Bard": "CHA"
         }[char_class]
         stats[key_stat] = max(stats[key_stat], 14)
 
     return Character(name, race, char_class, background, stats)
 
-# Example main function
 def main():
     print("Creating a random viable character:\n")
     char = create_random_character(viable=True)
