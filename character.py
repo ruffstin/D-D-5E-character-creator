@@ -4,6 +4,13 @@
 # features include proficiencies, languages, and abilities
 
 STAT_NAMES = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
+ALL_SKILLS = [
+    "Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception",
+    "History", "Insight", "Intimidation", "Investigation", "Medicine",
+    "Nature", "Perception", "Performance", "Persuasion", "Religion",
+    "Sleight of Hand", "Stealth", "Survival"
+]
+
 from race.race import Race
 
 class Character:    
@@ -16,6 +23,8 @@ class Character:
         self.char_class = char_class 
         self.race = race
         self.background = background
+        self.skills: dict[str, bool]
+        self.skills = {skill: False for skill in ALL_SKILLS}
 
     def show_character(self):
         print(f"Name: {self.name}")
@@ -25,3 +34,7 @@ class Character:
         print("Stats:")
         for i, stat in enumerate(STAT_NAMES):
             print(f"  {stat}: {self.stats[i]}")
+        print("Skill Proficiencies:")
+        for skill, proficient in self.skills.items():
+            if proficient:
+                print(f"  - {skill}")
