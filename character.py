@@ -25,6 +25,20 @@ class Character:
         self.background = background
         self.skills: dict[str, bool]
         self.skills = {skill: False for skill in ALL_SKILLS}
+        self.items = []
+        #self.apply_background_features()
+
+    def apply_background_features(self):
+        if self.background:
+            # Apply skill proficiencies
+            for skill in self.background.get_skills():
+                self.skills[skill] = True
+
+            # Apply items
+            self.items.extend(self.background.get_items())
+
+    def is_proficient(self, skill: str) -> bool:
+        return self.skills.get(skill, False)
 
     def show_character(self):
         print(f"Name: {self.name}")

@@ -1,5 +1,20 @@
-# background/__init__.py
-#from .background import background
-#from .acolyte import Acolyte
-#from .charlatan import Charlatan
-#from .criminal import Criminal
+# race/__init__.py
+from .race import Race
+from .dwarf import Dwarf
+from .elf import Elf
+from .halfling import Halfling
+from .human import Human
+from .dragonborn import Dragonborn
+from .gnome import Gnome
+from .half_elf import Half_Elf
+from .half_orc import Half_Orc
+from .tiefling import Tiefling
+#from .gnoll import Gnoll
+#from .orc import Orc
+#from .bugbear import Bugbear
+#from .goliath import Goliath
+#from .tabaxi import Tabaxi
+#from .aasimar import Aasimar
+#from .firbolg import Firbolg
+#from .kenku import Kenku
+#from .kobold import Kobold

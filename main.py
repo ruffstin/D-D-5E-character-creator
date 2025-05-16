@@ -1,13 +1,5 @@
 from character import Character
-from race.elf import Elf
-from race.dwarf import Dwarf
-from race.halfling import Halfling
-from race.human import Human
-from race.dragonborn import Dragonborn 
-from race.gnome import Gnome
-from race.half_elf import Half_Elf
-from race.half_orc import Half_Orc
-from race.tiefling import Tiefling
+from race import Elf, Dwarf, Halfling, Human, Dragonborn, Gnome, Half_Elf, Half_Orc, Tiefling
 
 def main():
     base_stats = [15, 14, 13, 12, 10, 8] # Default stat spread for testing
@@ -15,7 +7,11 @@ def main():
     final_stats = my_race.apply_racial_bonuses(base_stats.copy())
 
     my_char = Character("Thalindra", final_stats, "Wizard", race = my_race, background = "Sage")
-    my_char.show_character()
+    #my_char.show_character()
+        
+        
+    my_char = Character("Thali", final_stats, "Fighter", race = my_race, background = "Soldier")
+
 
     my_race2 = Dwarf(subrace = "Mountain Dwarf")
     final_stats2 = my_race2.apply_racial_bonuses(base_stats.copy())
