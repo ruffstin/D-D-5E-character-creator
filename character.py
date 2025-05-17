@@ -12,9 +12,10 @@ ALL_SKILLS = [
 ]
 
 from race.race import Race
+from background.background import Background
 
 class Character:    
-    def __init__(self, name: str, stats: list[int], char_class: str, race: Race, background: str):
+    def __init__(self, name: str, stats: list[int], char_class: str, race: Race, background: Background):
         if len(stats) != 6:
             raise ValueError("Stats list must contain exactly 6 integers (STR, DEX, CON, INT, WIS, CHA)")
         
@@ -26,7 +27,7 @@ class Character:
         self.skills: dict[str, bool]
         self.skills = {skill: False for skill in ALL_SKILLS}
         self.items = []
-        #self.apply_background_features()
+        self.apply_background_features()
 
     def apply_background_features(self):
         if self.background:
@@ -52,3 +53,4 @@ class Character:
         for skill, proficient in self.skills.items():
             if proficient:
                 print(f"  - {skill}")
+        print() # for visual clarity
