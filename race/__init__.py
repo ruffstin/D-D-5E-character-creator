@@ -6,8 +6,8 @@ from .halfling import Halfling
 from .human import Human
 from .dragonborn import Dragonborn
 from .gnome import Gnome
-from .half_elf import Half_Elf
-from .half_orc import Half_Orc
+from .half_elf import HalfElf
+from .half_orc import HalfOrc
 from .tiefling import Tiefling
 #from .gnoll import Gnoll
 #from .orc import Orc
