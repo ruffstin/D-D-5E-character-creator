@@ -261,7 +261,7 @@ def main():
         try:
             stats_input = input("Enter 6 integers separated by spaces: ")
             stats = list(map(int, stats_input.strip().split()))
-            if len(stats) != 6:
+            if len(stats) != 6 or any(stat < 1 or stat > 18 for stat in stats):
                 raise ValueError
         except ValueError:
             print("Invalid input. Using default stats: 15 14 13 12 10 8")
@@ -279,7 +279,6 @@ def main():
         if another != "yes" and another != "y":
             creating_char = False
             print("=== Thank you for using the D&D 5E Character Creator! ===")
-    
 
 if __name__ == "__main__":
     main()
