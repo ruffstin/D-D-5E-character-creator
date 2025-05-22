@@ -10,3 +10,5 @@ class Criminal(Background):
             "Set of dark common clothes including a hood",
             "Belt pouch with 15 gp"
         ]
+        self.features = ["Criminal Specialty", "Criminal Contact"]
+        self.tools_proficient = {"One gaming set", "Thieves' tools"}

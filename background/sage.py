@@ -13,3 +13,5 @@ class Sage(Background):
             "A set of common clothes",
             "A belt pouch containing 10 gp"
         ]
+        self.features = ["Specialty", "Researcher"]
+        self.languages = {"Two of your choice"}

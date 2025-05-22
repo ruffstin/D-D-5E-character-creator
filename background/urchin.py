@@ -12,3 +12,5 @@ class Urchin(Background):
             "A set of common clothes",
             "A belt pouch containing 10 gp"
         ]
+        self.features = ["City Secrets"]
+        self.tools_proficient = {"Disguise kit", "Thieves' tools"}

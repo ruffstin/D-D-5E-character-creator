@@ -8,7 +8,8 @@ class Soldier(Background):
         self.items = [
             "Insignia of rank",
             "Trophy from a fallen enemy",
-            "Set of bone dice",
+            "Set of bone dice or a deck of playing cards",
             "Common clothes",
             "Belt pouch with 10 gp"
         ]
+        self.features = ["Specialty", "Military Rank"]

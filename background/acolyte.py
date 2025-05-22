@@ -13,3 +13,5 @@ class Acolyte(Background):
             "Common clothes",
             "Belt pouch with 15 gp"
         ]
+        self.features = ["Shelter of the Faithful"]
+        self.languages = {"Two of your choice"}

@@ -12,3 +12,6 @@ class Folk_Hero(Background):
             "A set of common clothes",
             "A belt pouch containing 10 gp"
         ]
+        self.features = ["Defining Event", "Rustic Hospitality"]
+        self.tools_proficient = {"One type of artisan's tools", "Vehicles (land)"}
+        

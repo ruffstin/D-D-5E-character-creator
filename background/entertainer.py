@@ -11,3 +11,5 @@ class Entertainer(Background):
             "a costume",
             "a belt pouch containing 15 gp"
         ]
+        self.features = ["Entertainer Routines", "By Popular Demand"]
+        self.tools_proficient = {"Disguise kit", "Musical instrument (one of your choice)"}

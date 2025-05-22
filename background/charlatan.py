@@ -11,3 +11,5 @@ class Charlatan(Background):
             "Tools of the con of your choice",
             "Belt pouch with 15 gp"
         ]
+        self.features = ["Favorite Schemes", "False Identity"]
+        self.tools_proficient = {"Disguise kit", "Forgery kit"}

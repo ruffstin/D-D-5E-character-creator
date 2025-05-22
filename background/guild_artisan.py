@@ -11,3 +11,6 @@ class Guild_Artisan(Background):
             "Traveler's clothes",
             "Belt pouch with 15 gp"
         ]
+        self.features = ["Guild Business", "Guild Membership"]
+        self.tools_proficient = {"One type of artisan's tools"}
+        self.languages = {"One of your choice"}

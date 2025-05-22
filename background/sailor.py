@@ -12,3 +12,5 @@ class Sailor(Background):
             "A set of common clothes",
             "A belt pouch containing 10 gp",
         ]
+        self.features = ["Ship's Passage"]
+        self.tools_proficient = {"Navigator's tools", "Vehicles (water)"}

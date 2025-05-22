@@ -11,4 +11,7 @@ class Noble(Background):
             "A scroll of pedigree",
             "A purse containing 25 gp"
         ]
+        self.features = ["Position of Privilege"]
+        self.languages = {"One of your choice"}
+        self.tools_proficient = {"One gaming set of your choice"}
 

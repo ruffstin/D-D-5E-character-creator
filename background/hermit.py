@@ -12,3 +12,6 @@ class Hermit(Background):
             "Herbalism kit",
             "Belt pouch with 5 gp"
         ]
+        self.features = ["Life of Seclusion", "Discovery"]
+        self.tools_proficient = {"Herbalism kit"}
+        self.langauges = {"One of your choice"}

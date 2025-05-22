@@ -12,4 +12,6 @@ class Outlander(Background):
             "A set of traveler's clothes",
             "A belt pouch containing 10 gp"
         ]
-
+        self.features = ["Origin", "Wanderer"]
+        self.tools_proficient = {"Musical instrument (one of your choice)"}
+        self.languages = {"One of your choice"}
