@@ -3,7 +3,7 @@ from .race import Race
 
 class Elf(Race):
     def __init__(self, subrace: str = "High Elf"):
-        super().__init__("Elf", subrace)
+        super().__init__("elf", subrace)
         if subrace not in ["High Elf", "Wood Elf", "Dark Elf", "Drow"]:
             raise ValueError("Invalid subrace. Choose from 'High Elf', 'Wood Elf', or 'Dark Elf' / 'Drow'.")
        
@@ -47,3 +47,4 @@ class Elf(Race):
             self.features.append("Sunlight Sensitivity")
 
         # else: no additional bonuses
+        

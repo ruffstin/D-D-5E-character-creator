@@ -38,7 +38,7 @@ class Character:
         #self.currency = {"gold": 0, "silver": 0, "copper": 0, "electrum": 0, "platinum": 0}
         self.items = []
         
-        self.features = []
+        self.features: list[str] =  []
         self.maxhp = 0
         self.currhp = 0
         #self.hit_die = {}  # implement hit dice
@@ -244,9 +244,9 @@ class Character:
 
     def show_character(self):
         self.print_essentials()
-        #self.print_skills_and_saves()
-        #self.print_items_tool_profs_lang() 
-        #self.print_features()
+        self.print_skills_and_saves()
+        self.print_items_tool_profs_lang() 
+        self.print_features()
         #self.print_appearance()
         #self.print_personality()
 

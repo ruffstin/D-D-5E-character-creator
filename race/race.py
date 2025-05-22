@@ -33,6 +33,9 @@ class Race:
 
     def get_skills(self) -> set[str]:
         return self.skills_proficient if hasattr(self, 'skills_proficient') else set()
+    
+    def level_up(level: int, features: list[str]):
+        return None
 
     def description(self) -> str:
         return self.subrace if self.subrace else self.name
