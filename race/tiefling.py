@@ -14,3 +14,11 @@ class Tiefling(Race):
         # All tieflings get +2 CHA and +1 to INT
         self.bonuses = {"CHA": 2, "INT": 1}
 
+    def level_up(self, level, features):
+        if level >= 3:
+            features.append("level 3 spell")
+            
+        if level >= 5: 
+            features.append("level 5 spell ")
+        
+        return features

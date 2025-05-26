@@ -8,7 +8,7 @@ class Rogue(CharClass):
         self.name = "Rogue"
         self.hit_die_value = 8
         self.proficient_saving_throws = ["DEX", "INT"]
-        # choose four
+        self.skills_known = 4
         self.skills_proficient = {"Acrobatics", "Athletics", "Deception", "Insight", 
                                   "Intimidation", "Investigation", "Perception", 
                                   "Performance", "Persuasion", "Sleight of Hand", 

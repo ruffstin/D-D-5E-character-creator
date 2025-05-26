@@ -16,6 +16,7 @@ class CharClass:
         self.hit_die_value = 0
         self.items = []
         self.features = []
+        self.skills_known = 2
         self.skills_proficient = set()
         self.proficient_saving_throws = []
         self.features = []

@@ -47,7 +47,7 @@ class Character:
         self.armor_class = 0
         self.inspiration = "none"
 
-        self.proficiency_bonus = Character.get_proficiency_bonus(self.level)
+        self.proficiency_bonus = 2
         self.skills_proficient: set[str] = set()
         self.skills_expert: set[str] = set()
         self.saving_throws_proficient: set[str] = set()
@@ -86,15 +86,16 @@ class Character:
         self.deathsaves = {"success": 0, "failure": 0}
         self.exhaustion = 0
         self.initiative = stats[1] // 2 - 5 # DEX mod, update with level up
+        self.level_up()
 
-    def get_proficiency_bonus(level: int) -> int:
-        if level < 5:
+    def get_proficiency_bonus(self) -> int:
+        if self.level < 5:
             return 2
-        elif level < 9:
+        elif self.level < 9:
             return 3
-        elif level < 13:
+        elif self.level < 13:
             return 4
-        elif level < 17:
+        elif self.level < 17:
             return 5
         else:
             return 6
@@ -132,9 +133,12 @@ class Character:
                 self.saving_throws_proficient.add(stat)
 
             # Apply skill proficiencies
-            for skill in self.char_class.skills_proficient:
-                self.skills_proficient.add(skill) # implement choices
+            self.choose_class_skills()
+                #self.skills_proficient.add(skill) # implement choices
                 # self.skills_expert.add(skill)  # for expertise note for later
+
+            self.maxhp = self.char_class.hit_die_value + ((self.stats[2] // 2) - 5)
+            self.currhp = self.maxhp
 
             # Apply features
             self.features.extend(self.char_class.get_features())
@@ -142,6 +146,37 @@ class Character:
             # Apply items
             self.items.extend(self.char_class.get_items())
     
+    def choose_class_skills(self):
+        available_skills = [
+            skill for skill in self.char_class.skills_proficient
+            if skill not in self.skills_proficient
+        ]
+
+        num_choices = self.char_class.skills_known
+
+        print(f"\nChoose {num_choices} skill proficiencies from your class.")
+        print("Available options:")
+        print(", ".join(available_skills))
+
+        chosen_skills = set()
+
+        while len(chosen_skills) < num_choices:
+            choice = input(f"Select skill {len(chosen_skills) + 1}/{num_choices}: ").strip().lower()
+            matching_skill = next(
+            (s for s in available_skills if s.lower() == choice), None
+            )
+            if not matching_skill:
+                print("Invalid choice. Please choose a valid skill from the list.")
+            
+            elif matching_skill in chosen_skills:
+                print("You already selected that skill. Choose a different one.")
+            else:
+                chosen_skills.add(matching_skill)
+                print(f"{matching_skill} added.")
+
+        self.skills_proficient.update(chosen_skills)
+
+
     def is_proficient(self, skill: str) -> bool:
         return skill in self.skills_proficient
 
@@ -179,22 +214,29 @@ class Character:
 
         return bonus
     
-    def level_up(self):
-        if self.level < 20:
-            self.level += 1
+    def level_up(self, next_level = 1):
+        if (next_level < 21):
+            while (self.level < next_level):           
+                self.level += 1
+                #print do you want to take the average hp or roll for it? 
+                #roll 
+                # or add the average, check from each class what the average is
             # Increase hit die, hit points
-            # self.char_class.level_up() # implement in char_class for class features
             # or in race for racial features
-            # update prof bonus
-
+        self.proficiency_bonus  = self.get_proficiency_bonus()
+        #self.char_class.level_up()
+        self.race.level_up(self.level, self.features)
         # with multi-classing, need to know which class to level up
+    
     def print_essentials (self):
         print(f"Name: {self.name}")
-        print(f"Class: {self.char_class.name} Level {self.level}") #implement adding subclass
+        print(f"Class: Level {self.level} {self.char_class.name} ") #implement adding subclass
         print(f"Race: {self.race.description()}")
         print(f"Background: {self.background}")
         #print(f"Alignment: {self.alignment}")
+        print(f"Proficiency Bonus: {self.proficiency_bonus}")
         print(f"Speed: {self.speed}")
+        print(f"Hit Points: {self.currhp}/{self.maxhp} (Temporary: {self.temphp})")
         print("Stats:")
         for i, stat in enumerate(STAT_NAMES):
             stat_value = self.stats[i]
@@ -244,11 +286,8 @@ class Character:
 
     def show_character(self):
         self.print_essentials()
-        self.print_skills_and_saves()
-        self.print_items_tool_profs_lang() 
-        self.print_features()
+        #self.print_skills_and_saves()
+        #self.print_items_tool_profs_lang() 
+        #self.print_features()
         #self.print_appearance()
         #self.print_personality()
-
-
-

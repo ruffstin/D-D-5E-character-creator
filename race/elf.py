@@ -47,4 +47,13 @@ class Elf(Race):
             self.features.append("Sunlight Sensitivity")
 
         # else: no additional bonuses
+    
+    def level_up(self, level, features):
+        if (self.subrace == "Drow" or self.subrace == "Dark Elf"):
+            if level >= 3:
+                features.append("level 3 spell")
+            
+            if level >= 5: 
+                features.append("level 5 spell ")
         
+        return features

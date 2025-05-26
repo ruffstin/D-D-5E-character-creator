@@ -8,7 +8,7 @@ class Ranger(CharClass):
         self.name = "Ranger"
         self.hit_die_value = 10
         self.proficient_saving_throws = ["STR", "DEX"]
-        # choose 3 
+        self.skills_known = 3
         self.skills_proficient = {"Animal Handling", "Athletics", "Insight", "Investigation", 
                                    "Nature", "Perception", "Stealth", "Survival"}
         # update for choices

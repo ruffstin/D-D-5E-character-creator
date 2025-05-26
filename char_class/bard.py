@@ -8,7 +8,7 @@ class Bard(CharClass):
         self.name = "Bard"
         self.hit_die_value = 8
         self.proficient_saving_throws = ["DEX", "CHA"]
-        # Choose any 3 skills to be proficient in
+        self.skills_known = 3
         self.skills_proficient = {"Acrobatics", "Animal Handling", "Arcana", "Athletics", 
                                   "Deception", "History", "Insight", "Intimidation", 
                                   "Investigation", "Medicine", "Nature", "Perception", 
