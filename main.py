@@ -78,7 +78,7 @@ def main():
                     
                 break
 
-            elif race_choice.lower() == "elf":
+            elif race_choice == "elf":
                 while True:
                     subrace = input("Choose a subrace (High Elf, Wood Elf, Dark Elf (Drow)): ").strip().lower()
                     
@@ -101,7 +101,7 @@ def main():
                         print("Invalid subrace. Please enter 'High Elf', 'Wood Elf', 'Dark Elf'(Drow)")
                 break
         
-            elif race_choice.lower() == "halfling":
+            elif race_choice == "halfling":
                 while True:
 
                     subrace = input("Choose a subrace (Lightfoot Halfling, Stout Halfling): ").strip().lower()
@@ -116,7 +116,6 @@ def main():
                     else:
                         print("Invalid subrace. Please enter 'Lightfoot Halfling' or 'Stout Halfling'.")
                 break
-
             
             elif race_choice == "human":
                 race = Human()
@@ -246,47 +245,54 @@ def main():
                 print("Unknown background selected. Please enter a valid background.") 
 
         print("Choose a method for stat generation: default / roll / point buy")
-        method = input("Method: ").strip().lower()
-        try:
-            stat_gen = StatGenerator(method)
-            stats = stat_gen.generate_stats()
-        except ValueError:
-            print("Invalid method selected. Using default stats.")
-            stat_gen = StatGenerator("default")
-            stats = stat_gen.generate_stats()
+        while True:
+            method = input("Method: ").strip().lower()
+            if method in ["default", "roll", "point buy", "d", "r", "pb"]: 
+                stat_gen = StatGenerator(method)
+                stats = stat_gen.generate_stats()
+                break
+            else: 
+                print("Invalid method. Please choose 'default', 'roll', or 'point buy'.")
         
         # Build character
         character = Character(name, stats, char_class, race, background)
         
         # Level up?
-        level = input("Are you level 1? ").strip().lower()
-        if level != "yes" and level != "y":
-            what_level = True
-            
-            while what_level:
-                try: 
+        while True:
+            level = input("Are you level 1? (yes/no) ").strip().lower()
+            if level == "yes" or level == "y":
+                 print("You are level 1. You can level up later once you get some exp!")
+                 break   
+            elif level == "no" or level == "n": 
+                what_level = True
+                while what_level:
+                    try: 
+                        level = int(input("What level are you? ").strip())       
+                        if (level > 20 or level < 1):
+                            print("That is not a valid level... try again? ")
+                        else: 
+                            character.level_up(level)
+                            print("You are now level", level)
+                            what_level = False
 
-                    level = int(input("What level are you? ").strip())       
-                    if (level > 20 or level < 1):
-                        print("That is not a valid level... try again? ")
-                
-                    else: 
-                        character.level_up(level)
-                        print("You are now level", level)
-                        what_level = False
-
-                except ValueError: 
-                    print("Please enter a valid integer between 1 and 20.")
-
+                    except ValueError: 
+                        print("Please enter a valid integer between 1 and 20.")
+                break
         # Display summary
         print("\n=== Character Summary ===")
         character.show_character()  # Assuming you’ve written this display method
 
         # Ask if the user wants to create another character
-        another = input("Do you want to create another character? (yes/no): ").strip().lower()
-        if another != "yes" and another != "y":
-            creating_char = False
-            print("=== Thank you for using the D&D 5E Character Creator! ===")
+        while True:
+            another = input("Do you want to create another character? (yes/no): ").strip().lower()
+            if another == "no" or another == "n":
+                creating_char = False
+                print("=== Thank you for using the D&D 5E Character Creator! ===")
+                break
+            
+            elif another == "yes" or another == "y":
+                print("=== Lets make a new character! ===")
+                break
 
 if __name__ == "__main__":
     main()

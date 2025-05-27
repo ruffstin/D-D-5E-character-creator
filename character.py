@@ -151,16 +151,14 @@ class Character:
             skill for skill in self.char_class.skills_proficient
             if skill not in self.skills_proficient
         ]
-
         num_choices = self.char_class.skills_known
 
         print(f"\nChoose {num_choices} skill proficiencies from your class.")
-        print("Available options:")
-        print(", ".join(available_skills))
-
         chosen_skills = set()
-
+        
         while len(chosen_skills) < num_choices:
+            print("Available options:")
+            print(", ".join(available_skills))
             choice = input(f"Select skill {len(chosen_skills) + 1}/{num_choices}: ").strip().lower()
             matching_skill = next(
             (s for s in available_skills if s.lower() == choice), None
@@ -170,8 +168,10 @@ class Character:
             
             elif matching_skill in chosen_skills:
                 print("You already selected that skill. Choose a different one.")
+            
             else:
                 chosen_skills.add(matching_skill)
+                available_skills.remove(matching_skill)
                 print(f"{matching_skill} added.")
 
         self.skills_proficient.update(chosen_skills)
@@ -226,6 +226,25 @@ class Character:
         self.proficiency_bonus  = self.get_proficiency_bonus()
         #self.char_class.level_up()
         self.race.level_up(self.level, self.features)
+
+        while True: 
+            choice =  input(f"Do you want to roll for your hit points or take the average? (roll/average): ").strip().lower()
+            if choice in ['roll', 'average', 'r', 'a', 'avg']:
+                break
+            print("Invalid input. Please enter 'roll' or 'average'.")
+
+        if choice in ['roll', 'r']:
+            import random
+            roll = random.randint(1, self.char_class.hit_die_value)
+            print(f"You rolled a {roll} for your hit points.")
+        
+        elif choice in ['average', 'a', 'avg']:
+            roll = (self.char_class.hit_die_value + 1) // 2
+            print(f"You take the average of {roll} for your hit points.")
+
+        self.maxhp += roll + ((self.stats[2] // 2) - 5)  # CON mod
+        self.currhp = self.maxhp
+            
         # with multi-classing, need to know which class to level up
     
     def print_essentials (self):

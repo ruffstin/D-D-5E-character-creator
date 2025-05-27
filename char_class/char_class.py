@@ -33,7 +33,7 @@ class CharClass:
     def get_features (self) -> list[str]:
         return self.features
     
-    def level_up(self):
+    def level_up(self, stats: list[int], hp, features) -> None:
         if self.level < 20:
             self.level += 1
             self.num_hit_die += 1
