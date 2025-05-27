@@ -36,6 +36,8 @@ class StatGenerator:
             self.stats = self.assign_stats(self.DEFAULT_STATS)
 
         elif self.method == "roll" or self.method == "r":
+            print("\n=== Rolling Stats ===")
+            print("Rolling 4d6 and dropping the lowest for each stat.")
             rolled = [self.roll_4d6_drop_lowest() for _ in range(6)]
             print(f"Rolled values: {rolled}")
             while True:
@@ -55,8 +57,6 @@ class StatGenerator:
         return self.stats
     
     def roll_4d6_drop_lowest(self):
-        print("\n=== Rolling Stats ===")
-        print("Rolling 4d6 and dropping the lowest for each stat.")
         rolls = [random.randint(1, 6) for _ in range(4)]
         return sum(sorted(rolls)[1:])
     

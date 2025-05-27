@@ -15,10 +15,10 @@ class Tiefling(Race):
         self.bonuses = {"CHA": 2, "INT": 1}
 
     def level_up(self, level, features):
-        if level >= 3:
+        if level >= 3 and "level 3 spell" not in features:
             features.append("level 3 spell")
             
-        if level >= 5: 
+        if level >= 5 and "level 5 spell" not in features: 
             features.append("level 5 spell ")
         
         return features

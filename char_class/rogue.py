@@ -2,7 +2,10 @@
 
 from .char_class import CharClass
 
+
 class Rogue(CharClass):
+    ABILITY_SCORE_IMPROVEMENT = {4, 8, 10, 12, 16, 19}
+
     def __init__(self, level: int = 1, subclass: str = None):
         super().__init__(level, subclass)
         self.name = "Rogue"

@@ -221,13 +221,10 @@ class Character:
                 self.level += 1
                 times_to_roll += 1
 
-                #print do you want to take the average hp or roll for it? 
-                #roll 
-                # or add the average, check from each class what the average is
-            # Increase hit die, hit points
-            # or in race for racial features
         self.proficiency_bonus  = self.get_proficiency_bonus()
-        #self.char_class.level_up()
+        char_hp = [self.maxhp]
+        self.char_class.level_up(self.level, self.stats, self.features, char_hp)
+        self.maxhp = char_hp[0]
         self.race.level_up(self.level, self.features)
 
         while times_to_roll > 0:
