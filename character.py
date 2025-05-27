@@ -215,9 +215,12 @@ class Character:
         return bonus
     
     def level_up(self, next_level = 1):
+        times_to_roll = 0
         if (next_level < 21):
             while (self.level < next_level):           
                 self.level += 1
+                times_to_roll += 1
+
                 #print do you want to take the average hp or roll for it? 
                 #roll 
                 # or add the average, check from each class what the average is
@@ -227,23 +230,24 @@ class Character:
         #self.char_class.level_up()
         self.race.level_up(self.level, self.features)
 
-        while True: 
-            choice =  input(f"Do you want to roll for your hit points or take the average? (roll/average): ").strip().lower()
-            if choice in ['roll', 'average', 'r', 'a', 'avg']:
-                break
-            print("Invalid input. Please enter 'roll' or 'average'.")
-
-        if choice in ['roll', 'r']:
-            import random
-            roll = random.randint(1, self.char_class.hit_die_value)
-            print(f"You rolled a {roll} for your hit points.")
+        while times_to_roll > 0:
+            while True: 
+                choice =  input(f"Do you want to roll for your hit points or take the average? (roll/average): ").strip().lower()
+                if choice in ['roll', 'average', 'r', 'a', 'avg']:
+                    break
+                print("Invalid input. Please enter 'roll' or 'average'.")
+            if choice in ['roll', 'r']:
+                import random
+                roll = random.randint(1, self.char_class.hit_die_value)
+                print(f"You rolled a {roll} for your hit points.")
         
-        elif choice in ['average', 'a', 'avg']:
-            roll = (self.char_class.hit_die_value + 1) // 2
-            print(f"You take the average of {roll} for your hit points.")
+            elif choice in ['average', 'a', 'avg']:
+                roll = (self.char_class.hit_die_value // 2) + 1
+                print(f"You take the average of {roll} for your hit points.")
 
-        self.maxhp += roll + ((self.stats[2] // 2) - 5)  # CON mod
-        self.currhp = self.maxhp
+            self.maxhp += roll + ((self.stats[2] // 2) - 5)  # CON mod
+            self.currhp = self.maxhp
+            times_to_roll -= 1
             
         # with multi-classing, need to know which class to level up
     
