@@ -14,6 +14,7 @@ ALL_SKILLS = [
 from race.race import Race
 from background.background import Background
 from char_class.char_class import CharClass
+from item import Item
 
 class Character:    
     def __init__(self, name: str, stats: list[int], char_class: CharClass, race: Race, 
@@ -23,8 +24,6 @@ class Character:
         if level < 1 or level > 20:
             raise ValueError("Level must be between 1 and 20")
         
-
-
         self.name = name
         self.stats = stats  # Should be in STR, DEX, CON, INT, WIS, CHA order
         self.alignment = "" # implement the 9 alignments
@@ -35,13 +34,14 @@ class Character:
         self.level = level
         self.exp = 0
 
-        #self.currency = {"gold": 0, "silver": 0, "copper": 0, "electrum": 0, "platinum": 0}
+        self.currency = {"gold": 0, "silver": 0, "copper": 0, "electrum": 0, "platinum": 0}
+        self.inventory = {} # {Item: quantity}
         self.items = []
         
         self.features: list[str] =  []
         self.maxhp = 0
         self.currhp = 0
-        #self.hit_die = {}  # implement hit dice
+        #self.hit_die = {}  # implement hit dice, die value: used? (boolean)
         self.temphp = 0
         self.speed = 0
         self.armor_class = 0
@@ -247,6 +247,18 @@ class Character:
             times_to_roll -= 1
             
         # with multi-classing, need to know which class to level up
+
+    def add_item(self, item: Item, quantity: int = 1):
+        if item in self.inventory:
+            self.inventory[item] += quantity
+        else:
+            self.inventory[item] = quantity
+
+    def remove_item(self, item: Item, quantity: int = 1):
+        if item in self.inventory:
+            self.inventory[item] -= quantity
+            if self.inventory[item] <= 0:
+                del self.inventory[item]
     
     def print_essentials (self):
         print(f"Name: {self.name}")

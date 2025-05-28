@@ -1,6 +1,9 @@
 # background.py
 
 # backgrounds provide skill proficiencies, items, and features
+
+from item import Item
+
 class Background:
     def __init__(self, name: str):
         self.name = name

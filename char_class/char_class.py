@@ -4,7 +4,7 @@
 # and will provide items
 
 STAT_NAMES = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
-
+from item import Item
 
 class CharClass:
     ABILITY_SCORE_IMPROVEMENT = {4, 8, 12, 16, 19}
@@ -140,8 +140,6 @@ class CharClass:
         new_con_mod = (stats[2] // 2) - 5
         if new_con_mod > old_con_mod:
             char_hp[0] += 1
-
-
 
     def description(self) -> str:
         if self.subclass:
