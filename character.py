@@ -36,7 +36,6 @@ class Character:
 
         self.currency = {"gold": 0, "silver": 0, "copper": 0, "electrum": 0, "platinum": 0}
         self.inventory = {} # {Item: quantity}
-        self.items = []
         
         self.features: list[str] =  []
         self.maxhp = 0
@@ -121,8 +120,13 @@ class Character:
             self.features.extend(self.background.get_features())
             
             # Apply items
-            self.items.extend(self.background.get_items())
-            
+            for item_name, (item, qty) in self.background.get_inventory().items():
+                if item_name in self.inventory:
+                    _, current_qty = self.inventory[item_name]
+                    self.inventory[item_name] = (item, current_qty + qty)
+                else:
+                    self.inventory[item_name] = (item, qty)
+            self.currency["gold"] += self.background.currency
             # Apply languages
             # Apply tool proficiencies
 
@@ -144,7 +148,12 @@ class Character:
             self.features.extend(self.char_class.get_features())
 
             # Apply items
-            self.items.extend(self.char_class.get_items())
+            for item_name, (item, qty) in self.char_class.get_items().items():
+                if item_name in self.inventory:
+                    _, current_qty = self.inventory[item_name]
+                    self.inventory[item_name] = (item, current_qty + qty)
+                else:
+                    self.inventory[item_name] = (item, qty)    
     
     def choose_class_skills(self):
         available_skills = [
@@ -249,16 +258,23 @@ class Character:
         # with multi-classing, need to know which class to level up
 
     def add_item(self, item: Item, quantity: int = 1):
-        if item in self.inventory:
-            self.inventory[item] += quantity
+        if item.name in self.inventory:
+            _, current_qty = self.inventory[item.name]
+            self.inventory[item.name] = (item, current_qty + quantity)
         else:
-            self.inventory[item] = quantity
+            self.inventory[item.name] = (item, quantity)
+    
+    def remove_item(self, item_name: str, quantity: int = 1):
+        if item_name in self.inventory:
+            item, current_qty = self.inventory[item_name]
+            new_qty = current_qty - quantity
+            if new_qty > 0: 
+                self.inventory[item_name] = (item, new_qty)
+            else: 
+                del self.inventory[item_name]
 
-    def remove_item(self, item: Item, quantity: int = 1):
-        if item in self.inventory:
-            self.inventory[item] -= quantity
-            if self.inventory[item] <= 0:
-                del self.inventory[item]
+    def get_item(self, item_name: str):
+        return self.inventory.get(item_name, (None, 0))
     
     def print_essentials (self):
         print(f"Name: {self.name}")
@@ -299,8 +315,12 @@ class Character:
 
     def print_items_tool_profs_lang(self):
         print("Equipment:")
-        for item in self.items:
-            print(f"  - {item}")
+        for item_name, (item, qty) in self.inventory.items():
+            print(f"  - {item.name} x{qty}")
+
+        print("Coins:")
+        for coin, amount in self.currency.items():
+            print(f"  {coin.capitalize()}: {amount}")
 
         print("Tool Proficiencies:")
         for tool in self.other_proficiencies:
@@ -319,7 +339,7 @@ class Character:
     def show_character(self):
         self.print_essentials()
         #self.print_skills_and_saves()
-        #self.print_items_tool_profs_lang() 
+        self.print_items_tool_profs_lang() 
         #self.print_features()
         #self.print_appearance()
         #self.print_personality()
