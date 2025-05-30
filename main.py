@@ -62,7 +62,7 @@ def main():
 
         # Race selection
         while True: 
-            race_choice = input("Choose a race (Dwarf Elf, Halfling, Human, Dragonborn, Gnome, Half Elf, Half Orc, or Tiefling): ").strip().lower()
+            race_choice = input("Choose a race (Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half Elf, Half Orc, or Tiefling): ").strip().lower()
             if race_choice == "dwarf":
                 while True:
                     subrace = input("Choose a subrace (Hill Dwarf, Mountain Dwarf): ").strip().lower()

@@ -11,6 +11,6 @@ class Criminal(Background):
             "Dark Common Clothes": (Item("Dark Common Clothes", "Set of dark common clothes including a hood."), 1),
             "Pouch": (Item("Pouch", "A small belt pouch for coins or trinkets."), 1)
         }
-        self.currency = 15  # 15 gold
+        self.currency = 15 
         self.features = ["Criminal Specialty", "Criminal Contact"]
         self.tools_proficient = {"One gaming set", "Thieves' tools"}

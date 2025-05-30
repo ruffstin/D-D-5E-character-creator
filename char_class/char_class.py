@@ -19,7 +19,7 @@ class CharClass:
         self.level = level
         self.num_hit_die = level
         self.hit_die_value = 0
-        self.items = []
+        self.inventory: dict[str, tuple[Item, int]] = {}
         self.features = []
         self.skills_known = 2
         self.skills_proficient = set()
@@ -29,8 +29,8 @@ class CharClass:
     def get_subclass(self) -> str:
         return self.subclass or "None"
         
-    def get_items(self) -> list[str]:
-        return self.items
+    def get_inventory(self) -> dict[str, tuple[Item, int]]:
+        return self.inventory
     
     def get_proficient_saving_throws(self) -> list[str]:
         return self.proficient_saving_throws
@@ -51,7 +51,7 @@ class CharClass:
     def ability_score_improve(self, stats: list[int], char_features, char_hp):
         old_con = stats[2]
         char_features.append(f"Ability Score Improvement lvl{self.level}")
-        print("Ability Score Improvement gained at level ", self.level)
+        print("Ability Score Improvement gained at level", self.level)
         
         while True: 
             choice = input("Would you like to improve 1 stat by 2 or 2 stats by 1? (Enter '1' for one stat or '2' for two stats): ").strip()

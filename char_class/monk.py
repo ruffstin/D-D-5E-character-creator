@@ -1,6 +1,6 @@
 # monk.py
- 
 from .char_class import CharClass
+from item import Item
 
 class Monk(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
@@ -12,7 +12,10 @@ class Monk(CharClass):
         self.skills_proficient = {"Acrobatics", "Athletics", "History", "Insight", 
                                   "Religion", "Stealth"}
         # tool proficiency
-        # update for choices
-        self.items = ["shortsword", "dart"] # ADD ALL ITEMS, 10 darts?!
+        # update for choices and all items
+        self.inventory = {
+            "Shortsword": (Item("Shorsword"), 1),
+            "Dart": (Item("Dart"), 10)
+        }
         self.features = ["Unarmored Defense", "Martial Arts", "Ki"] # implement leveling up for more features
 

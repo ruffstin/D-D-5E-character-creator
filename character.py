@@ -34,7 +34,7 @@ class Character:
         self.level = level
         self.exp = 0
 
-        self.currency = {"gold": 0, "silver": 0, "copper": 0, "electrum": 0, "platinum": 0}
+        self.currency = {"copper": 0, "silver": 0, "gold": 0, "electrum": 0, "platinum": 0}
         self.inventory = {} # {Item: quantity}
         
         self.features: list[str] =  []
@@ -148,7 +148,7 @@ class Character:
             self.features.extend(self.char_class.get_features())
 
             # Apply items
-            for item_name, (item, qty) in self.char_class.get_items().items():
+            for item_name, (item, qty) in self.char_class.get_inventory().items():
                 if item_name in self.inventory:
                     _, current_qty = self.inventory[item_name]
                     self.inventory[item_name] = (item, current_qty + qty)
@@ -238,7 +238,8 @@ class Character:
 
         while times_to_roll > 0:
             while True: 
-                choice =  input(f"Do you want to roll for your hit points or take the average? (roll/average): ").strip().lower()
+                level_for_this_roll = self.level - times_to_roll + 1
+                choice = input(f"Do you want to roll for your hit points or take the average for level {level_for_this_roll}? (roll/average): ").strip().lower()
                 if choice in ['roll', 'average', 'r', 'a', 'avg']:
                     break
                 print("Invalid input. Please enter 'roll' or 'average'.")

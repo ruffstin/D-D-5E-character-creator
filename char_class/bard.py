@@ -1,6 +1,6 @@
 # bard.py 
-
 from .char_class import CharClass
+from item import Item
 
 class Bard(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
@@ -14,6 +14,10 @@ class Bard(CharClass):
                                   "Investigation", "Medicine", "Nature", "Perception", 
                                   "Performance", "Persuasion", "Religion", 
                                   "Sleight of Hand", "Stealth", "Survival"}
-        # update for choices
-        self.items = ["rapier", "lute", "entertainer's pack"] # ADD ALL ITEMS
+        # update for choices and all items
+        self.inventory = {
+            "Rapier": (Item("Rapier"), 1),
+            "Lute": (Item("Lute", "A musical instrument."), 1),
+            "Entertainer's Pack": (Item("Entertainer's Pack", "A pack with performance gear."), 1)
+        }        
         self.features = ["Bardic Inspiration", "Spellcasting", "Jack of All Trades"] # implement leveling up for more features

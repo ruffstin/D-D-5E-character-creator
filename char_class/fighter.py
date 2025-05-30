@@ -1,7 +1,6 @@
 # fighter.py 
-
 from .char_class import CharClass
-
+from item import Item
 
 class Fighter(CharClass):
     ABILITY_SCORE_IMPROVEMENT = {4, 6, 8, 12, 14, 16, 19}
@@ -13,7 +12,11 @@ class Fighter(CharClass):
         self.proficient_saving_throws = ["STR", "CON"]
         self.skills_proficient = {"Athletics", "Acrobatics", "Animal Handling", "History", 
                                   "Insight", "Intimidation", "Perception", "Survival"}
-        # update for choices
-        self.items = ["chain mail", "shield", "longsword"] # ADD ALL ITEMS
+        # update for choices and add all items
+        self.inventory = {
+            "Chain Mail": (Item("Chain Mail"), 1),
+            "Shield": (Item("Shield"), 1),
+            "Longsword": (Item("Longsword"), 1)
+        }
         self.features = ["Second Wind", "Action Surge", "Fighting Style", "Extra Attack"] # implement leveling up for more features
 
