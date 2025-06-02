@@ -23,7 +23,11 @@ class Race:
         return updated_stats
     
     def get_languages(self) -> list[str]:
-        return self.languages if hasattr(self, 'languages') else []
+        """
+        Returns the list of languages in the order they were added.
+        Internal storage is a set; only use .add() to preserve order and uniqueness.
+        """
+        return list(self.languages)    
     
     def get_speed(self) -> int:
         return self.speed if hasattr(self, 'speed') else 0
@@ -39,4 +43,10 @@ class Race:
 
     def description(self) -> str:
         return self.subrace if self.subrace else self.name
+    
+def choose_languages(self, known_languages: set, n: int) -> set:
+    """
+    Default: No language choices. Override in subclasses that grant language choices.
+    """
+    return None
     

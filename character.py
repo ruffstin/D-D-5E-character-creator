@@ -15,6 +15,7 @@ from race.race import Race
 from background.background import Background
 from char_class.char_class import CharClass
 from item import Item
+from languages import LANGUAGES
 
 class Character:    
     def __init__(self, name: str, stats: list[int], char_class: CharClass, race: Race, 
@@ -53,6 +54,7 @@ class Character:
 
         self.other_proficiencies: set[str] = set() # tools and items
         self.languages: set[str] = set()
+        self.language_order = []
 
         self.personality_traits: set[str] = set()
         self.ideals: set[str] = set()
@@ -101,7 +103,8 @@ class Character:
     
     def apply_racial_features(self):
          if self.race:
-            self.languages.update(self.race.get_languages())
+            for lang in self.race.get_languages():
+                self.add_language(lang)
             self.speed = self.race.get_speed()
             self.features.extend(self.race.get_features())
             for skill in self.race.get_skills():
@@ -128,6 +131,15 @@ class Character:
                     self.inventory[item_name] = (item, qty)
             self.currency["gold"] += self.background.currency
             # Apply languages
+            if hasattr(self.background, "choose_languages"):
+                chosen = self.background.choose_languages(self.languages, 2)  # 2 for Acolyte, or use a property
+                if chosen:
+                    for lang in chosen:
+                        self.add_language(lang)
+            # If the background has automatic languages, add them as well
+            if hasattr(self.background, "get_languages"):
+                for lang in self.background.get_languages():
+                    self.add_language(lang)
             # Apply tool proficiencies
 
     def apply_class_features(self):
@@ -277,6 +289,11 @@ class Character:
     def get_item(self, item_name: str):
         return self.inventory.get(item_name, (None, 0))
     
+    def add_language(self, lang):
+        if lang not in self.languages:
+            self.languages.add(lang)
+            self.language_order.append(lang)
+    
     def print_essentials (self):
         print(f"Name: {self.name}")
         print(f"Class: Level {self.level} {self.char_class.name} ") #implement adding subclass
@@ -328,8 +345,9 @@ class Character:
             print(f"  - {tool}")
         
         print("Languages:")
-        for lang in self.languages:
-            print(f"  - {lang}")
+        for lang_name in self.language_order:
+            lang_obj = LANGUAGES[lang_name]
+            print(f"{lang_obj.name}, script: {lang_obj.script}")
     
     def print_features(self):
         print("Features:")

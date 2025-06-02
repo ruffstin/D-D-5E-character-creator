@@ -29,6 +29,12 @@ class Background:
     def get_tools_proficient(self) -> list[str]:
         return self.tools_proficient if hasattr(self, 'tools_proficient') else []
 
+    def choose_languages(self, known_languages: set, n: int) -> set:
+        """
+        Default: No language choices. Override in subclasses that grant language choices.
+        """
+        return None
+
     def __str__(self):
         return self.name
     

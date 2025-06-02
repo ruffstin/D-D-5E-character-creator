@@ -140,6 +140,12 @@ class CharClass:
         new_con_mod = (stats[2] // 2) - 5
         if new_con_mod > old_con_mod:
             char_hp[0] += 1
+    
+    def choose_languages(self, known_languages: set, n: int) -> set:
+        """
+        Default: No language choices. Override in subclasses that grant language choices.
+        """
+        return None
 
     def description(self) -> str:
         if self.subclass:

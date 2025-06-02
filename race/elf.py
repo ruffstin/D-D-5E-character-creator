@@ -1,5 +1,6 @@
 # elf.py
 from .race import Race
+from languages import LANGUAGES
 
 class Elf(Race):
     def __init__(self, subrace: str = "High Elf"):
@@ -23,7 +24,10 @@ class Elf(Race):
             # they can cast this spell using INT as the spellcasting ability
             self.features.append("Elf Weapon Training")
             self.other_proficiencies.update({"longsword", "shortsword", "shortbow", "longbow"})
-            self.languages.append("one extra language of your choice")
+            extra_lang = self.choose_languages(set(self.languages), 1)
+            if extra_lang:
+                for lang in extra_lang:
+                    self.languages.append(lang)
 
         elif self.subrace == "Wood Elf":
             self.bonuses["WIS"] = 1
@@ -57,3 +61,30 @@ class Elf(Race):
                 features.append("level 5 spell ")
         
         return features
+    
+    def choose_languages(self, known_languages: set, n: int) -> set:
+        # Filter out already known and secret languages        
+        chosen = set()
+        current_known = set(known_languages)
+        while len(chosen) < n:
+            available = [name for name, lang in LANGUAGES.items()
+                if lang.lang_type != "secret" and name not in current_known]
+            standard = [name for name in available if LANGUAGES[name].lang_type == "standard"]
+            exotic = [name for name in available if LANGUAGES[name].lang_type == "exotic"]
+            print("\nChoose a language you do not already know:")
+            print("Standard Languages:")
+            for i, lang in enumerate(standard):
+                print(f"  {i+1}. {lang}")
+            print("Exotic Languages:")
+            for i, lang in enumerate(exotic):
+                print(f"  {i+1+len(standard)}. {lang}")
+
+            choice = input(f"Enter the name of language {len(chosen)+1}/{n}: ").strip()
+            # Find a matching language in available, case-insensitive
+            matching_lang = next((lang for lang in available if lang.lower() == choice.lower()), None)
+            if matching_lang and matching_lang not in chosen:
+                chosen.add(matching_lang)
+                current_known.add(matching_lang)
+            else:
+                print("Invalid or duplicate choice. Please try again.")
+        return chosen
