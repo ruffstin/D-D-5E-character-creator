@@ -15,4 +15,4 @@ class Guild_Artisan(Background):
         self.currency = 15
         self.features = ["Guild Business", "Guild Membership"]
         self.tools_proficient = {"One type of artisan's tools"}
-        self.languages = {"One of your choice"}
+        self.num_languages = 1

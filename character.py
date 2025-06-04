@@ -131,8 +131,8 @@ class Character:
                     self.inventory[item_name] = (item, qty)
             self.currency["gold"] += self.background.currency
             # Apply languages
-            if hasattr(self.background, "choose_languages"):
-                chosen = self.background.choose_languages(self.languages, 2) # adjusted for how many languages learned
+            if (self.background.get_num_lang() > 0):
+                chosen = self.background.choose_languages(self.languages, self.background.get_num_lang())
                 if chosen:
                     for lang in chosen:
                         self.add_language(lang)

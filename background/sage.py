@@ -16,4 +16,4 @@ class Sage(Background):
         }
         self.currency = 10
         self.features = ["Specialty", "Researcher"]
-        self.languages = {"Two of your choice"}
+        self.num_languages = 2
