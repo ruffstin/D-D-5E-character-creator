@@ -17,4 +17,3 @@ class Cleric(CharClass):
             "Holy Symbol": (Item("Holy Symbol", "A source for holy magic and prayer"), 1),
         }
         self.features = ["Spellcasting", "Channel Divinity", "Destroy Undead"] # implement leveling up for more features
-        

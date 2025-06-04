@@ -11,7 +11,6 @@ class Elf(Race):
         self.features = ["Darkvision", "Keen Senses", "Fey Ancestry", "Trance"]
         self.skills_proficient = {"Perception"}
         self.languages = ["Common", "Elvish"]
-        self.size = "Medium"
         self.set_bonuses()
     
     def set_bonuses(self):
@@ -62,9 +61,9 @@ class Elf(Race):
         
         return features
     
-    def choose_languages(self, known_languages: set, n: int) -> set:
+    def choose_languages(self, known_languages: set, n: int) -> list:
         # Filter out already known and secret languages        
-        chosen = set()
+        chosen = []
         current_known = set(known_languages)
         while len(chosen) < n:
             available = [name for name, lang in LANGUAGES.items()
@@ -79,12 +78,18 @@ class Elf(Race):
             for i, lang in enumerate(exotic):
                 print(f"  {i+1+len(standard)}. {lang}")
 
-            choice = input(f"Enter the name of language {len(chosen)+1}/{n}: ").strip()
-            # Find a matching language in available, case-insensitive
-            matching_lang = next((lang for lang in available if lang.lower() == choice.lower()), None)
-            if matching_lang and matching_lang not in chosen:
-                chosen.add(matching_lang)
-                current_known.add(matching_lang)
+            all_options = standard + exotic
+            choice = input(f"Enter the name or number of language {len(chosen)+1}/{n}: ").strip()
+            selected_lang = None
+            if choice.isdigit():
+                idx = int(choice) - 1
+                if 0 <= idx < len(all_options):
+                    selected_lang = all_options[idx]
+            else:
+                selected_lang = next((lang for lang in available if lang.lower() == choice.lower()), None)
+            if selected_lang and selected_lang not in chosen:
+                chosen.append(selected_lang)
+                current_known.add(selected_lang)
             else:
                 print("Invalid or duplicate choice. Please try again.")
         return chosen

@@ -6,8 +6,8 @@ class Dwarf(Race):
         super().__init__("Dwarf", subrace)
         self.set_bonuses()
         self.speed = 25
-        self.features = {"Darkvision", "Dwarven Resilience", "Dwarven Combat Training", "Stonecunning"}
-        self.languages = {"Common", "Dwarvish"}
+        self.features = ["Darkvision", "Dwarven Resilience", "Dwarven Combat Training", "Stonecunning"]
+        self.languages = ["Common", "Dwarvish"]
         self.other_proficiencies = {"Battleaxe", "Handaxe", "Light hammer", "Warhammer", 
                                     "Pick one of Smith's tools, Brewer's supplies, or Mason's tools"}
     

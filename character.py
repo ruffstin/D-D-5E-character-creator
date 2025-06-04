@@ -115,8 +115,8 @@ class Character:
     def apply_background_features(self):
         if self.background:
             # Apply skill proficiencies
-            for skill in self.background.get_skills():
-                self.skills_proficient.add(skill)
+            bg_skills = self._choose_skills_with_overlap(self.background.get_skills(), n=2)
+            self.skills_proficient.update(bg_skills)
                 # self.skills_expert.add(skill)  # for expertise note for later
             
             # Apply features
@@ -132,7 +132,7 @@ class Character:
             self.currency["gold"] += self.background.currency
             # Apply languages
             if hasattr(self.background, "choose_languages"):
-                chosen = self.background.choose_languages(self.languages, 2)  # 2 for Acolyte, or use a property
+                chosen = self.background.choose_languages(self.languages, 2) # adjusted for how many languages learned
                 if chosen:
                     for lang in chosen:
                         self.add_language(lang)
@@ -168,35 +168,37 @@ class Character:
                     self.inventory[item_name] = (item, qty)    
     
     def choose_class_skills(self):
-        available_skills = [
-            skill for skill in self.char_class.skills_proficient
-            if skill not in self.skills_proficient
-        ]
-        num_choices = self.char_class.skills_known
+        class_skills = self._choose_skills_with_overlap(
+        self.char_class.skills_proficient, self.char_class.skills_known
+        )
+        for skill in class_skills:
+            self.skills_proficient.add(skill)
 
-        print(f"\nChoose {num_choices} skill proficiencies from your class.")
-        chosen_skills = set()
-        
-        while len(chosen_skills) < num_choices:
-            print("Available options:")
-            print(", ".join(available_skills))
-            choice = input(f"Select skill {len(chosen_skills) + 1}/{num_choices}: ").strip().lower()
-            matching_skill = next(
-            (s for s in available_skills if s.lower() == choice), None
-            )
-            if not matching_skill:
-                print("Invalid choice. Please choose a valid skill from the list.")
-            
-            elif matching_skill in chosen_skills:
-                print("You already selected that skill. Choose a different one.")
-            
+    def _choose_skills_with_overlap(self, fixed_skills: set, n: int) -> set:
+        """
+        Handles overlap and fallback for skill selection.
+        - fixed_skills: the set of skills granted (e.g., by background or class)
+        - n: number of proficiencies to grant
+        Returns a set of n skills, none of which are already proficient.
+        """
+        chosen = set()
+        already_proficient = set(self.skills_proficient)
+        # Add as many fixed skills as possible
+        for skill in fixed_skills:
+            if skill not in already_proficient and len(chosen) < n:
+                chosen.add(skill)
+                already_proficient.add(skill)
+        # If not enough, prompt for replacements from all unproficient skills
+        while len(chosen) < n:
+            available = [s for s in ALL_SKILLS if s not in already_proficient and s not in chosen]
+            print("Available skills:", ", ".join(available))
+            choice = input(f"Choose skill {len(chosen)+1}/{n}: ").strip().title()
+            if choice in available:
+                chosen.add(choice)
+                already_proficient.add(choice)
             else:
-                chosen_skills.add(matching_skill)
-                available_skills.remove(matching_skill)
-                print(f"{matching_skill} added.")
-
-        self.skills_proficient.update(chosen_skills)
-
+                print("Invalid or duplicate choice. Please try again.")
+        return chosen
 
     def is_proficient(self, skill: str) -> bool:
         return skill in self.skills_proficient
@@ -357,8 +359,7 @@ class Character:
 
     def show_character(self):
         self.print_essentials()
-        #self.print_skills_and_saves()
+        self.print_skills_and_saves()
         self.print_items_tool_profs_lang() 
         #self.print_features()
         #self.print_appearance()
-        #self.print_personality()
