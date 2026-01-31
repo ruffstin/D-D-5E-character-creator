@@ -202,8 +202,8 @@ def main():
             "wizard": Wizard
         }
 
-        while True: 
-            class_choice = input("Choose a class (Artificer, Barbarian, Bard, Cleric, Druid, " \
+        while True: #removed artificer from choices for now
+            class_choice = input("Choose a class (Barbarian, Bard, Cleric, Druid, " \
             "Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, Wizard): ").strip().lower()
 
             if class_choice in class_map:

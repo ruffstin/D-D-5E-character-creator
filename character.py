@@ -2,7 +2,7 @@
 # a character has a race, class, background, stats, features, skills/saving throws, 
 # and inventory
 # features include proficiencies, languages, and abilities
-
+ 
 STAT_NAMES = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
 ALL_SKILLS = [
     "Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception",
@@ -136,10 +136,10 @@ class Character:
                 if chosen:
                     for lang in chosen:
                         self.add_language(lang)
+            
             # If the background has automatic languages, add them as well
-            if hasattr(self.background, "get_languages"):
-                for lang in self.background.get_languages():
-                    self.add_language(lang)
+            for lang in self.background.get_languages():
+                self.add_language(lang)
             # Apply tool proficiencies
 
     def apply_class_features(self):
@@ -158,6 +158,9 @@ class Character:
 
             # Apply features
             self.features.extend(self.char_class.get_features())
+            
+            for lang in self.char_class.get_languages():
+                self.add_language(lang)
 
             # Apply items
             for item_name, (item, qty) in self.char_class.get_inventory().items():
@@ -359,7 +362,7 @@ class Character:
 
     def show_character(self):
         self.print_essentials()
-        self.print_skills_and_saves()
+        #self.print_skills_and_saves()
         self.print_items_tool_profs_lang() 
-        #self.print_features()
+        self.print_features()
         #self.print_appearance()

@@ -11,7 +11,7 @@ class Halfling(Race):
         self.languages = ["Common", "Halfling"]
     
     def set_bonuses(self):
-        # All elves get +2 DEX
+        # All halflings get +2 DEX
         self.bonuses = {"DEX": 2}
         if self.subrace == "Lightfoot Halfling":
             self.bonuses["CHA"] = 1

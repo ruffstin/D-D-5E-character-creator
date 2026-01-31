@@ -12,7 +12,7 @@ class Dwarf(Race):
                                     "Pick one of Smith's tools, Brewer's supplies, or Mason's tools"}
     
     def set_bonuses(self):
-        # All elves get +2 CON
+        # All dwarves get +2 CON
         self.bonuses = {"CON": 2}
 
         if self.subrace == "Hill Dwarf":

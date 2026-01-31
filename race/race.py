@@ -48,5 +48,5 @@ def choose_languages(self, known_languages: set, n: int) -> set:
     """
     Default: No language choices. Override in subclasses that grant language choices.
     """
-    return None
+    return set()
     

@@ -16,6 +16,7 @@ class CharClass:
             raise ValueError("Level must be at most 20")
         self.name = "char_class"
         self.subclass = subclass
+        self.subclass_options = {}
         self.level = level
         self.num_hit_die = level
         self.hit_die_value = 0
@@ -28,7 +29,10 @@ class CharClass:
 
     def get_subclass(self) -> str:
         return self.subclass or "None"
-        
+    
+    def get_languages(self):
+        return []
+
     def get_inventory(self) -> dict[str, tuple[Item, int]]:
         return self.inventory
     
@@ -38,7 +42,7 @@ class CharClass:
     def get_features (self) -> list[str]:
         return self.features
     
-    def level_up(self, current_level, stats: list[int], char_features, char_hp) -> None:
+    def level_up(self, current_level, stats: list[int], char_features: list[str], char_hp) -> None:
         while self.level < current_level:
             if self.level < 20:
                 self.level += 1
@@ -50,7 +54,7 @@ class CharClass:
                 
     def ability_score_improve(self, stats: list[int], char_features, char_hp):
         old_con = stats[2]
-        char_features.append(f"Ability Score Improvement lvl{self.level}")
+        char_features.append(f"Ability Score Improvement lvl {self.level}")
         print("Ability Score Improvement gained at level", self.level)
         
         while True: 

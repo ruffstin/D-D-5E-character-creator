@@ -36,7 +36,7 @@ class Background:
         return self.features if hasattr(self, 'features') else []
     
     def get_languages(self) -> list[str]: 
-        return self.languages if hasattr(self, 'languages') else []
+        return self.languages
     
     def get_tools_proficient(self) -> list[str]:
         return self.tools_proficient if hasattr(self, 'tools_proficient') else []
@@ -70,8 +70,6 @@ class Background:
             else:
                 print("Invalid or duplicate choice. Please try again.")
         return chosen
-
-
 
     def choose_skills(self, known_skills: set, n: int) -> list:
         available = [s for s in ALL_SKILLS if s not in known_skills]
