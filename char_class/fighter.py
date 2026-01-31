@@ -23,6 +23,7 @@ class Fighter(CharClass):
 
         # Apply level 1 features
         self.features = ["Fighting Style", "Second Wind"] # implement choices for fighting style
+        self.martial_archetype_features = {}
 
     def level_up(self, current_level, stats: list[int], char_features: list[str], char_hp) -> None:
         while self.level < current_level:
@@ -63,3 +64,12 @@ class Fighter(CharClass):
                         char_features.append("Indomitable")
                         # implement number of uses based on level
 
+                # if self.level in {} call martial_archetype feature
+
+        # def pick martial_archetype function 
+            
+        # def martial_archetype feature function    
+            #self.martial_archetype_features.append
+            # char_features.append
+
+            #which if statement will depend on sublcass chosen

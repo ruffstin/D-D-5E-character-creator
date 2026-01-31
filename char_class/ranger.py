@@ -18,7 +18,9 @@ class Ranger(CharClass):
             "Shortsword": (Item("Shortsword"), 1),
             "Longbow": (Item("Longbow"), 1),
         }
-        self.features = ["Favored Enemy", "Natural Explorer"] # implement leveling up for more features
+
+        # Apply level 1 features
+        self.features = ["Favored Enemy", "Natural Explorer"] 
         self.language = "" # set language based off favored enemy
         self.enclave_features = {}
 

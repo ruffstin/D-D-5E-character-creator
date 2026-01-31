@@ -2,8 +2,8 @@
 
 from .char_class import CharClass
 from item import Item
-RAGE_DAMAGE = [0, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-RAGE_USES = ["0", "2", "2", "3", "3", "3", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "Unlimited", "Unlimited"]
+RAGE_DAMAGE = [0, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4]
+RAGE_USES = ["0", "2", "2", "3", "3", "3", "4", "4", "4", "4", "4", "4", "5", "5", "5", "5", "5", "6", "6", "6", "Unlimited"]
 
 class Barbarian(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
