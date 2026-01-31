@@ -35,7 +35,7 @@ class Rogue(CharClass):
         # def set expertise, 2 skills your proficient in, or 1 and thieves tools
 
     def get_sneak_attack(self, level):    
-        return SNEAK_ATTACK_DICE[level]
+        return SNEAK_ATTACK_DICE[level] #d6 implement more clear return?
         
     def get_languages(self):
         return self.secret_languages

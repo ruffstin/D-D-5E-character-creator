@@ -21,7 +21,7 @@ class Druid(CharClass):
         }
 
         # Apply level 1 features
-        self.features = ["Druidic", "Spellcasting"] # implement leveling up for more features
+        self.features = ["Druidic", "Spellcasting"] 
         self.secret_languages = ["Druidic"]
         self.circle_features = {}
 
@@ -40,6 +40,7 @@ class Druid(CharClass):
                     if "Wild Shape" not in self.features:
                         self.features.append("Wild Shape")
                         char_features.append("Wild Shape")
+                        #implement wild shapes uses
                 
                     if "Druid Circle" not in self.features: 
                         self.features.append("Druid Circle")

@@ -2,6 +2,8 @@
 
 from .char_class import CharClass
 from item import Item
+RAGE_DAMAGE = [0, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+RAGE_USES = ["0", "2", "2", "3", "3", "3", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "Unlimited", "Unlimited"]
 
 class Barbarian(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
@@ -21,9 +23,16 @@ class Barbarian(CharClass):
         }
 
         # Apply level 1 features
-        self.features = ["Rage", "Unarmored Defense", "Danger Sense"] # implement leveling up for more features
+        self.features = ["Rage", "Unarmored Defense"]
         self.primal_path_features = {}
-
+    
+    # make our getters visable to character sheet
+    def get_rage_damage(self, level):
+        return RAGE_DAMAGE[level]
+    
+    def get_rage_uses(self, level):
+        return RAGE_USES[level]
+    
     def level_up(self, current_level, stats: list[int], char_features: list[str], char_hp) -> None:
         while self.level < current_level:
             if self.level < 20:
@@ -76,10 +85,16 @@ class Barbarian(CharClass):
                         self.features.append("Persistent Rage")
                         char_features.append("Persistent Rage")
 
+                if self.level == 18:
+                    if "Indomitable Might" not in self.features:
+                        self.features.append("Indomitable Might")
+                        char_features.append("Indomitable Might")
+
                 if self.level == 20:
                     if "Primal Champion" not in self.features:
                         self.features.append("Primal Champion")
                         char_features.append("Primal Champion")
+                        # pass in stats to increase STR and CON by 4 each, max 24
                 
                 # if self.level in {} call path feature
 

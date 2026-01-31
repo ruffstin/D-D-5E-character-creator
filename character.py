@@ -362,7 +362,7 @@ class Character:
 
     def show_character(self):
         self.print_essentials()
-        #self.print_skills_and_saves()
+        self.print_skills_and_saves()
         self.print_items_tool_profs_lang() 
         self.print_features()
         #self.print_appearance()
