@@ -14,8 +14,8 @@ class Druid(CharClass):
         # tool proficiencies herbalism kit
         # update for choices and all items
         self.inventory = {
-            "Leather Armor": (Item("Leather Armor"), 1),
-            "Shield": (Item("Shield"), 1),
+            "Leather Armor": (Item("Leather Armor", armor_type="light"), 1),
+            "Shield": (Item("Shield", armor_type="shield"), 1),
             "Scimitar": (Item("Scimitar"), 1),
             "Druidic Focus": (Item("Druidic Focus", "A focus for druidic spells."), 1)
         }

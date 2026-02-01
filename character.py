@@ -308,11 +308,15 @@ class Character:
         print(f"Proficiency Bonus: {self.proficiency_bonus}")
         print(f"Speed: {self.speed}")
         print(f"Hit Points: {self.currhp}/{self.maxhp} (Temporary: {self.temphp})")
+        print(f"Hit Die: {self.level}d{self.char_class.hit_die_value} ")
+        print()
+
         print("Stats:")
         for i, stat in enumerate(STAT_NAMES):
             stat_value = self.stats[i]
             stat_bonus = (stat_value // 2) - 5
             print(f"  {stat}: {stat_value:2} ({stat_bonus:+2})")
+        print()
 
     def print_skills_and_saves(self):
         print("Saving Throws:") # Edit to show full name of stat
@@ -324,6 +328,7 @@ class Character:
             else:
                 print(f"  {stat:<16}: {bonus:+2}")
 
+        print()
         print("Skills:")
         for skill in ALL_SKILLS:
             bonus = self.get_skill_bonus(skill)
@@ -334,26 +339,32 @@ class Character:
             else:
                 suffix = ""
             print(f"  {skill:<16}: {bonus:+2}{suffix}")
-        #print(f" (* = Proficient, ** = Expertise)")
+        print()
+        print(f" (* = Proficient, ** = Expertise)")
+        print()
 
     def print_items_tool_profs_lang(self):
         print("Equipment:")
         for item_name, (item, qty) in self.inventory.items():
             print(f"  - {item.name} x{qty}")
+        print()
 
         print("Coins:")
         for coin, amount in self.currency.items():
             print(f"  {coin.capitalize()}: {amount}")
-
+        print()
+        
         print("Tool Proficiencies:")
         for tool in self.other_proficiencies:
             print(f"  - {tool}")
-        
+        print()
+
         print("Languages:")
         for lang_name in self.language_order:
             lang_obj = LANGUAGES[lang_name]
             print(f"{lang_obj.name}, script: {lang_obj.script}")
-    
+        print()
+
     def print_features(self):
         print("Features:")
         for feature in self.features:

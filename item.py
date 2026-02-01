@@ -8,7 +8,7 @@
 
 class Item: 
     def __init__(self, name: str, description: str = "", weight: float = 0.0, cost: int = 0, currency: str = "gp",
-                 is_weapon: bool = False, weapon_type: str = None, properties: list[str] = None, 
+                 is_weapon: bool = False, weapon_type: str = None, properties: list[str] = None, armor_type = None,
                  is_magical: bool = False, rarity: str = None, magic_type: str = None):
         
         self.name = name
@@ -19,14 +19,18 @@ class Item:
         self.is_weapon = is_weapon
         self.weapon_type = weapon_type  # e.g., 'simple melee', 'martial ranged'
         self.properties = properties or []  # e.g., ['light', 'finesse', 'two-handed']
+        self.armor_type = armor_type # e.g., 'light', 'medium', 'heavy'
         self.is_magical = is_magical
         self.rarity = rarity  # e.g., 'common', 'uncommon', 'rare', 'very rare', 'legendary'
         self.magic_type = magic_type  # e.g., 'weapon', 'armor', etc.
+
 
     def __str__(self):
         s = f"{self.name} ({self.weight} lb, {self.cost} {self.currency})"
         if self.is_weapon:
             s += f" [Weapon: {self.weapon_type}, Properties: {', '.join(self.properties)}]"
+        if self.armor_type:
+            s += f" [Armor: {self.armor_type}]"
         if self.is_magical:
             s += f" [Magic: {self.rarity or ''} {self.magic_type or ''}]"
         if self.description:

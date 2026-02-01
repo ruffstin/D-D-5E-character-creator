@@ -14,8 +14,8 @@ class Paladin(CharClass):
                                   "Medicine", "Persuasion", "Religion"}
         # update for choices and all items
         self.inventory = {
-            "Chain Mail": (Item("Chain Mail"), 1),
-            "Shield": (Item("Shield"), 1),
+            "Chain Mail": (Item("Chain Mail", armor_type="heavy"), 1),
+            "Shield": (Item("Shield", armor_type="shield"), 1),
             "Longsword": (Item("Longsword"), 1)
         }
 

@@ -21,7 +21,7 @@ class Rogue(CharClass):
                                   "Stealth"}
         # update for choices and add all items
         self.inventory = {
-            "Leather Armor": (Item("Leather Armor"), 1),
+            "Leather Armor": (Item("Leather Armor", armor_type="light"), 1),
             "Rapier": (Item("Rapier"), 1),
             "Thieves' Tools": (Item("Thieves' Tools", "Tools for lockpicking and disarming traps."), 1)
         }

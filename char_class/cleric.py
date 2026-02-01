@@ -14,7 +14,7 @@ class Cleric(CharClass):
                                   "Religion"}
         # update for choices
         self.inventory = {
-            "Shield": (Item("Shield"), 1),
+            "Shield": (Item("Shield", armor_type="shield"), 1),
             "Mace": (Item("Mace"), 1),
             "Holy Symbol": (Item("Holy Symbol", "A source for holy magic and prayer"), 1),
         }

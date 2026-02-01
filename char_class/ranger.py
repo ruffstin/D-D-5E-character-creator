@@ -14,7 +14,7 @@ class Ranger(CharClass):
                                    "Nature", "Perception", "Stealth", "Survival"}
         # update for choices
         self.inventory = {
-            "Scale Mail": (Item("Scale Mail"), 1),
+            "Scale Mail": (Item("Scale Mail", armor_type="medium"), 1),
             "Shortsword": (Item("Shortsword"), 1),
             "Longbow": (Item("Longbow"), 1),
         }
