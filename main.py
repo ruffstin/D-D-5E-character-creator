@@ -248,7 +248,7 @@ def main():
         while True:
             method = input("Method: ").strip().lower()
             if method in ["default", "roll", "point buy", "d", "r", "pb"]: 
-                stat_gen = StatGenerator(method)
+                stat_gen = StatGenerator(method, class_choice)
                 stats = stat_gen.generate_stats()
                 break
             else: 
@@ -280,7 +280,7 @@ def main():
                 break
         # Display summary
         print("\n=== Character Summary ===")
-        character.show_character()  # Assuming you’ve written this display method
+        character.show_character()  
 
         # Ask if the user wants to create another character
         while True:

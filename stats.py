@@ -24,8 +24,26 @@ class StatGenerator:
         15:9
     }
 
-    def __init__(self, method = "default"):
+    # Class stat priorities - ordered from most important to least important
+    CLASS_STAT_PRIORITY = {
+        "artificer": ["INT", "CON", "DEX", "STR", "WIS", "CHA"],
+        "barbarian": ["STR", "CON", "DEX", "WIS", "CHA", "INT"],
+        "bard": ["CHA", "CON", "DEX", "STR", "WIS", "INT"],
+        "cleric": ["WIS", "CON", "STR", "DEX", "INT", "CHA"],
+        "druid": ["WIS", "CON", "DEX", "STR", "INT", "CHA"],
+        "fighter": ["STR", "CON", "DEX", "WIS", "INT", "CHA"],
+        "monk": ["DEX", "CON", "WIS", "INT", "CHA", "STR"],
+        "paladin": ["STR", "CON", "CHA", "WIS", "INT", "DEX"],
+        "ranger": ["DEX", "CON", "WIS", "STR", "INT", "CHA"],
+        "rogue": ["DEX", "CHA", "CON", "INT", "WIS", "STR"],
+        "sorcerer": ["CHA", "CON", "DEX", "WIS", "INT", "STR"],
+        "warlock": ["CHA", "CON", "DEX", "INT", "WIS", "STR"],
+        "wizard": ["INT", "CON", "DEX", "WIS", "CHA", "STR"]
+    }
+
+    def __init__(self, method="default", char_class=None):
         self.method = method.lower()
+        self.char_class = char_class
         self.stats = []
     
     def generate_stats(self):
@@ -33,23 +51,60 @@ class StatGenerator:
         if self.method == "default" or self.method == "d":
             print("\n=== Default Stat Generation ===")
             print("Default stat values: [15, 14, 13, 12, 10, 8]")
-            self.stats = self.assign_stats(self.DEFAULT_STATS)
+            
+            # Ask if they want to auto-apply based on class
+            if self.char_class and self.char_class in self.CLASS_STAT_PRIORITY:
+                while True:
+                    auto_apply = input("Auto-apply stats based on your class priority? (y/n): ").lower()
+                    if auto_apply in ['y', 'yes', 'n', 'no']:
+                        break
+                    print("Invalid input. Please enter 'y' or 'n'.")
+                
+                if auto_apply in ['y', 'yes']:
+                    self.stats = self.auto_assign_stats(self.DEFAULT_STATS)
+                else:
+                    self.stats = self.assign_stats(self.DEFAULT_STATS)
+            else:
+                self.stats = self.assign_stats(self.DEFAULT_STATS)
 
         elif self.method == "roll" or self.method == "r":
             print("\n=== Rolling Stats ===")
             print("Rolling 4d6 and dropping the lowest for each stat.")
             rolled = [self.roll_4d6_drop_lowest() for _ in range(6)]
             print(f"Rolled values: {rolled}")
-            while True:
-                assign = input("Do you want to assign these values to stats yourself? (y/n): ").lower()
+            
+            # Ask if they want to auto-apply based on class
+            if self.char_class and self.char_class in self.CLASS_STAT_PRIORITY:
+                while True:
+                    auto_apply = input("Auto-apply stats based on your class priority? (y/n): ").lower()
+                    if auto_apply in ['y', 'yes', 'n', 'no']:
+                        break
+                    print("Invalid input. Please enter 'y' or 'n'.")
                 
-                if assign == 'y' or assign == 'yes':
-                    self.stats = self.assign_stats(rolled)
-                    break
+                if auto_apply in ['y', 'yes']:
+                    self.stats = self.auto_assign_stats(rolled)
+                else:
+                    while True:
+                        assign = input("Do you want to assign these values to stats yourself? (y/n): ").lower()
+                        
+                        if assign == 'y' or assign == 'yes':
+                            self.stats = self.assign_stats(rolled)
+                            break
 
-                elif assign == 'n' or assign == 'no':
-                    self.stats = rolled
-                    break
+                        elif assign == 'n' or assign == 'no':
+                            self.stats = rolled
+                            break
+            else:
+                while True:
+                    assign = input("Do you want to assign these values to stats yourself? (y/n): ").lower()
+                    
+                    if assign == 'y' or assign == 'yes':
+                        self.stats = self.assign_stats(rolled)
+                        break
+
+                    elif assign == 'n' or assign == 'no':
+                        self.stats = rolled
+                        break
         
         elif self.method == "point buy" or self.method == "pb":
             self.stats = self.point_buy()
@@ -141,6 +196,32 @@ class StatGenerator:
                         break
                     print("Invalid input. Please enter 'y' or 'n'.")     
         return stats
+
+    def auto_assign_stats(self, stat_values):
+        """Automatically assign stats based on class priority order."""
+        if not self.char_class or self.char_class not in self.CLASS_STAT_PRIORITY:
+            print("Warning: Class not found. Falling back to manual assignment.")
+            return self.assign_stats(stat_values)
+        
+        # Get the priority order for this class
+        priority_order = self.CLASS_STAT_PRIORITY[self.char_class]
+        
+        # Sort the stat values in descending order (highest first)
+        sorted_values = sorted(stat_values, reverse=True)
+        
+        # Assign highest values to highest priority stats
+        assigned_stats = {}
+        for i, stat in enumerate(priority_order):
+            assigned_stats[stat] = sorted_values[i]
+        
+        # Display the assignment
+        print(f"\nAuto-assigning stats based on {self.char_class} priorities:")
+        for stat in priority_order:
+            print(f"  {stat}: {assigned_stats[stat]}")
+        
+        # Return stats in STR, DEX, CON, INT, WIS, CHA order
+        available_stats = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
+        return [assigned_stats[stat] for stat in available_stats]
 
     def assign_stats(self, stat_values):
         assigned_stats = {}

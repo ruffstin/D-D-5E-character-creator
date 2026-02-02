@@ -41,7 +41,7 @@ class Character:
         self.features: list[str] =  []
         self.maxhp = 0
         self.currhp = 0
-        #self.hit_die = {}  # implement hit dice, die value: used? (boolean)
+        #self.hit_die = {}  # implement hit dice tracker instead of display 
         self.temphp = 0
         self.speed = 0
         self.armor_class = 0
@@ -80,8 +80,8 @@ class Character:
         self.hair = ""
         
         self.apply_racial_features()  
-        self.apply_background_features()
         self.apply_class_features()
+        self.apply_background_features()
         self.passive_perception = 10 + self.get_skill_bonus("Perception") #update with level up
         # self.attacks: set[str] = set() # implement attacks
         self.deathsaves = {"success": 0, "failure": 0}
@@ -112,12 +112,78 @@ class Character:
             self.size = self.race.size
             # Apply tool proficiencies
 
+    def apply_class_features(self):
+        if self.char_class:
+            # Apply saving throw proficiencies
+            for stat in STAT_NAMES:
+                self.saving_throws_proficient.add(stat)
+
+            # Apply skill proficiencies
+            self.choose_class_skills()   
+            # self.skills_expert.add(skill)  # for expertise note for later
+
+            self.maxhp = self.char_class.hit_die_value + ((self.stats[2] // 2) - 5)
+            self.currhp = self.maxhp
+
+            # Apply features
+            self.features.extend(self.char_class.get_features())
+            
+            for lang in self.char_class.get_languages():
+                self.add_language(lang)
+
+            # Apply items
+            for item_name, (item, qty) in self.char_class.get_inventory().items():
+                if item_name in self.inventory:
+                    _, current_qty = self.inventory[item_name]
+                    self.inventory[item_name] = (item, current_qty + qty)
+                else:
+                    self.inventory[item_name] = (item, qty)    
+    
+    def choose_class_skills(self):
+        """
+        Choose class skills, prompting for class options first, then falling back to all skills if needed.
+        """
+        class_options = list(self.char_class.skills_proficient)
+        num_to_choose = self.char_class.skills_known
+        already = set(self.skills_proficient)
+        chosen = set()
+
+        # Offer class-specific options first (excluding ones already proficient)
+        available = [s for s in class_options if s not in already]
+        while len(chosen) < num_to_choose and available:
+            print(f"\nChoose class skill {len(chosen)+1}/{num_to_choose}:")
+            print("Options:", ", ".join(available))
+            choice = input("Enter skill: ").strip().title()
+            if choice in available and choice not in chosen:
+                chosen.add(choice)
+                already.add(choice)
+                available.remove(choice)
+            else:
+                print("Invalid or duplicate choice. Try again.")
+
+        # If class options didn't cover the full number, let the user pick from any remaining skills
+        while len(chosen) < num_to_choose:
+            pool = [s for s in ALL_SKILLS if s not in already]
+            if not pool:
+                print("No skills left to choose.")
+                break
+            print(f"\nChoose replacement skill {len(chosen)+1}/{num_to_choose}:")
+            print("Available:", ", ".join(pool))
+            choice = input("Enter skill: ").strip().title()
+            if choice in pool:
+                chosen.add(choice)
+                already.add(choice)
+            else:
+                print("Invalid choice. Try again.")
+
+        self.skills_proficient.update(chosen)
+                
+
     def apply_background_features(self):
         if self.background:
             # Apply skill proficiencies
-            bg_skills = self._choose_skills_with_overlap(self.background.get_skills(), n=2)
-            self.skills_proficient.update(bg_skills)
-                # self.skills_expert.add(skill)  # for expertise note for later
+            self.choose_background_skills()
+            # self.skills_expert.add(skill)  # for expertise note for later
             
             # Apply features
             self.features.extend(self.background.get_features())
@@ -142,66 +208,44 @@ class Character:
                 self.add_language(lang)
             # Apply tool proficiencies
 
-    def apply_class_features(self):
-        if self.char_class:
-            # Apply saving throw proficiencies
-            for stat in STAT_NAMES:
-                self.saving_throws_proficient.add(stat)
-
-            # Apply skill proficiencies
-            self.choose_class_skills()
-                #self.skills_proficient.add(skill) # implement choices
-                # self.skills_expert.add(skill)  # for expertise note for later
-
-            self.maxhp = self.char_class.hit_die_value + ((self.stats[2] // 2) - 5)
-            self.currhp = self.maxhp
-
-            # Apply features
-            self.features.extend(self.char_class.get_features())
-            
-            for lang in self.char_class.get_languages():
-                self.add_language(lang)
-
-            # Apply items
-            for item_name, (item, qty) in self.char_class.get_inventory().items():
-                if item_name in self.inventory:
-                    _, current_qty = self.inventory[item_name]
-                    self.inventory[item_name] = (item, current_qty + qty)
-                else:
-                    self.inventory[item_name] = (item, qty)    
-    
-    def choose_class_skills(self):
-        class_skills = self._choose_skills_with_overlap(
-        self.char_class.skills_proficient, self.char_class.skills_known
-        )
-        for skill in class_skills:
-            self.skills_proficient.add(skill)
-
-    def _choose_skills_with_overlap(self, fixed_skills: set, n: int) -> set:
+    def choose_background_skills(self):
         """
-        Handles overlap and fallback for skill selection.
-        - fixed_skills: the set of skills granted (e.g., by background or class)
-        - n: number of proficiencies to grant
-        Returns a set of n skills, none of which are already proficient.
+        Choose background skills. Automatically apply available background skills,
+        but prompt for replacements if a background skill is already proficient.
         """
+        bg_options = list(self.background.get_skills())
+        already = set(self.skills_proficient)
         chosen = set()
-        already_proficient = set(self.skills_proficient)
-        # Add as many fixed skills as possible
-        for skill in fixed_skills:
-            if skill not in already_proficient and len(chosen) < n:
-                chosen.add(skill)
-                already_proficient.add(skill)
-        # If not enough, prompt for replacements from all unproficient skills
-        while len(chosen) < n:
-            available = [s for s in ALL_SKILLS if s not in already_proficient and s not in chosen]
-            print("Available skills:", ", ".join(available))
-            choice = input(f"Choose skill {len(chosen)+1}/{n}: ").strip().title()
-            if choice in available:
-                chosen.add(choice)
-                already_proficient.add(choice)
-            else:
-                print("Invalid or duplicate choice. Please try again.")
-        return chosen
+        
+        # Separate background skills into available vs already proficient
+        available_bg = [s for s in bg_options if s not in already]
+        duplicate_bg = [s for s in bg_options if s in already]
+        
+        # Auto-add available background skills
+        chosen.update(available_bg)
+        already.update(available_bg)
+        
+        # Notify user what was granted
+        print(f"\nAs a {self.background.name}, you are proficient in {' and '.join(bg_options)}")
+        
+        # For duplicates, prompt for replacements
+        for dup_skill in duplicate_bg:
+            print(f"\nYou are already proficient in {dup_skill}. Let's choose a replacement skill:")
+            while True:
+                pool = [s for s in ALL_SKILLS if s not in already]
+                if not pool:
+                    print("No skills left to choose.")
+                    break
+                print("Available:", ", ".join(pool))
+                choice = input("Enter skill: ").strip().title()
+                if choice in pool:
+                    chosen.add(choice)
+                    already.add(choice)
+                    break
+                else:
+                    print("Invalid choice. Try again.")
+        
+        self.skills_proficient.update(chosen)
 
     def is_proficient(self, skill: str) -> bool:
         return skill in self.skills_proficient

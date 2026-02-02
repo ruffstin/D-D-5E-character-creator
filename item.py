@@ -9,7 +9,7 @@
 class Item: 
     def __init__(self, name: str, description: str = "", weight: float = 0.0, cost: int = 0, currency: str = "gp",
                  is_weapon: bool = False, weapon_type: str = None, properties: list[str] = None, armor_type = None,
-                 is_magical: bool = False, rarity: str = None, magic_type: str = None):
+                 is_magical: bool = False, rarity: str = None, magic_type: str = None, magic_bonus: int = 0):
         
         self.name = name
         self.description = description
@@ -23,6 +23,7 @@ class Item:
         self.is_magical = is_magical
         self.rarity = rarity  # e.g., 'common', 'uncommon', 'rare', 'very rare', 'legendary'
         self.magic_type = magic_type  # e.g., 'weapon', 'armor', etc.
+        self.magic_bonus = magic_bonus # e.g., +1, +2, +3 for magical weapons/armor
 
 
     def __str__(self):
