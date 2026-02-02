@@ -153,8 +153,10 @@ class Character:
         while len(chosen) < num_to_choose and available:
             print(f"\nChoose class skill {len(chosen)+1}/{num_to_choose}:")
             print("Options:", ", ".join(available))
-            choice = input("Enter skill: ").strip().title()
-            if choice in available and choice not in chosen:
+            choice_input = input("Enter skill: ").strip()
+            # Find matching skill in available (case-insensitive)
+            choice = next((s for s in available if s.lower() == choice_input.lower()), None)
+            if choice and choice not in chosen:
                 chosen.add(choice)
                 already.add(choice)
                 available.remove(choice)
@@ -169,8 +171,10 @@ class Character:
                 break
             print(f"\nChoose replacement skill {len(chosen)+1}/{num_to_choose}:")
             print("Available:", ", ".join(pool))
-            choice = input("Enter skill: ").strip().title()
-            if choice in pool:
+            choice_input = input("Enter skill: ").strip()
+            # Find matching skill in pool (case-insensitive)
+            choice = next((s for s in pool if s.lower() == choice_input.lower()), None)
+            if choice:
                 chosen.add(choice)
                 already.add(choice)
             else:
@@ -237,8 +241,10 @@ class Character:
                     print("No skills left to choose.")
                     break
                 print("Available:", ", ".join(pool))
-                choice = input("Enter skill: ").strip().title()
-                if choice in pool:
+                choice_input = input("Enter skill: ").strip()
+                # Find matching skill in pool (case-insensitive)
+                choice = next((s for s in pool if s.lower() == choice_input.lower()), None)
+                if choice:
                     chosen.add(choice)
                     already.add(choice)
                     break

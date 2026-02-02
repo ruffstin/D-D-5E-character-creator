@@ -82,8 +82,10 @@ class HalfElf(Race):
         print(f"As a Half-Elf, you gain proficiency in {n} skills of your choice.")
         while len(chosen) < n:
             print("Available skills:", ", ".join(available))
-            choice = input(f"Choose skill {len(chosen)+1}/{n}: ").strip().title()
-            if choice in available and choice not in chosen:
+            choice_input = input(f"Choose skill {len(chosen)+1}/{n}: ").strip()
+            # Find matching skill in available (case-insensitive)
+            choice = next((s for s in available if s.lower() == choice_input.lower()), None)
+            if choice and choice not in chosen:
                 chosen.append(choice)
                 available.remove(choice)
             else:

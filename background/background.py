@@ -78,8 +78,10 @@ class Background:
         while len(chosen) < n:
             print("Available skills:", ", ".join(available))
             # Always show the correct number (len(chosen)+1)/n
-            choice = input(f"Choose skill {len(chosen)+1}/{n}: ").strip().title()
-            if choice in available and choice not in chosen:
+            choice_input = input(f"Choose skill {len(chosen)+1}/{n}: ").strip()
+            # Find matching skill in available (case-insensitive)
+            choice = next((s for s in available if s.lower() == choice_input.lower()), None)
+            if choice and choice not in chosen:
                 chosen.append(choice)
                 available.remove(choice)
             else:
