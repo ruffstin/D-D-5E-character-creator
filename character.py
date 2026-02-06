@@ -109,11 +109,9 @@ class Character:
         self.apply_racial_features()  
         self.apply_class_features()
         self.apply_background_features()
-        self.passive_perception = 10 + self.get_skill_bonus("Perception") #update with level up
         # instead of attacks, implement weapons in mainhand/offhand and calculate attack bonus/damage
         self.deathsaves = {"success": 0, "failure": 0}
         self.exhaustion = 0
-        self.initiative = stats[1] // 2 - 5 # DEX mod, update with level up
         self.level_up()
 
     def get_proficiency_bonus(self) -> int:
@@ -425,7 +423,7 @@ class Character:
         print(f"Background: {self.background}")
         #print(f"Alignment: {self.alignment}")
         print(f"Proficiency Bonus: {self.proficiency_bonus}")
-        print(f"Initiative: {self.initiative}")
+        print(f"Initiative: {self.get_initiative()}")
         print(f"Armor Class: {self.get_armor_class()}")
         print(f"Speed: {self.get_movement_speed()} ft")
         print(f"Hit Points: {self.currhp}/{self.maxhp} (Temporary: {self.temphp})")
@@ -476,6 +474,14 @@ class Character:
         print()
         print(f" (* = Proficient, ** = Expertise)")
         print()
+
+    def get_initiative(self):
+        initiative = self.stats[1] // 2 - 5
+        # if alert feat increases initiative by 5 and you cannot be surprised
+        return initiative
+    
+    def get_passive_perception(self):
+        return 10 + self.get_skill_bonus("Perception") 
 
     def print_items_tool_profs_lang(self):
         print("Equipment:")
