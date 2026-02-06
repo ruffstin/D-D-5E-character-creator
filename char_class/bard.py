@@ -28,6 +28,7 @@ class Bard(CharClass):
         # make visable to character sheet
         self.bardic_inspiration_dice = "d6" # uses is your charisma modifier per long rest
         self.college_features = {}
+        self.expertise = set()
 
     def level_up(self, current_level, stats: list[int], char_features: list[str], char_hp) -> None:
         while self.level < current_level:
@@ -52,6 +53,11 @@ class Bard(CharClass):
                         char_features.append("Bard College")
                         # call pick college function
                     
+                    if "Expertise" not in self.features:
+                        self.features.append("Expertise")
+                        char_features.append("Expertise")
+                        # implement expertise choice function
+                    
                 if self.level == 5:
                     if "Font of Inspiration" not in self.features:
                         self.features.append("Font of Inspiration")
@@ -69,6 +75,10 @@ class Bard(CharClass):
                         char_features.append("Magical Secrets") 
                         self.bardic_inspiration_dice = "d10"
                     
+                    if self.level == 10: 
+                        self.features.append("Additonal Expertise")
+                        char_features.append("Additonal Expertise")
+
                     elif self.level == 14:
                         self.features.append("Additional Magical Secrets")
                         char_features.append("Additional Magical Secrets")

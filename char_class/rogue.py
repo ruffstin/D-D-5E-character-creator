@@ -68,6 +68,13 @@ class Rogue(CharClass):
                         self.features.append("Uncanny Dodge")
                         char_features.append("Uncanny Dodge")
 
+                if self.level == 6:
+                    if "Additional Expertise" not in self.features:
+                        self.features.append("Additional Expertise")
+                        char_features.append("Additional Expertise")
+                        # implement expertise choice function
+                        # def set expertise, 2 skills your proficient in, or 1 and thieves tools
+
                 if self.level == 7: 
                     if "Evasion" not in self.features: 
                         self.features.append("Evasion")

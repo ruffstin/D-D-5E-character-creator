@@ -11,6 +11,27 @@ ALL_SKILLS = [
     "Sleight of Hand", "Stealth", "Survival"
 ]
 
+ALL_TOOLS = [
+    "Artisan Tools", "Gaming Set", "Musical Instrument", "Disguise Kit", "Forgery Kit", "Herbalism Kit", 
+    "Navigator's Kit", "Poisoner's Kit", "Thieves' Tools"
+]
+
+ARTISAN_TOOLS = [
+    "Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Supplies", "Carpenter's Tools",
+    "Cartographer's Tools", "Cobbler's Tools", "Cook's Utensils", "Glassblower's Tools",
+    "Jeweler's Tools", "Leatherworker's Tools", "Mason's Tools", "Painter's Supplies",
+    "Potter's Tools", "Smith's Tools", "Tinker's Tools", "Weaver's Tools", "Woodcarver's Tools"
+]
+
+GAMING_SETS = [
+    "Dice Set", "Dragonchess Set", "Playing Card Set", "Three-Dragon Ante Set"
+]
+
+MUSICAL_INSTRUMENTS = [
+    "Bagpipes", "Drum", "Dulcimer", "Flute", "Lute", "Lyre", "Horn", "Pan Flute",
+    "Shawm", "Viol"
+]
+
 from race.race import Race
 from background.background import Background
 from char_class.char_class import CharClass
@@ -44,8 +65,7 @@ class Character:
         #self.hit_die = {}  # implement hit dice tracker instead of display 
         self.temphp = 0
         self.speed = 0
-        self.armor_class = 0
-        self.inspiration = "none"
+        self.inspiration = "None"
 
         self.proficiency_bonus = 2
         self.skills_proficient: set[str] = set()
@@ -55,6 +75,13 @@ class Character:
         self.other_proficiencies: set[str] = set() # tools and items
         self.languages: set[str] = set()
         self.language_order = []
+
+        '''
+        Equipped Gear, main hand, off hand, armor. 
+        '''
+        self.main_hand = "None"
+        self.off_hand = "None"
+        self.armor = "None" 
 
         self.personality_traits: set[str] = set()
         self.ideals: set[str] = set()
@@ -83,7 +110,7 @@ class Character:
         self.apply_class_features()
         self.apply_background_features()
         self.passive_perception = 10 + self.get_skill_bonus("Perception") #update with level up
-        # self.attacks: set[str] = set() # implement attacks
+        # instead of attacks, implement weapons in mainhand/offhand and calculate attack bonus/damage
         self.deathsaves = {"success": 0, "failure": 0}
         self.exhaustion = 0
         self.initiative = stats[1] // 2 - 5 # DEX mod, update with level up
@@ -127,7 +154,7 @@ class Character:
 
             # Apply features
             self.features.extend(self.char_class.get_features())
-            
+
             for lang in self.char_class.get_languages():
                 self.add_language(lang)
 
@@ -288,6 +315,11 @@ class Character:
         elif self.is_proficient(skill):
             bonus += self.proficiency_bonus
 
+        # if you are a bard with the jack of all trades feature, 
+        # apply half your proficiency bonus, rounded down to any skill you are not proficient in
+        elif self.char_class.name == "Bard" and "Jack of All Trades" in self.features:
+            bonus += self.proficiency_bonus // 2 
+
         return bonus
     
     def level_up(self, next_level = 1):
@@ -324,7 +356,7 @@ class Character:
             times_to_roll -= 1
             
         # with multi-classing, need to know which class to level up
-
+      
     def add_item(self, item: Item, quantity: int = 1):
         if item.name in self.inventory:
             _, current_qty = self.inventory[item.name]
@@ -344,6 +376,43 @@ class Character:
     def get_item(self, item_name: str):
         return self.inventory.get(item_name, (None, 0))
     
+    def get_armor_class(self):
+        armor_class = 10
+        shield_bonus = 0 #implement off hand/shield bonus later
+        if("Unarmored Defense" in self.features):
+                if self.armor == "None":
+
+                    # you can use a shield as a barbarian but not as a monk
+                    if (self.char_class.name == "Barbarian"):
+                        return armor_class + (self.stats[1] // 2 - 5) + (self.stats[2] // 2 - 5)
+                    
+                    
+                    elif (self.char_class.name == "Monk"):
+                        return armor_class + (self.stats[1] // 2 - 5) + (self.stats[4] // 2 - 5)
+        
+        elif self.armor == "None":
+            return armor_class + (self.stats[1] // 2 - 5)
+        
+        elif self.armor != "None": # implement for checking armor and armor proficiency 
+            return armor_class #+ self.get_item(self.armor)[0].get_armor_class() + (self.stats[1] // 2 - 5) # update to check if armor allows dex mod, and if character is proficient in armor
+        
+        else: return 10 + (self.stats[1] // 2 - 5)
+
+    def get_movement_speed(self):
+        current_speed = self.speed
+        # if wearing heavy armor that you are not strong enough to waer, reduce your speed by 10 feet.
+
+        if self.char_class.name == "Monk" and "Unarmored Movement" in self.features:
+            # if self.armor == "None" and self.off_hand.equals("Shield") == False and self.main_hand.equals("Shield"): # implement checking for armor and shield later, for now just assume monk is not wearing armor or using a shield
+            return current_speed + self.char_class.get_unarmored_movement(self.level)
+        
+        if self.char_class.name == "Barbarian" and "Fast Movement" in self.features:
+            # if self.armor == "None": # implement checking for armor later, for now just assume barbarian is not wearing armor
+            return current_speed + 10
+        
+        else: 
+            return current_speed
+
     def add_language(self, lang):
         if lang not in self.languages:
             self.languages.add(lang)
@@ -356,7 +425,9 @@ class Character:
         print(f"Background: {self.background}")
         #print(f"Alignment: {self.alignment}")
         print(f"Proficiency Bonus: {self.proficiency_bonus}")
-        print(f"Speed: {self.speed}")
+        print(f"Initiative: {self.initiative}")
+        print(f"Armor Class: {self.get_armor_class()}")
+        print(f"Speed: {self.get_movement_speed()} ft")
         print(f"Hit Points: {self.currhp}/{self.maxhp} (Temporary: {self.temphp})")
         print(f"Hit Die: {self.level}d{self.char_class.hit_die_value} ")
         print()
@@ -370,24 +441,37 @@ class Character:
 
     def print_skills_and_saves(self):
         print("Saving Throws:") # Edit to show full name of stat
+        STAT_TO_NAME = {
+            "STR": "Strength",
+            "DEX": "Dexterity",
+            "CON": "Constitution",
+            "INT": "Intelligence",
+            "WIS": "Wisdom",
+            "CHA": "Charisma"
+        }
         for stat, value in zip(STAT_NAMES, self.stats):
             bonus = value // 2 - 5
+            # disadv on str and dex saves if wearing armor you are not proficient in. 
             if stat in self.char_class.get_proficient_saving_throws():
                 bonus += self.proficiency_bonus
-                print(f"  {stat:<16}: {bonus:+2} *")
+                print(f"  {STAT_TO_NAME[stat]:<16}: {bonus:+2} *")
             else:
-                print(f"  {stat:<16}: {bonus:+2}")
+                print(f"  {STAT_TO_NAME[stat]:<16}: {bonus:+2}")
 
         print()
         print("Skills:")
         for skill in ALL_SKILLS:
             bonus = self.get_skill_bonus(skill)
-            if self.has_expertise(skill):
-                suffix = " **"
-            elif self.is_proficient(skill):
+            suffix = ""
+            if self.is_proficient(skill):
                 suffix = " *"
-            else:
-                suffix = ""
+            if self.has_expertise(skill): # you must be proficient to have expertise
+                suffix = suffix + "*"
+
+            # if self.has_armor_penalty(skill):
+            #      suffix = suffix + " disadvantage" # for strength and dexterity skills if wearing armor 
+            # you are not proficient in. Implement armor check penalty later.
+            
             print(f"  {skill:<16}: {bonus:+2}{suffix}")
         print()
         print(f" (* = Proficient, ** = Expertise)")
@@ -404,9 +488,9 @@ class Character:
             print(f"  {coin.capitalize()}: {amount}")
         print()
         
-        print("Tool Proficiencies:")
-        for tool in self.other_proficiencies:
-            print(f"  - {tool}")
+        print("Other Proficiencies (Armor, Weapons, Tools):")
+        for other in self.other_proficiencies:
+            print(f"  - {other}")
         print()
 
         print("Languages:")

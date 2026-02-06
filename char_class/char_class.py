@@ -151,6 +151,20 @@ class CharClass:
         """
         return None
 
+    def apply_class_features(self, char_features: list[str]) -> None:
+        """
+        Defaut no class features to apply. Override in subclasses 
+        that grant class features.
+        """
+        return None
+    
+    def apply_subclass_features(self, char_features: list[str]) -> None:
+        """
+        Default no subclass features to apply. Override in subclasses
+        that grant subclass features.
+        """
+        return None
+
     def description(self) -> str:
         if self.subclass:
             desc = f" ({self.subclass} {self.name})"

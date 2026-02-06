@@ -17,9 +17,9 @@ class Barbarian(CharClass):
         # update for choices and all items
         # proficient items/tools= ["light armor", "medium armor", "shields"]  # ADD ALL PROFICEINCIES
         self.inventory = {
-            "Greataxe": (Item("Greataxe"), 1),
-            "Handaxe": (Item("Handaxe"), 2),
-            "Explorer's Pack": (Item("Explorer's Pack", "A pack with adventuring gear."), 1)
+            "Greataxe": (Item("Greataxe", "A heavy two-handed axe.", 7.0, 30, "gp", True, "martial melee", ["heavy", "two-handed"], "slashing", 12), 1),
+            "Handaxe": (Item("Handaxe", "A small axe for throwing or cutting.", 2.0, 5, "sp", True, "simple melee", ["light", "thrown"], "slashing", 6), 2),
+            "Explorer's Pack": (Item("Explorer's Pack", "A pack with adventuring gear."), 1),
         }
 
         # Apply level 1 features
