@@ -14,13 +14,44 @@ class Barbarian(CharClass):
         self.proficient_saving_throws = ["STR", "CON"]
         self.skills_proficient = {"Animal Handling", "Athletics", "Intimidation", "Nature", 
                                   "Perception", "Survival"}
-        # update for choices and all items
         # proficient items/tools= ["light armor", "medium armor", "shields"]  # ADD ALL PROFICEINCIES
-        self.inventory = {
-            "Greataxe": (Item("Greataxe", "A heavy two-handed axe.", 7.0, 30, "gp", True, "martial melee", ["heavy", "two-handed"], "slashing", 12), 1),
-            "Handaxe": (Item("Handaxe", "A small axe for throwing or cutting.", 2.0, 5, "sp", True, "simple melee", ["light", "thrown"], "slashing", 6), 2),
-            "Explorer's Pack": (Item("Explorer's Pack", "A pack with adventuring gear."), 1),
-        }
+        
+        # Define equipment choices at level 1
+        self.equipment_choices = [
+            {
+                "description": "Choose (a) a greataxe or (b) any martial melee weapon:",
+                "options": [
+                    {"choice": "a", "items": ["greataxe"]},
+                    {"choice": "b", "items": ["battleaxe", "flail", "glaive", "halberd", "lance", "longsword", "maul", "morningstar", "pike", "rapier", "scimitar", "trident", "war_pick", "warhammer", "whip"]}
+                ]
+            },
+            {
+                "description": "Choose (a) two handaxes or (b) any simple weapon (not handaxe):",
+                "options": [
+                    {"choice": "a", "items": ["handaxe"]},  # Special handling: will add 2 total
+                    {"choice": "b", "items": ["club", "dagger", "greatclub", "javelin", "light_hammer", "mace", "quarterstaff", "sickle", "spear", "crossbow_light", "dart", "shortbow", "sling"]}
+                ]
+            }
+        ]
+        
+        # Static items all barbarians get
+        self.static_items = ["explorers_pack"]
+        
+        # Build inventory
+        self.inventory = {}
+        self._setup_inventory()
+        
+        # Handle special cases: if handaxe was chosen in option (a), ensure we have 2
+        if "Handaxe" in self.inventory:
+            item, qty = self.inventory["Handaxe"]
+            if qty == 1:
+                # User chose option (a) "two handaxes", so add a second
+                self.inventory["Handaxe"] = (item, 2)
+        
+        # Add 4 javelins
+        from item import create_item_from_template
+        javelin = create_item_from_template("javelin")
+        self.inventory["Javelin"] = (javelin, 4)
 
         # Apply level 1 features
         self.features = ["Rage", "Unarmored Defense"]

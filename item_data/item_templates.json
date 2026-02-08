@@ -1,0 +1,934 @@
+{
+  "weapons": {
+    "simple_melee": {
+      "club": {
+        "name": "Club",
+        "weight": 2.0,
+        "cost": 1,
+        "currency": "sp",
+        "is_weapon": true,
+        "weapon_type": "simple melee",
+        "properties": ["light"],
+        "damage_type": "bludgeoning",
+        "damage_die": "1d4"
+      },
+      "dagger": {
+        "name": "Dagger",
+        "weight": 1.0,
+        "cost": 2,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "simple melee",
+        "properties": ["finesse", "light", "thrown"],
+        "damage_type": "piercing",
+        "damage_die": "1d4",
+        "thrown_short": 20,
+        "thrown_long": 60
+      },
+      "greatclub": {
+        "name": "Greatclub",
+        "weight": 10.0,
+        "cost": 2,
+        "currency": "sp",
+        "is_weapon": true,
+        "weapon_type": "simple melee",
+        "properties": ["two-handed"],
+        "damage_type": "bludgeoning",
+        "damage_die": "1d8"
+      },
+      "handaxe": {
+        "name": "Handaxe",
+        "weight": 2.0,
+        "cost": 5,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "simple melee",
+        "properties": ["light", "thrown"],
+        "damage_type": "slashing",
+        "damage_die": "1d6",
+        "thrown_short": 20,
+        "thrown_long": 60
+      },
+      "javelin": {
+        "name": "Javelin",
+        "weight": 2.0,
+        "cost": 5,
+        "currency": "sp",
+        "is_weapon": true,
+        "weapon_type": "simple melee",
+        "properties": ["thrown"],
+        "damage_type": "piercing",
+        "damage_die": "1d6",
+        "thrown_short": 30,
+        "thrown_long": 120
+      },
+      "light_hammer": {
+        "name": "Light Hammer",
+        "weight": 2.0,
+        "cost": 2,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "simple melee",
+        "properties": ["light", "thrown"],
+        "damage_type": "bludgeoning",
+        "damage_die": "1d4",
+        "thrown_short": 20,
+        "thrown_long": 60
+      },
+      "mace": {
+        "name": "Mace",
+        "weight": 4.0,
+        "cost": 5,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "simple melee",
+        "properties": [],
+        "damage_type": "bludgeoning",
+        "damage_die": "1d6"
+      },
+      "quarterstaff": {
+        "name": "Quarterstaff",
+        "weight": 4.0,
+        "cost": 2,
+        "currency": "sp",
+        "is_weapon": true,
+        "weapon_type": "simple melee",
+        "properties": ["versatile"],
+        "damage_type": "bludgeoning",
+        "damage_die": "1d6",
+        "versatile_damage_die": "1d8"
+      },
+      "sickle": {
+        "name": "Sickle",
+        "weight": 2.0,
+        "cost": 1,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "simple melee",
+        "properties": ["light"],
+        "damage_type": "slashing",
+        "damage_die": "1d4"
+      },
+      "spear": {
+        "name": "Spear",
+        "weight": 3.0,
+        "cost": 1,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "simple melee",
+        "properties": ["thrown", "versatile"],
+        "damage_type": "piercing",
+        "damage_die": "1d6",
+        "versatile_damage_die": "1d8",
+        "thrown_short": 20,
+        "thrown_long": 60
+      },
+      "unarmed_strike": {
+        "name": "Unarmed Strike",
+        "weight": 0.0,
+        "cost": 0,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "simple melee",
+        "properties": [],
+        "damage_type": "bludgeoning",
+        "damage_die": "1"
+      }
+    },
+    "simple_ranged": {
+      "crossbow_light": {
+        "name": "Crossbow, Light",
+        "weight": 5.0,
+        "cost": 25,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "simple ranged",
+        "properties": ["ammunition", "loading", "two-handed"],
+        "damage_type": "piercing",
+        "damage_die": "1d8",
+        "ammunition_type": "bolts",
+        "range_short": 80,
+        "range_long": 320
+      },
+      "dart": {
+        "name": "Dart",
+        "weight": 0.25,
+        "cost": 5,
+        "currency": "cp",
+        "is_weapon": true,
+        "weapon_type": "simple ranged",
+        "properties": ["finesse", "thrown"],
+        "damage_type": "piercing",
+        "damage_die": "1d4",
+        "thrown_short": 20,
+        "thrown_long": 60
+      },
+      "shortbow": {
+        "name": "Shortbow",
+        "weight": 2.0,
+        "cost": 25,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "simple ranged",
+        "properties": ["ammunition", "two-handed"],
+        "damage_type": "piercing",
+        "damage_die": "1d6",
+        "ammunition_type": "arrows",
+        "range_short": 80,
+        "range_long": 320
+      },
+      "sling": {
+        "name": "Sling",
+        "weight": 0.0,
+        "cost": 1,
+        "currency": "sp",
+        "is_weapon": true,
+        "weapon_type": "simple ranged",
+        "properties": ["ammunition"],
+        "damage_type": "bludgeoning",
+        "damage_die": "1d4",
+        "ammunition_type": "bullets",
+        "range_short": 30,
+        "range_long": 120
+      }
+    },
+    "martial_melee": {
+      "battleaxe": {
+        "name": "Battleaxe",
+        "weight": 4.0,
+        "cost": 10,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["versatile"],
+        "damage_type": "slashing",
+        "damage_die": "1d8",
+        "versatile_damage_die": "1d10"
+      },
+      "flail": {
+        "name": "Flail",
+        "weight": 2.0,
+        "cost": 10,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": [],
+        "damage_type": "bludgeoning",
+        "damage_die": "1d8"
+      },
+      "glaive": {
+        "name": "Glaive",
+        "weight": 6.0,
+        "cost": 20,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["heavy", "reach", "two-handed"],
+        "damage_type": "slashing",
+        "damage_die": "1d10"
+      },
+      "greataxe": {
+        "name": "Greataxe",
+        "weight": 7.0,
+        "cost": 30,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["heavy", "two-handed"],
+        "damage_type": "slashing",
+        "damage_die": "1d12"
+      },
+      "greatsword": {
+        "name": "Greatsword",
+        "weight": 6.0,
+        "cost": 50,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["heavy", "two-handed"],
+        "damage_type": "slashing",
+        "damage_die": "2d6"
+      },
+      "halberd": {
+        "name": "Halberd",
+        "weight": 6.0,
+        "cost": 20,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["heavy", "reach", "two-handed"],
+        "damage_type": "slashing",
+        "damage_die": "1d10"
+      },
+      "lance": {
+        "name": "Lance",
+        "weight": 6.0,
+        "cost": 10,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["reach", "special"],
+        "damage_type": "piercing",
+        "damage_die": "1d12",
+        "special_description": "You have disadvantage when you use a lance to attack a target within 5 feet of you. Also, a lance requires both hands to wield when you aren't mounted."
+      },
+      "longsword": {
+        "name": "Longsword",
+        "weight": 3.0,
+        "cost": 15,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["versatile"],
+        "damage_type": "slashing",
+        "damage_die": "1d8",
+        "versatile_damage_die": "1d10"
+      },
+      "maul": {
+        "name": "Maul",
+        "weight": 10.0,
+        "cost": 10,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["heavy", "two-handed"],
+        "damage_type": "bludgeoning",
+        "damage_die": "2d6"
+      },
+      "morningstar": {
+        "name": "Morningstar",
+        "weight": 4.0,
+        "cost": 15,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": [],
+        "damage_type": "piercing",
+        "damage_die": "1d8"
+      },
+      "pike": {
+        "name": "Pike",
+        "weight": 18.0,
+        "cost": 5,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["heavy", "reach", "two-handed"],
+        "damage_type": "piercing",
+        "damage_die": "1d10"
+      },
+      "rapier": {
+        "name": "Rapier",
+        "weight": 2.0,
+        "cost": 25,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["finesse"],
+        "damage_type": "piercing",
+        "damage_die": "1d8"
+      },
+      "scimitar": {
+        "name": "Scimitar",
+        "weight": 3.0,
+        "cost": 25,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["finesse", "light"],
+        "damage_type": "slashing",
+        "damage_die": "1d6"
+      },
+      "shortsword": {
+        "name": "Shortsword",
+        "weight": 2.0,
+        "cost": 10,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["finesse", "light"],
+        "damage_type": "piercing",
+        "damage_die": "1d6"
+      },
+      "trident": {
+        "name": "Trident",
+        "weight": 4.0,
+        "cost": 5,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["thrown", "versatile"],
+        "damage_type": "piercing",
+        "damage_die": "1d6",
+        "versatile_damage_die": "1d8",
+        "thrown_short": 20,
+        "thrown_long": 60
+      },
+      "war_pick": {
+        "name": "War Pick",
+        "weight": 2.0,
+        "cost": 5,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": [],
+        "damage_type": "piercing",
+        "damage_die": "1d8"
+      },
+      "warhammer": {
+        "name": "Warhammer",
+        "weight": 2.0,
+        "cost": 15,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["versatile"],
+        "damage_type": "bludgeoning",
+        "damage_die": "1d8",
+        "versatile_damage_die": "1d8"
+      },
+      "whip": {
+        "name": "Whip",
+        "weight": 3.0,
+        "cost": 2,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial melee",
+        "properties": ["finesse", "reach"],
+        "damage_type": "slashing",
+        "damage_die": "1d4"
+      }
+    },
+    "martial_ranged": {
+      "blowgun": {
+        "name": "Blowgun",
+        "weight": 1.0,
+        "cost": 10,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial ranged",
+        "properties": ["ammunition", "loading"],
+        "damage_type": "piercing",
+        "damage_die": "1",
+        "ammunition_type": "needles",
+        "range_short": 25,
+        "range_long": 100
+      },
+      "crossbow_hand": {
+        "name": "Crossbow, Hand",
+        "weight": 3.0,
+        "cost": 75,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial ranged",
+        "properties": ["ammunition", "light", "loading"],
+        "damage_type": "piercing",
+        "damage_die": "1d6",
+        "ammunition_type": "bolts",
+        "range_short": 30,
+        "range_long": 120
+      },
+      "crossbow_heavy": {
+        "name": "Crossbow, Heavy",
+        "weight": 18.0,
+        "cost": 50,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial ranged",
+        "properties": ["ammunition", "heavy", "loading", "two-handed"],
+        "damage_type": "piercing",
+        "damage_die": "1d10",
+        "ammunition_type": "bolts",
+        "range_short": 100,
+        "range_long": 400
+      },
+      "longbow": {
+        "name": "Longbow",
+        "weight": 2.0,
+        "cost": 50,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial ranged",
+        "properties": ["ammunition", "heavy", "two-handed"],
+        "damage_type": "piercing",
+        "damage_die": "1d8",
+        "ammunition_type": "arrows",
+        "range_short": 150,
+        "range_long": 600
+      },
+      "net": {
+        "name": "Net",
+        "weight": 3.0,
+        "cost": 1,
+        "currency": "gp",
+        "is_weapon": true,
+        "weapon_type": "martial ranged",
+        "properties": ["special", "thrown"],
+        "damage_type": null,
+        "damage_die": null,
+        "thrown_short": 5,
+        "thrown_long": 15,
+        "special_description": "A creature hit by a net is restrained until it is freed. A net has no effect on creatures that are formless, or creatures that are larger than Large. A creature can use an action to make a DC 10 Strength check, freeing itself or another creature within its reach on a success. Dealing 5 slashing damage to the net (AC 10) also frees the creature without harming it, ending the effect and destroying the net. When you use an action, bonus action, or reaction to attack with a net, you can make only one melee attack regardless of the number of attacks you can normally make."
+      }
+    }
+  },
+  "armor": {
+    "light_armor": {
+      "padded": {
+        "name": "Padded",
+        "description": "Padded armor comprises quilted layers of cloth and batting.",
+        "weight": 8.0,
+        "cost": 5,
+        "armor_type": "light",
+        "armor_class": 11,
+        "add_dex_to_ac": true,
+        "disadvantage_stealth": true
+      },
+      "leather": {
+        "name": "Leather",
+        "description": "The breastplate and shoulder protection of this armor are made of leather that has been stiffened by being boiled in oil.",
+        "weight": 10.0,
+        "cost": 10,
+        "armor_type": "light",
+        "armor_class": 11,
+        "add_dex_to_ac": true,
+        "disadvantage_stealth": false
+      },
+      "studded_leather": {
+        "name": "Studded Leather",
+        "description": "Made from tough but flexible leather, studded leather is reinforced with close-set rivets or spikes.",
+        "weight": 13.0,
+        "cost": 45,
+        "armor_type": "light",
+        "armor_class": 12,
+        "add_dex_to_ac": true,
+        "disadvantage_stealth": false
+      }
+    },
+    "medium_armor": {
+      "hide": {
+        "name": "Hide",
+        "description": "This crude armor consists of thick furs and pelts.",
+        "weight": 12.0,
+        "cost": 10,
+        "armor_type": "medium",
+        "armor_class": 12,
+        "add_dex_to_ac": true,
+        "dex_modifier_max": 2,
+        "disadvantage_stealth": false
+      },
+      "chain_shirt": {
+        "name": "Chain Shirt",
+        "description": "Made of interlocking metal rings, a chain shirt is worn between layers of clothing or leather.",
+        "weight": 20.0,
+        "cost": 50,
+        "armor_type": "medium",
+        "armor_class": 13,
+        "add_dex_to_ac": true,
+        "dex_modifier_max": 2,
+        "disadvantage_stealth": false
+      },
+      "scale_mail": {
+        "name": "Scale Mail",
+        "description": "This armor consists of a coat and leggings of leather covered with overlapping pieces of metal, much like fish scales.",
+        "weight": 45.0,
+        "cost": 50,
+        "armor_type": "medium",
+        "armor_class": 14,
+        "add_dex_to_ac": true,
+        "dex_modifier_max": 2,
+        "disadvantage_stealth": true
+      },
+      "spiked_armor": {
+        "name": "Spiked Armor",
+        "description": "Spiked armor is leather armor covered with protruding spikes.",
+        "weight": 45.0,
+        "cost": 75,
+        "armor_type": "medium",
+        "armor_class": 14,
+        "add_dex_to_ac": true,
+        "dex_modifier_max": 2,
+        "disadvantage_stealth": true
+      },
+      "breastplate": {
+        "name": "Breastplate",
+        "description": "This armor consists of a fitted metal chest piece worn with supple leather.",
+        "weight": 20.0,
+        "cost": 400,
+        "armor_type": "medium",
+        "armor_class": 14,
+        "add_dex_to_ac": true,
+        "dex_modifier_max": 2,
+        "disadvantage_stealth": false
+      },
+      "halfplate": {
+        "name": "Half Plate",
+        "description": "Half plate consists of shaped metal plates that cover most of the wearer's body.",
+        "weight": 40.0,
+        "cost": 750,
+        "armor_type": "medium",
+        "armor_class": 15,
+        "add_dex_to_ac": true,
+        "dex_modifier_max": 2,
+        "disadvantage_stealth": true
+      }
+    },
+    "heavy_armor": {
+      "ring_mail": {
+        "name": "Ring Mail",
+        "description": "This armor is leather armor covered with close-fitting rings that offer excellent protection.",
+        "weight": 40.0,
+        "cost": 30,
+        "armor_type": "heavy",
+        "armor_class": 14,
+        "add_dex_to_ac": false,
+        "str_requirement": 0,
+        "disadvantage_stealth": true
+      },
+      "chain_mail": {
+        "name": "Chain Mail",
+        "description": "Made of interlocking metal rings, chain mail includes a layer of quilted fabric worn underneath the mail to prevent chafing and to cushion the impact of blows.",
+        "weight": 55.0,
+        "cost": 75,
+        "armor_type": "heavy",
+        "armor_class": 16,
+        "add_dex_to_ac": false,
+        "str_requirement": 13,
+        "disadvantage_stealth": true
+      },
+      "splint": {
+        "name": "Splint",
+        "description": "This armor is made of narrow vertical strips of metal riveted to a backing of leather that is worn over cloth padding.",
+        "weight": 60.0,
+        "cost": 200,
+        "armor_type": "heavy",
+        "armor_class": 17,
+        "add_dex_to_ac": false,
+        "str_requirement": 15,
+        "disadvantage_stealth": true
+      },
+      "plate": {
+        "name": "Plate",
+        "description": "Plate consists of shaped, interlocking metal plates to cover the entire body.",
+        "weight": 65.0,
+        "cost": 1500,
+        "armor_type": "heavy",
+        "armor_class": 18,
+        "add_dex_to_ac": false,
+        "str_requirement": 15,
+        "disadvantage_stealth": true
+      }
+    },
+    "shields": {
+      "shield": {
+        "name": "Shield",
+        "description": "A wooden or metal frame strapped to your arm.",
+        "weight": 6.0,
+        "cost": 10,
+        "armor_type": "shield",
+        "armor_class": 2,
+        "add_dex_to_ac": false,
+        "disadvantage_stealth": false
+      },
+      "wooden_shield": {
+        "name": "Wooden Shield",
+        "description": "A simple wooden shield that grants +2 to AC.",
+        "weight": 6.0,
+        "cost": 10,
+        "armor_type": "shield",
+        "armor_class": 2,
+        "add_dex_to_ac": false,
+        "disadvantage_stealth": false
+      }
+    }
+  },
+  "tools": {
+    "artisan": {
+      "alchemists_supplies": {
+        "name": "Alchemist's Supplies",
+        "weight": 3.0,
+        "cost": 50
+      },
+      "brewers_supplies": {
+        "name": "Brewer's Supplies",
+        "weight": 9.0,
+        "cost": 20
+      },
+      "calligraphers_supplies": {
+        "name": "Calligrapher's Supplies",
+        "weight": 2.5,
+        "cost": 10
+      },
+      "carpenters_tools": {
+        "name": "Carpenter's Tools",
+        "weight": 6.0,
+        "cost": 8
+      },
+      "cartographers_tools": {
+        "name": "Cartographer's Tools",
+        "weight": 1.0,
+        "cost": 15
+      },
+      "cobblers_tools": {
+        "name": "Cobbler's Tools",
+        "weight": 5.0,
+        "cost": 5
+      },
+      "cooks_utensils": {
+        "name": "Cook's Utensils",
+        "weight": 4.0,
+        "cost": 1
+      },
+      "glassblowers_tools": {
+        "name": "Glassblower's Tools",
+        "weight": 5.0,
+        "cost": 30
+      },
+      "jewelers_tools": {
+        "name": "Jeweler's Tools",
+        "weight": 2.0,
+        "cost": 25
+      },
+      "leatherworkers_tools": {
+        "name": "Leatherworker's Tools",
+        "weight": 5.0,
+        "cost": 5
+      },
+      "masons_tools": {
+        "name": "Mason's Tools",
+        "weight": 8.0,
+        "cost": 10
+      },
+      "painters_supplies": {
+        "name": "Painter's Supplies",
+        "weight": 5.0,
+        "cost": 10
+      },
+      "potters_tools": {
+        "name": "Potter's Tools",
+        "weight": 3.0,
+        "cost": 10
+      },
+      "smiths_tools": {
+        "name": "Smith's Tools",
+        "weight": 8.0,
+        "cost": 20
+      },
+      "tinkers_tools": {
+        "name": "Tinker's Tools",
+        "weight": 10.0,
+        "cost": 50
+      },
+      "weavers_tools": {
+        "name": "Weaver's Tools",
+        "weight": 5.0,
+        "cost": 5
+      },
+      "woodcarvers_tools": {
+        "name": "Woodcarver's Tools",
+        "weight": 5.0,
+        "cost": 10
+      }
+    },
+    "gaming": {
+      "dice_set": {
+        "name": "Dice Set",
+        "weight": 0.0,
+        "cost": 1
+      },
+      "dragonchess_set": {
+        "name": "Dragonchess Set",
+        "weight": 1.0,
+        "cost": 1
+      },
+      "playing_card_set": {
+        "name": "Playing Card Set",
+        "weight": 0.0,
+        "cost": 5
+      },
+      "three_dragon_ante_set": {
+        "name": "Three-Dragon Ante Set",
+        "weight": 0.0,
+        "cost": 1
+      }
+    },
+    "instruments": {
+      "bagpipes": {
+        "name": "Bagpipes",
+        "weight": 6.0,
+        "cost": 30
+      },
+      "drum": {
+        "name": "Drum",
+        "weight": 3.0,
+        "cost": 6
+      },
+      "dulcimer": {
+        "name": "Dulcimer",
+        "weight": 10.0,
+        "cost": 25
+      },
+      "flute": {
+        "name": "Flute",
+        "weight": 1.0,
+        "cost": 2
+      },
+      "lute": {
+        "name": "Lute",
+        "weight": 1.0,
+        "cost": 35
+      },
+      "lyre": {
+        "name": "Lyre",
+        "weight": 2.0,
+        "cost": 30
+      },
+      "horn": {
+        "name": "Horn",
+        "weight": 2.0,
+        "cost": 3
+      },
+      "pan_flute": {
+        "name": "Pan Flute",
+        "weight": 2.0,
+        "cost": 12
+      },
+      "shawm": {
+        "name": "Shawm",
+        "weight": 1.0,
+        "cost": 2
+      },
+      "viol": {
+        "name": "Viol",
+        "weight": 1.0,
+        "cost": 30
+      }
+    },
+    "misc": {
+      "disguise_kit": {
+        "name": "Disguise Kit",
+        "weight": 3.0,
+        "cost": 25
+      },
+      "forgery_kit": {
+        "name": "Forgery Kit",
+        "weight": 5.0,
+        "cost": 15
+      },
+      "herbalism_kit": {
+        "name": "Herbalism Kit",
+        "weight": 3.0,
+        "cost": 5
+      },
+      "navigators_kit": {
+        "name": "Navigator's Kit",
+        "weight": 2.0,
+        "cost": 25
+      },
+      "poisoners_kit": {
+        "name": "Poisoner's Kit",
+        "weight": 2.0,
+        "cost": 50
+      },
+      "thieves_tools": {
+        "name": "Thieves' Tools",
+        "weight": 1.0,
+        "cost": 25
+      }
+    }
+  },
+  "packs": {
+    "explorers_pack": {
+      "name": "Explorer's Pack",
+      "description": "A pack for adventurers exploring the wilderness.",
+      "weight": 0.0,
+      "cost": 10,
+      "is_pack": true,
+      "contents": {
+        "backpack": 1,
+        "bedroll": 1,
+        "rope_50ft": 1,
+        "rations_10days": 1,
+        "torch": 10,
+        "tinderbox": 1,
+        "waterskin": 2
+      }
+    },
+    "dungeoneers_pack": {
+      "name": "Dungeoneer's Pack",
+      "description": "A pack for adventurers delving into dungeons.",
+      "weight": 0.0,
+      "cost": 12,
+      "is_pack": true,
+      "contents": {
+        "backpack": 1,
+        "crowbar": 1,
+        "hammer": 1,
+        "piton": 10,
+        "rope_50ft": 1,
+        "rations_10days": 1,
+        "tinderbox": 1,
+        "torch": 10,
+        "waterskin": 2
+      }
+    }
+  },
+  "adventuring_gear": {
+    "backpack": {
+      "name": "Backpack",
+      "weight": 5.0,
+      "cost": 2
+    },
+    "bedroll": {
+      "name": "Bedroll",
+      "weight": 7.0,
+      "cost": 1
+    },
+    "rope_50ft": {
+      "name": "Rope (50 feet)",
+      "weight": 10.0,
+      "cost": 1
+    },
+    "rations_10days": {
+      "name": "Rations (10 days)",
+      "weight": 10.0,
+      "cost": 5
+    },
+    "torch": {
+      "name": "Torch",
+      "weight": 0.25,
+      "cost": 1
+    },
+    "tinderbox": {
+      "name": "Tinderbox",
+      "weight": 1.0,
+      "cost": 5
+    },
+    "waterskin": {
+      "name": "Waterskin",
+      "weight": 5.0,
+      "cost": 2
+    },
+    "crowbar": {
+      "name": "Crowbar",
+      "weight": 2.0,
+      "cost": 2
+    },
+    "hammer": {
+      "name": "Hammer",
+      "weight": 1.0,
+      "cost": 1
+    },
+    "piton": {
+      "name": "Piton",
+      "weight": 0.25,
+      "cost": 5
+    },
+    "druidic_focus": {
+      "name": "Druidic Focus",
+      "description": "A focus for druidic spells, such as a mistletoe or totem.",
+      "weight": 0.0,
+      "cost": 0
+    }
+  }
+}

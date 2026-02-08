@@ -109,6 +109,8 @@ class Character:
         self.apply_racial_features()  
         self.apply_class_features()
         self.apply_background_features()
+        # Prompt to equip from starting inventory (armor / shields)
+        self.prompt_equip_initial()
         # instead of attacks, implement weapons in mainhand/offhand and calculate attack bonus/damage
         self.deathsaves = {"success": 0, "failure": 0}
         self.exhaustion = 0
@@ -373,28 +375,129 @@ class Character:
 
     def get_item(self, item_name: str):
         return self.inventory.get(item_name, (None, 0))
+
+    def equip_armor(self, item_name: str) -> bool:
+        """Equip armor from inventory by item name.
+
+        Returns True if equipped, False if not found or not armor.
+        """
+        item, qty = self.get_item(item_name)
+        if not item:
+            # try case-insensitive lookup
+            match = next((n for n in self.inventory.keys() if n.lower() == item_name.lower()), None)
+            if match:
+                item, qty = self.inventory[match]
+            else:
+                return False
+
+        if not item.armor_type or item.armor_type == 'shield':
+            return False
+
+        self.armor = item.name
+        return True
+
+    def equip_shield(self, item_name: str) -> bool:
+        """Equip shield in off-hand from inventory by item name."""
+        item, qty = self.get_item(item_name)
+        if not item:
+            match = next((n for n in self.inventory.keys() if n.lower() == item_name.lower()), None)
+            if match:
+                item, qty = self.inventory[match]
+            else:
+                return False
+
+        if item.armor_type != 'shield':
+            return False
+
+        # If monk has Unarmored Defense, warn that equipping a shield will prevent it
+        if self.char_class.name == 'Monk' and 'Unarmored Defense' in self.features:
+            print('Warning: equipping a shield will prevent Monk Unarmored Defense from applying.')
+            confirm = input('Equip shield anyway? (y/n): ').strip().lower()
+            if confirm not in ('y', 'yes'):
+                return False
+
+        self.off_hand = item.name
+        return True
+
+    def prompt_equip_initial(self) -> None:
+        """Prompt the user to equip armor and shield from starting inventory."""
+        # Armor choices
+        armor_items = [name for name, (it, q) in self.inventory.items() if it and it.armor_type in ('light', 'medium', 'heavy')]
+        if armor_items:
+            print('\nYou have the following armor in your inventory:')
+            print(', '.join(armor_items))
+            choice = input('Would you like to equip armor now? (y/n): ').strip().lower()
+            if choice in ('y', 'yes'):
+                while True:
+                    sel = input('Enter armor name to equip: ').strip()
+                    if self.equip_armor(sel):
+                        print(f'Equipped armor: {self.armor}')
+                        break
+                    else:
+                        print('Invalid armor name. Try again.')
+
+        # Shield choices
+        shield_items = [name for name, (it, q) in self.inventory.items() if it and it.armor_type == 'shield']
+        if shield_items:
+            print('\nYou have the following shields in your inventory:')
+            print(', '.join(shield_items))
+            choice = input('Would you like to equip a shield now? (y/n): ').strip().lower()
+            if choice in ('y', 'yes'):
+                while True:
+                    sel = input('Enter shield name to equip: ').strip()
+                    if self.equip_shield(sel):
+                        print(f'Equipped shield: {self.off_hand}')
+                        break
+                    else:
+                        print('Invalid shield name. Try again.')
     
     def get_armor_class(self):
-        armor_class = 10
-        shield_bonus = 0 #implement off hand/shield bonus later
-        if("Unarmored Defense" in self.features):
-                if self.armor == "None":
+        # Base AC without armor
+        base_ac = 10
 
-                    # you can use a shield as a barbarian but not as a monk
-                    if (self.char_class.name == "Barbarian"):
-                        return armor_class + (self.stats[1] // 2 - 5) + (self.stats[2] // 2 - 5)
-                    
-                    
-                    elif (self.char_class.name == "Monk"):
-                        return armor_class + (self.stats[1] // 2 - 5) + (self.stats[4] // 2 - 5)
-        
-        elif self.armor == "None":
-            return armor_class + (self.stats[1] // 2 - 5)
-        
-        elif self.armor != "None": # implement for checking armor and armor proficiency 
-            return armor_class #+ self.get_item(self.armor)[0].get_armor_class() + (self.stats[1] // 2 - 5) # update to check if armor allows dex mod, and if character is proficient in armor
-        
-        else: return 10 + (self.stats[1] // 2 - 5)
+        # Determine shield bonus (if any)
+        shield_item, _ = self.get_item(self.off_hand)
+        shield_bonus = 0
+        if shield_item and shield_item.armor_type == 'shield':
+            shield_bonus = shield_item.armor_class
+
+        # If Unarmored Defense feature applies and no armor equipped
+        if "Unarmored Defense" in self.features and (self.armor == "None" or not self.armor):
+            if self.char_class.name == "Barbarian":
+                # Barbarians may use a shield and still benefit from Unarmored Defense
+                return base_ac + ((self.stats[1] // 2) - 5) + ((self.stats[2] // 2) - 5) + shield_bonus
+            if self.char_class.name == "Monk":
+                # Monks do not get Unarmored Defense while using a shield
+                if shield_bonus == 0:
+                    return base_ac + ((self.stats[1] // 2) - 5) + ((self.stats[4] // 2) - 5)
+
+        dex_mod = (self.stats[1] // 2) - 5
+
+        # If no armor equipped, return 10 + Dex
+        if not self.armor or self.armor == "None":
+            return base_ac + dex_mod
+
+        # Get equipped armor item
+        armor_item, _ = self.get_item(self.armor)
+        if not armor_item:
+            return base_ac + dex_mod
+
+        # Start with armor's base AC
+        ac = armor_item.armor_class
+
+        # Add Dex modifier if armor allows it
+        if armor_item.add_dex_to_ac:
+            if armor_item.dex_modifier_max is None:
+                ac += dex_mod
+            else:
+                ac += min(dex_mod, armor_item.dex_modifier_max)
+
+        # Add shield bonus if equipped
+        shield_item, _ = self.get_item(self.off_hand)
+        if shield_item and shield_item.armor_type == 'shield':
+            ac += shield_item.armor_class
+
+        return ac
 
     def get_movement_speed(self):
         current_speed = self.speed
@@ -410,6 +513,14 @@ class Character:
         
         else: 
             return current_speed
+    
+    def get_initiative(self):
+        initiative = self.stats[1] // 2 - 5
+        # if alert feat increases initiative by 5 and you cannot be surprised
+        return initiative
+    
+    def get_passive_perception(self):
+        return 10 + self.get_skill_bonus("Perception") 
 
     def add_language(self, lang):
         if lang not in self.languages:
@@ -474,14 +585,6 @@ class Character:
         print()
         print(f" (* = Proficient, ** = Expertise)")
         print()
-
-    def get_initiative(self):
-        initiative = self.stats[1] // 2 - 5
-        # if alert feat increases initiative by 5 and you cannot be surprised
-        return initiative
-    
-    def get_passive_perception(self):
-        return 10 + self.get_skill_bonus("Perception") 
 
     def print_items_tool_profs_lang(self):
         print("Equipment:")

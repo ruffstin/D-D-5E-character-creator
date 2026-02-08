@@ -1,24 +1,47 @@
 # druid.py 
 from .char_class import CharClass
-from item import Item
 
 class Druid(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
         super().__init__(level, subclass)
         self.name = "Druid"
-        self.subclass_options = {"Circle of the Land", "Circle of the Moon"}
+        # Accept several input variants and normalize to canonical names
+        self.subclass_options = {
+            "circle of the land": "Circle of the Land",
+            "land": "Circle of the Land",
+            "circle of the moon": "Circle of the Moon",
+            "moon": "Circle of the Moon",
+        }
         self.hit_die_value = 8
         self.proficient_saving_throws = ["INT", "WIS"]
         self.skills_proficient = {"Animal Handling", "Arcana", "History", "Insight", 
                                   "Medicine", "Nature", "Perception", "Religion"}
         # tool proficiencies herbalism kit
-        # update for choices and all items
-        self.inventory = {
-            "Leather Armor": (Item("Leather Armor", armor_type="light"), 1),
-            "Shield": (Item("Shield", armor_type="shield"), 1),
-            "Scimitar": (Item("Scimitar"), 1),
-            "Druidic Focus": (Item("Druidic Focus", "A focus for druidic spells."), 1)
-        }
+        
+        # Define equipment choices at level 1
+        self.equipment_choices = [
+            {
+                "description": "Choose (a) a wooden shield or (b) any simple weapon:",
+                "options": [
+                    {"choice": "a", "items": ["wooden_shield"]},
+                    {"choice": "b", "items": ["club", "dagger", "greatclub", "handaxe", "javelin", "light_hammer", "mace", "quarterstaff", "sickle", "spear"]}
+                ]
+            },
+            {
+                "description": "Choose (a) a scimitar or (b) any simple melee weapon:",
+                "options": [
+                    {"choice": "a", "items": ["scimitar"]},
+                    {"choice": "b", "items": ["club", "dagger", "greatclub", "handaxe", "javelin", "light_hammer", "mace", "quarterstaff", "sickle", "spear"]}
+                ]
+            }
+        ]
+        
+        # Static items all druids get
+        self.static_items = ["leather", "explorers_pack", "druidic_focus"]
+        
+        # Build inventory
+        self.inventory = {}
+        self._setup_inventory()
 
         # Apply level 1 features
         self.features = ["Druidic", "Spellcasting"] 
@@ -44,8 +67,10 @@ class Druid(CharClass):
                 
                     if "Druid Circle" not in self.features: 
                         self.features.append("Druid Circle")
-                        char_features.append("Druid Circle")
                         # call pick circle function
+                        circle = self.pick_circle()
+                        self.features.append(circle)
+                        char_features.append(circle)
                     
                 if self.level == 18: 
                     if "Timeless Body" not in self.features: 
@@ -63,9 +88,16 @@ class Druid(CharClass):
                 
                 # if self.level in {} call circle feature
 
-        # def pick circle function 
-            
-        # def circle feature function    
+    def pick_circle(self):
+        prompt = "Choose a Druid Circle (Circle of the Land or Circle of the Moon): "
+        user_input = input(prompt).strip().lower()
+        while user_input not in self.subclass_options:
+            user_input = input("Invalid choice. Please choose either 'Circle of the Land' or 'Circle of the Moon': ").strip().lower()
+        subclass_choice = self.subclass_options[user_input]
+        self.subclass = subclass_choice
+        return subclass_choice
+    
+    # def circle feature function    
             #self.circle_features.append
             # char_features.append
 

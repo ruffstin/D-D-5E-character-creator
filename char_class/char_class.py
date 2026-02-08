@@ -4,7 +4,7 @@
 # and will provide items
 
 STAT_NAMES = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
-from item import Item
+from item import Item, create_item_from_template
 
 class CharClass:
     ABILITY_SCORE_IMPROVEMENT = {4, 8, 12, 16, 19}
@@ -33,6 +33,59 @@ class CharClass:
     def get_languages(self):
         return []
 
+    def _setup_inventory(self) -> None:
+        """Build inventory from static items and player equipment choices.
+        
+        Subclasses should define:
+        - self.static_items: list of template keys for items all instances get
+        - self.equipment_choices: list of dicts with equipment choice groups
+        """
+        # Add static items
+        if hasattr(self, 'static_items'):
+            for template_key in self.static_items:
+                item = create_item_from_template(template_key)
+                self.inventory[item.name] = (item, 1)
+        
+        # Handle equipment choices
+        if hasattr(self, 'equipment_choices'):
+            for choice_group in self.equipment_choices:
+                print(f"\n{choice_group['description']}")
+                for option in choice_group["options"]:
+                    print(f"  {option['choice']}) {', '.join(create_item_from_template(k).name for k in option['items'])}")
+                
+                while True:
+                    user_choice = input("Enter your choice (a/b): ").strip().lower()
+                    selected_option = next((opt for opt in choice_group["options"] if opt["choice"] == user_choice), None)
+                    if selected_option:
+                        items_in_option = selected_option["items"]
+                        
+                        # If only one item, add it directly
+                        if len(items_in_option) == 1:
+                            template_key = items_in_option[0]
+                            item = create_item_from_template(template_key)
+                            self.inventory[item.name] = (item, 1)
+                        else:
+                            # Multiple items - let user type the item name
+                            item_names = [create_item_from_template(k).name for k in items_in_option]
+                            item_dict = {name.lower(): key for name, key in zip(item_names, items_in_option)}
+                            
+                            print(f"  Available: {', '.join(item_names)}")
+                            
+                            while True:
+                                item_input = input("Enter item: ").strip().lower()
+                                if item_input in item_dict:
+                                    template_key = item_dict[item_input]
+                                    item = create_item_from_template(template_key)
+                                    self.inventory[item.name] = (item, 1)
+                                    break
+                                else:
+                                    print(f"'{item_input}' not found. Available: {', '.join(item_names)}")
+                        break
+                    else:
+                        print("Invalid choice. Please enter 'a' or 'b'.")
+    
+    
+    
     def get_inventory(self) -> dict[str, tuple[Item, int]]:
         return self.inventory
     

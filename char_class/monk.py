@@ -15,12 +15,37 @@ class Monk(CharClass):
         self.skills_proficient = {"Acrobatics", "Athletics", "History", "Insight", 
                                   "Religion", "Stealth"}
         self.martial_arts_die = MARTIAL_ARTS_DIE[level]
-        # tool proficiency
-        # update for choices and all items
-        self.inventory = {
-            "Shortsword": (Item("Shorsword"), 1),
-            "Dart": (Item("Dart"), 10)
-        }
+        # tool proficiency - Tools: Choose one type of artisan's tools or one musical instrument
+        
+        # Define equipment choices at level 1
+        self.equipment_choices = [
+            {
+                "description": "Choose (a) a shortsword or (b) any simple weapon:",
+                "options": [
+                    {"choice": "a", "items": ["shortsword"]},
+                    {"choice": "b", "items": ["club", "dagger", "greatclub", "handaxe", "javelin", "light_hammer", "mace", "quarterstaff", "sickle", "spear"]}
+                ]
+            },
+            {
+                "description": "Choose (a) a dungeoneer's pack or (b) an explorer's pack:",
+                "options": [
+                    {"choice": "a", "items": ["dungeoneers_pack"]},
+                    {"choice": "b", "items": ["explorers_pack"]}
+                ]
+            }
+        ]
+        
+        # Static items: darts will be added manually as quantity 10
+        self.static_items = []
+        
+        # Build inventory
+        self.inventory = {}
+        self._setup_inventory()
+        
+        # Add 10 darts manually
+        from item import create_item_from_template
+        dart = create_item_from_template("dart")
+        self.inventory["Dart"] = (dart, 10)
                 
         # Apply level 1 features
         self.features = ["Unarmored Defense", "Martial Arts"]
