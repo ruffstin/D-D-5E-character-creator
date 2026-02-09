@@ -9,7 +9,11 @@ class Barbarian(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
         super().__init__(level, subclass)
         self.name = "Barbarian"
-        self.subclass_options = {"Berserker", "Totem Warrior"}
+        self.subclass_options = {
+            "berserker": "Berserker",
+            "totem warrior": "Totem Warrior",
+            "totem": "Totem Warrior",
+        }
         self.hit_die_value = 12
         self.proficient_saving_throws = ["STR", "CON"]
         self.skills_proficient = {"Animal Handling", "Athletics", "Intimidation", "Nature", 
@@ -84,8 +88,9 @@ class Barbarian(CharClass):
                 if self.level == 3:    
                     if "Primal Path" not in self.features: 
                         self.features.append("Primal Path")
-                        char_features.append("Primal Path")
-                        # call pick path function
+                        path = self.pick_primal_path()
+                        if path:
+                            char_features.append("Primal Path: " + path)
                     
                 if self.level == 5:
                     if "Extra Attack" not in self.features:
@@ -129,10 +134,17 @@ class Barbarian(CharClass):
                 
                 # if self.level in {} call path feature
 
-        # def pick Primal Path function 
-            
-        # def primal path feature function    
-            #self.primal_features.append
+    def pick_primal_path(self):
+        prompt = "Choose a Primal Path (Berserker or Totem Warrior): "
+        user_input = input(prompt).strip().lower()
+        while user_input not in self.subclass_options:
+            user_input = input("Invalid choice. Please choose 'Berserker' or 'Totem Warrior': ").strip().lower()
+        subclass_choice = self.subclass_options[user_input]
+        self.subclass = subclass_choice
+        return subclass_choice
+
+    # def primal_path feature function    
+            #self.primal_path_features.append
             # char_features.append
 
-            #which if statement will depend on subclass chosen
+            #which if statement will depend on sublcass chosen

@@ -5,7 +5,6 @@ class Druid(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
         super().__init__(level, subclass)
         self.name = "Druid"
-        # Accept several input variants and normalize to canonical names
         self.subclass_options = {
             "circle of the land": "Circle of the Land",
             "land": "Circle of the Land",
@@ -67,10 +66,9 @@ class Druid(CharClass):
                 
                     if "Druid Circle" not in self.features: 
                         self.features.append("Druid Circle")
-                        # call pick circle function
                         circle = self.pick_circle()
-                        self.features.append(circle)
-                        char_features.append(circle)
+                        if circle:
+                            char_features.append("Druid Circle: " + circle)
                     
                 if self.level == 18: 
                     if "Timeless Body" not in self.features: 
@@ -89,7 +87,7 @@ class Druid(CharClass):
                 # if self.level in {} call circle feature
 
     def pick_circle(self):
-        prompt = "Choose a Druid Circle (Circle of the Land or Circle of the Moon): "
+        prompt = "Choose a Druid Circle(Circle of the Land or Circle of the Moon): "
         user_input = input(prompt).strip().lower()
         while user_input not in self.subclass_options:
             user_input = input("Invalid choice. Please choose either 'Circle of the Land' or 'Circle of the Moon': ").strip().lower()

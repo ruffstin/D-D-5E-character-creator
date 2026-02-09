@@ -7,23 +7,80 @@ class Warlock(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
         super().__init__(level, subclass)
         self.name = "Warlock"
-        self.subclass_options = {"The Archfey", "The Fiend", "The Great Old One"}
-        self.pact_boon_options = {"Pact of the Chain", "Pact of the Blade", "Pact of the Tome"}
+        self.subclass_options = {
+            "the archfey": "The Archfey",
+            "archfey": "The Archfey",
+            "the fiend": "The Fiend",
+            "fiend": "The Fiend",
+            "the great old one": "The Great Old One",
+            "great old one": "The Great Old One",
+            "old one": "The Great Old One",
+        }
+        self.pact_boon_options = {
+            "pact of the chain": "Pact of the Chain",
+            "chain": "Pact of the Chain",
+            "pact of the blade": "Pact of the Blade",
+            "blade": "Pact of the Blade",
+            "pact of the tome": "Pact of the Tome",
+            "tome": "Pact of the Tome",
+        }
         self.hit_die_value = 8
         self.proficient_saving_throws = ["WIS", "CHA"]
         # choose 2 
         self.skills_proficient = {"Arcana", "Deception", "History", "Intimidation", 
                                   "Investigation", "Nature", "Religion"}
-        # update for choices and all items
-        self.inventory = {
-            "Arcane Focus": (Item("Arcane Focus", "A focus for casting spells"), 1),
-            "Light Crossbow": (Item("Light Crossbow"), 1)
-        }
+        
+        # Equipment choices and static items
+        self.equipment_choices = [
+            {
+                "description": "Choose (a) a light crossbow and 20 bolts or (b) any simple weapon:",
+                "options": [
+                    {"choice": "a", "items": ["crossbow_light"]},
+                    {"choice": "b", "items": ["club", "dagger", "greatclub", "handaxe", "javelin", "light_hammer", "mace", "quarterstaff", "sickle", "spear"]}
+                ]
+            },
+            {
+                "description": "Choose (a) a component pouch or (b) an arcane focus:",
+                "options": [
+                    {"choice": "a", "items": ["component_pouch"]},
+                    {"choice": "b", "items": ["arcane_focus"]}
+                ]
+            },
+            {
+                "description": "Choose (a) a scholar's pack or (b) a dungeoneer's pack:",
+                "options": [
+                    {"choice": "a", "items": ["scholars_pack"]},
+                    {"choice": "b", "items": ["dungeoneers_pack"]}
+                ]
+            }
+        ]
+
+        # Static items: leather armor, any simple weapon, and 2 daggers
+        self.static_items = ["leather", "dagger"]
+
+        # Build inventory from templates
+        self.inventory = {}
+        self._setup_inventory()
+
+        # Post-setup handling for combos
+        from item import create_item_from_template
+        # Ensure 2 daggers total
+        if "Dagger" in self.inventory:
+            item, qty = self.inventory["Dagger"]
+            self.inventory["Dagger"] = (item, 2)
+        # If crossbow chosen (option 1a), add 20 bolts
+        if "Crossbow, Light" in self.inventory:
+            bolt = create_item_from_template("crossbow_bolt")
+            self.inventory[bolt.name] = (bolt, 20)
 
         # Apply level 1 features
-        self.features = ["Otherworldly Patron", "Pact Magic"]
-        #call otherworldly patron function since subclass is chosen at level 1
-        
+        self.features = ["Pact Magic"]
+        self.pact_boon = None
+        self.pact_features = {}
+        # call otherworldly patron function since subclass is chosen at level 1
+        if not self.subclass:
+            self.pick_otherworldly_patron()
+        self.features.append("Otherworldly Patron: " + self.subclass)
 
     def get_invocations_known(self, level):
         if "Invocations" in self.features:
@@ -48,8 +105,10 @@ class Warlock(CharClass):
                 if self.level == 3: 
                     if "Pact Boon" not in self.features: 
                         self.features.append("Pact Boon")
-                        char_features.append("Pact Boon")
                         # call pick pact boon function
+                        boon = self.pick_pact_boon()
+                        if boon:
+                            char_features.append("Pact Boon: " + boon)
 
                 if self.level == 11 or self.level == 13 or self.level == 15 or self.level == 17: 
                     if "Mystic Arcanum (6th level)" not in self.features:
@@ -78,12 +137,20 @@ class Warlock(CharClass):
                         char_features.append("Eldritch Master")
 
 
-        # if self.level in {} call otherworldly patron feature
-        # def pick pact boon function
-        # def pick otherworldly patron function 
-            
-        # def otherworldly patron feature function    
-            #self.otherworldly_patron_features.append
-            # char_features.append
+    def pick_otherworldly_patron(self):
+        prompt = "Choose an Otherworldly Patron (The Archfey, The Fiend, The Great Old One): "
+        user_input = input(prompt).strip().lower()
+        while user_input not in self.subclass_options:
+            user_input = input("Invalid choice. Please choose a valid Otherworldly Patron: ").strip().lower()
+        subclass_choice = self.subclass_options[user_input]
+        self.subclass = subclass_choice
+        return subclass_choice
 
-            #which if statement will depend on sublcass chosen
+    def pick_pact_boon(self):
+        prompt = "Choose a Pact Boon (Pact of the Chain, Pact of the Blade, Pact of the Tome): "
+        user_input = input(prompt).strip().lower()
+        while user_input not in self.pact_boon_options:
+            user_input = input("Invalid choice. Please choose a valid Pact Boon: ").strip().lower()
+        boon_choice = self.pact_boon_options[user_input]
+        self.pact_boon = boon_choice
+        return boon_choice

@@ -10,7 +10,14 @@ class Rogue(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
         super().__init__(level, subclass)
         self.name = "Rogue"
-        self.subclass_options = {"Thief ", "Assassin", "Arcane Tricker"}
+        self.subclass_options = {
+            "thief": "Thief",
+            "assassin": "Assassin",
+            "arcane trickster": "Arcane Trickster",
+            "arcane tricker": "Arcane Trickster",
+            "arcane": "Arcane Trickster",
+            "arcanetrickster": "Arcane Trickster"
+        }
 
         self.hit_die_value = 8
         self.proficient_saving_throws = ["DEX", "INT"]
@@ -19,12 +26,50 @@ class Rogue(CharClass):
                                   "Intimidation", "Investigation", "Perception", 
                                   "Performance", "Persuasion", "Sleight of Hand", 
                                   "Stealth"}
-        # update for choices and add all items
-        self.inventory = {
-            "Leather Armor": (Item("Leather Armor", armor_type="light"), 1),
-            "Rapier": (Item("Rapier"), 1),
-            "Thieves' Tools": (Item("Thieves' Tools", "Tools for lockpicking and disarming traps."), 1)
-        }
+        
+        # Equipment choices and static items
+        self.equipment_choices = [
+            {
+                "description": "Choose (a) a rapier or (b) a shortsword:",
+                "options": [
+                    {"choice": "a", "items": ["rapier"]},
+                    {"choice": "b", "items": ["shortsword"]}
+                ]
+            },
+            {
+                "description": "Choose (a) a shortbow and quiver of 20 arrows, or (b) a shortsword:",
+                "options": [
+                    {"choice": "a", "items": ["shortbow"]},
+                    {"choice": "b", "items": ["shortsword"]}
+                ]
+            },
+            {
+                "description": "Choose (a) a burglar's pack, (b) a dungeoneer's pack, or (c) an explorer's pack:",
+                "options": [
+                    {"choice": "a", "items": ["burglars_pack"]},
+                    {"choice": "b", "items": ["dungeoneers_pack"]},
+                    {"choice": "c", "items": ["explorers_pack"]}
+                ]
+            }
+        ]
+
+        # Static items: leather armor, one dagger, and thieves' tools
+        self.static_items = ["leather", "dagger", "thieves_tools"]
+
+        # Build inventory from templates
+        self.inventory = {}
+        self._setup_inventory()
+
+        # Post-setup handling for combos
+        from item import create_item_from_template
+        # Add a second dagger (rogue gets 2 daggers total)
+        if "Dagger" in self.inventory:
+            item, qty = self.inventory["Dagger"]
+            self.inventory["Dagger"] = (item, 2)
+        # If shortbow chosen (option 2a), add 20 arrows
+        if "Shortbow" in self.inventory:
+            arrow = create_item_from_template("arrow")
+            self.inventory[arrow.name] = (arrow, 20)
 
         # Apply level 1 features
         self.features = ["Sneak Attack", "Thieves' Cant", "Expertise"]
@@ -60,8 +105,9 @@ class Rogue(CharClass):
                 if self.level == 3:
                     if "Roguish Archetype" not in self.features: 
                         self.features.append("Roguish Archetype")
-                        char_features.append("Roguish Archetype")
-                        # call pick Roguish Archetype function
+                        archetype = self.pick_roguish_archetype()
+                        if archetype:
+                            char_features.append("Roguish Archetype: " + archetype)
 
                 if self.level == 5: 
                     if "Uncanny Dodge" not in self.features: 
@@ -107,10 +153,13 @@ class Rogue(CharClass):
                 
                 # if self.level in {} call roguish_archetype feature
 
-    # def pick roguish archetype function 
-            
-    # def roguish_archetype feature function    
-        #self.roguish_features.append
-        # char_features.append
+    def pick_roguish_archetype(self):
+        prompt = "Choose a Roguish Archetype (Thief, Assassin, Arcane Trickster): "
+        user_input = input(prompt).strip().lower()
+        while user_input not in self.subclass_options:
+            user_input = input("Invalid choice. Please choose Thief, Assassin, or Arcane Trickster: ").strip().lower()
+        subclass_choice = self.subclass_options[user_input]
+        self.subclass = subclass_choice
+        return subclass_choice
 
-        #which if statement will depend on sublcass chosen
+    # roguish archetype-specific features can be added later

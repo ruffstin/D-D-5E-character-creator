@@ -40,7 +40,7 @@ Character holds Race and Class and Background
 	Background start with similar logic, adjust for alternate bonuses.
 
 ## How to run this program
-open up the main function and start creating characters! I have some examples listed
+open up the main function and start creating characters! 
 Next open up a powershell terminal and run this line: 
 "python main.py" and that will start the program
 ***NEW INSTRUCTIONS!***

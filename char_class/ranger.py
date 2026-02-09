@@ -6,18 +6,70 @@ class Ranger(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
         super().__init__(level, subclass)
         self.name = "Ranger"
-        self.subclass_options = {"Hunter", "Beast Master"}
+        # Normalize enclave inputs to canonical names
+        self.subclass_options = {
+            "hunter": "Hunter",
+            "beast master": "Beast Master",
+            "beastmaster": "Beast Master",
+            "beast": "Beast Master",
+        }
         self.hit_die_value = 10
         self.proficient_saving_throws = ["STR", "DEX"]
         self.skills_known = 3
         self.skills_proficient = {"Animal Handling", "Athletics", "Insight", "Investigation", 
                                    "Nature", "Perception", "Stealth", "Survival"}
-        # update for choices
-        self.inventory = {
-            "Scale Mail": (Item("Scale Mail", armor_type="medium"), 1),
-            "Shortsword": (Item("Shortsword"), 1),
-            "Longbow": (Item("Longbow"), 1),
-        }
+        
+        # Equipment choices and static items
+        self.equipment_choices = [
+            {
+                "description": "Choose (a) scale mail or (b) leather armor:",
+                "options": [
+                    {"choice": "a", "items": ["scale_mail"]},
+                    {"choice": "b", "items": ["leather"]}
+                ]
+            },
+            {
+                "description": "Choose (a) two shortswords or (b) two simple melee weapons:",
+                "options": [
+                    {"choice": "a", "items": ["shortsword"]},
+                    {"choice": "b", "items": ["club", "dagger", "greatclub", "handaxe", "javelin", "light_hammer", "mace", "quarterstaff", "sickle", "spear"]}
+                ]
+            },
+            {
+                "description": "Choose (a) a dungeoneer's pack or (b) an explorer's pack:",
+                "options": [
+                    {"choice": "a", "items": ["dungeoneers_pack"]},
+                    {"choice": "b", "items": ["explorers_pack"]}
+                ]
+            }
+        ]
+
+        # Static items: longbow and 20 arrows
+        self.static_items = ["longbow"]
+
+        # Build inventory from templates
+        self.inventory = {}
+        self._setup_inventory()
+
+        # Post-setup handling for combos
+        from item import create_item_from_template
+        # If shortsword (option 2a), ensure qty is 2
+        if "Shortsword" in self.inventory:
+            item, qty = self.inventory["Shortsword"]
+            if qty == 1:
+                self.inventory["Shortsword"] = (item, 2)
+        else:
+            # Option 2b: two simple melee weapons - add a second one
+            simple_melee_names = {"Club", "Dagger", "Greatclub", "Handaxe", "Javelin", "Light Hammer", "Mace", "Quarterstaff", "Sickle", "Spear"}
+            for name in self.inventory:
+                if name in simple_melee_names:
+                    item, qty = self.inventory[name]
+                    if qty == 1:
+                        self.inventory[name] = (item, 2)
+                    break
+        # Add 20 arrows for the longbow
+        arrow = create_item_from_template("arrow")
+        self.inventory[arrow.name] = (arrow, 20)
 
         # Apply level 1 features
         self.features = ["Favored Enemy", "Natural Explorer"] 
@@ -51,8 +103,9 @@ class Ranger(CharClass):
 
                     if "Ranger Enclave" not in self.features: 
                         self.features.append("Ranger Enclave")
-                        char_features.append("Ranger Enclave")
-                        # call pick ranger enclave function
+                        enclave = self.pick_ranger_enclave()
+                        if enclave:
+                            char_features.append(enclave)
                 
                 if self.level == 5: 
                     if "Extra Attack" not in self.features: 
@@ -86,10 +139,13 @@ class Ranger(CharClass):
                 
                 # if self.level in {} call enclave feature
 
-        # def pick ranger enclave function 
-            
-        # def enclave feature function    
-            #self.enclave_features.append
-            # char_features.append
+    def pick_ranger_enclave(self):
+        prompt = "Choose a Ranger Enclave (Hunter or Beast Master): "
+        user_input = input(prompt).strip().lower()
+        while user_input not in self.subclass_options:
+            user_input = input("Invalid choice. Please choose Hunter or Beast Master: ").strip().lower()
+        subclass_Choice = self.subclass_options[user_input]
+        self.subclass = subclass_Choice
+        return subclass_Choice
 
-            #which if statement will depend on sublcass chosen
+    # enclave-specific feature functions can be added later

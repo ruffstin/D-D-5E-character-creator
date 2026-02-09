@@ -6,21 +6,61 @@ class Wizard(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
         super().__init__(level, subclass)
         self.name = "Wizard"
-        self.subclass_options = {"School of Abjuration", "School of Conjuration", "School of Divination",
-                                 "School of Enchantment", "School of Evocation", 
-                                 "School of Illusion", "School of Necromancy", 
-                                 "School of Transmutation"}
+        self.subclass_options = {
+            "school of abjuration": "School of Abjuration",
+            "abjuration": "School of Abjuration",
+            "school of conjuration": "School of Conjuration",
+            "conjuration": "School of Conjuration",
+            "school of divination": "School of Divination",
+            "divination": "School of Divination",
+            "school of enchantment": "School of Enchantment",
+            "enchantment": "School of Enchantment",
+            "school of evocation": "School of Evocation",
+            "evocation": "School of Evocation",
+            "school of illusion": "School of Illusion",
+            "illusion": "School of Illusion",
+            "school of necromancy": "School of Necromancy",
+            "necromancy": "School of Necromancy",
+            "school of transmutation": "School of Transmutation",
+            "transmutation": "School of Transmutation",
+        }
         self.hit_die_value = 6
         self.proficient_saving_throws = ["INT", "WIS"]
         # choose 2 
         self.skills_proficient = {"Arcana", "History", "Insight", 
                                   "Investigation", "Medicine", "Religion"}
-        # update for choices and all items
-        self.inventory = {
-            "Quarterstaff": (Item("Quarterstaff"), 1),
-            "Arcane Focus": (Item("Arcane Focus", "A focus for casting spells"), 1),
-            "Spellbook": (Item("Spellbook", "A book to record spells in, requires a special ink"), 1),
-        }
+        
+        # Equipment choices and static items
+        self.equipment_choices = [
+            {
+                "description": "Choose (a) a quarterstaff or (b) a dagger:",
+                "options": [
+                    {"choice": "a", "items": ["quarterstaff"]},
+                    {"choice": "b", "items": ["dagger"]}
+                ]
+            },
+            {
+                "description": "Choose (a) a component pouch or (b) an arcane focus:",
+                "options": [
+                    {"choice": "a", "items": ["component_pouch"]},
+                    {"choice": "b", "items": ["arcane_focus"]}
+                ]
+            },
+            {
+                "description": "Choose (a) a scholar's pack or (b) an explorer's pack:",
+                "options": [
+                    {"choice": "a", "items": ["scholars_pack"]},
+                    {"choice": "b", "items": ["explorers_pack"]}
+                ]
+            }
+        ]
+
+        # Static items: spellbook
+        self.static_items = ["spellbook"]
+
+        # Build inventory from templates
+        self.inventory = {}
+        self._setup_inventory()
 
         # Apply level 1 features
         self.features = ["Spellcasting", "Arcane Recovery"]
@@ -37,8 +77,10 @@ class Wizard(CharClass):
                 if self.level == 2:
                     if "Arcane Tradition" not in self.features: 
                         self.features.append("Arcane Tradition")
-                        char_features.append("Arcane Tradition")
                         # call pick arcane_tradition function
+                        tradition = self.pick_arcane_tradition()
+                        if tradition:
+                            char_features.append("Arcane Tradition: " + tradition)
 
                 if self.level == 18: 
                     if "Spell Mastery" not in self.features: 
@@ -50,12 +92,11 @@ class Wizard(CharClass):
                         self.features.append("Signature Spells")
                         char_features.append("Signature Spells")
 
-        # if self.level in {} call arcane_tradition feature
-
-        # def pick arcane_tradition function 
-            
-        # def arcane_tradition feature function    
-            #self.arcane_tradition_features.append
-            # char_features.append
-
-            #which if statement will depend on sublcass chosen
+    def pick_arcane_tradition(self):
+        prompt = "Choose an Arcane Tradition (Abjuration, Conjuration, Divination, Enchantment, Evocation, Illusion, Necromancy, Transmutation): "
+        user_input = input(prompt).strip().lower()
+        while user_input not in self.subclass_options:
+            user_input = input("Invalid choice. Please choose a valid Arcane Tradition: ").strip().lower()
+        subclass_choice = self.subclass_options[user_input]
+        self.subclass = subclass_choice
+        return subclass_choice

@@ -8,7 +8,14 @@ class Monk(CharClass):
     def __init__(self, level: int = 1, subclass: str = None):
         super().__init__(level, subclass)
         self.name = "Monk"
-        self.subclass_options = {"Way of the Open Hand", "Way of Shadow", "Way of the Four Elements"}
+        self.subclass_options = {
+            "way of the open hand": "Way of the Open Hand",
+            "open hand": "Way of the Open Hand",
+            "way of shadow": "Way of Shadow",
+            "shadow": "Way of Shadow",
+            "way of the four elements": "Way of the Four Elements",
+            "four elements": "Way of the Four Elements"
+        }
         self.hit_die_value = 8
         self.proficient_saving_throws = ["STR", "DEX"]
         # choose 2
@@ -83,9 +90,10 @@ class Monk(CharClass):
                 
                 if self.level == 3:    
                     if "Monastic Tradition" not in self.features: 
-                        self.features.append("Monastic Tradition")
-                        char_features.append("Monastic Tradition")
-                        # call pick tradition function
+                        self.features.append("Monastic Tradition") 
+                        tradition = self.pick_monastic_tradition()
+                        if tradition:
+                            char_features.append("Monastic Tradition: " + tradition)
 
                     if "Deflect Missiles" not in self.features:
                         self.features.append("Deflect Missiles")
@@ -148,11 +156,16 @@ class Monk(CharClass):
                     if "Perfect Self" not in self.features:
                         self.features.append("Perfect Self")
                         char_features.append("Perfect Self")    
-
-
             # if self.level in {} call monastic_tradition feature
 
-        # def pick monastic_tradition function 
+    def pick_monastic_tradition(self):
+        prompt = "Choose a Monastic Tradition (Way of the Open Hand, Way of Shadow, Way of the Four Elements): "
+        user_input = input(prompt).strip().lower()
+        while user_input not in self.subclass_options:
+            user_input = input("Invalid choice. Please choose either 'Way of the Open Hand', 'Way of Shadow', or 'Way of the Four Elements': ").strip().lower()
+        subclass_choice = self.subclass_options[user_input]
+        self.subclass = subclass_choice
+        return subclass_choice
             
         # def monastic_tradition feature function    
             #self.monastic_tradition_features.append
