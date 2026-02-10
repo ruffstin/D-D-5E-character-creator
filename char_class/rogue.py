@@ -26,6 +26,7 @@ class Rogue(CharClass):
                                   "Intimidation", "Investigation", "Perception", 
                                   "Performance", "Persuasion", "Sleight of Hand", 
                                   "Stealth"}
+        self.expertise1 = True
         
         # Equipment choices and static items
         self.equipment_choices = [
@@ -119,7 +120,6 @@ class Rogue(CharClass):
                         self.features.append("Additional Expertise")
                         char_features.append("Additional Expertise")
                         # implement expertise choice function
-                        # def set expertise, 2 skills your proficient in, or 1 and thieves tools
 
                 if self.level == 7: 
                     if "Evasion" not in self.features: 

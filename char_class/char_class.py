@@ -26,6 +26,7 @@ class CharClass:
         self.skills_proficient = set()
         self.proficient_saving_throws = []
         self.features = []
+        self.expertise1 = False
 
     def get_subclass(self) -> str:
         return self.subclass or "None"
@@ -217,6 +218,47 @@ class CharClass:
         that grant subclass features.
         """
         return None
+
+    def apply_expertise(self, char_proficient_skills: set, char_expertise_skills: set, tools: bool = False) -> None:
+        """
+        Allow the user to choose expertise in skills.
+        If tools=True, reserved for thieves tools expertise implementation.
+        If tools=False, prompts user to select 2 skills as expertise from proficient skills.
+        Selected skills are added to expertise and removed from the selection pool.
+        """
+        if tools:
+            # TODO: Implement thieves tools expertise selection in future
+            return
+        
+        # Prompt user to select 2 expertise skills
+        expertise_count = 0
+        while expertise_count < 2:
+            print(f"\nSelect expertise skill {expertise_count + 1} of 2")
+            available_skills = char_proficient_skills - char_expertise_skills
+            
+            if not available_skills:
+                print("No more skills available for expertise.")
+                break
+            
+            print("Available skills:")
+            skills_list = sorted(list(available_skills))
+            for i, skill in enumerate(skills_list):
+                print(f"  {i}: {skill}")
+            
+            while True:
+                user_input = input("Enter the skill number: ").strip()
+                if user_input.isdigit():
+                    choice = int(user_input)
+                    if 0 <= choice < len(skills_list):
+                        selected_skill = skills_list[choice]
+                        char_expertise_skills.add(selected_skill)
+                        print(f"Added {selected_skill} to expertise.")
+                        expertise_count += 1
+                        break
+                    else:
+                        print("Invalid choice. Please enter a valid number.")
+                else:
+                    print("Invalid input. Please enter a number.")
 
     def description(self) -> str:
         if self.subclass:

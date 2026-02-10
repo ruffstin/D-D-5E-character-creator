@@ -106,9 +106,18 @@ class Character:
         self.skin = ""
         self.hair = ""
         
+        # Expertise tracking flags
+        self._expertise_applied = False
+        self._additional_expertise_applied = False
+        
         self.apply_racial_features()  
         self.apply_class_features()
         self.apply_background_features()
+        # replace expert_Tools = False with self.char_class.name == "Rogue"
+        expert_tools = False
+        if self.char_class.expertise1:
+            self.char_class.apply_expertise(self.skills_proficient, self.skills_expert, expert_tools)
+            self._expertise_applied = True  # Mark that first expertise has been applied
         # Prompt to equip from starting inventory (armor / shields)
         self.prompt_equip_initial()
         # instead of attacks, implement weapons in mainhand/offhand and calculate attack bonus/damage
@@ -334,6 +343,17 @@ class Character:
         self.char_class.level_up(self.level, self.stats, self.features, char_hp)
         self.maxhp = char_hp[0]
         self.race.level_up(self.level, self.features)
+        
+        # Handle expertise features gained from leveling up
+        expert_tools = False
+        # Apply expertise if this is the first level with the feature
+        if "Expertise" in self.features and not self._expertise_applied:
+            self.char_class.apply_expertise(self.skills_proficient, self.skills_expert, expert_tools)
+            self._expertise_applied = True
+        # Apply additional expertise (higher level expertise for Bards, etc.)
+        if "Additional Expertise" in self.features and not self._additional_expertise_applied:
+            self.char_class.apply_expertise(self.skills_proficient, self.skills_expert, expert_tools)
+            self._additional_expertise_applied = True
 
         while times_to_roll > 0:
             while True: 

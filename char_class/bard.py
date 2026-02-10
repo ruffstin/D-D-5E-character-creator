@@ -108,8 +108,8 @@ class Bard(CharClass):
                         self.bardic_inspiration_dice = "d10"
                     
                     if self.level == 10: 
-                        self.features.append("Additonal Expertise")
-                        char_features.append("Additonal Expertise")
+                        self.features.append("Additional Expertise")
+                        char_features.append("Additional Expertise")
 
                     elif self.level == 14:
                         self.features.append("Additional Magical Secrets")
