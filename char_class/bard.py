@@ -20,6 +20,11 @@ class Bard(CharClass):
                                   "Investigation", "Medicine", "Nature", "Perception", 
                                   "Performance", "Persuasion", "Religion", 
                                   "Sleight of Hand", "Stealth", "Survival"}
+        
+        self.armor_proficient = ["light armor"]
+        self.weapons_proficient = ["simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
+        self.tools_proficient = self.select_instruments()  # function to select 3 musical instruments from the list of options
+
         # Equipment choices and static items (level 1)
         self.equipment_choices = [
             {
@@ -137,6 +142,18 @@ class Bard(CharClass):
         self.subclass = subclass_choice
         return subclass_choice
 
+    def select_instruments(self):
+        instruments = ["bagpipes", "drum", "dulcimer", "flute", "lyre", "horn", "pan_flute", "shawm"]
+        selected_instruments = []
+        while len(selected_instruments) < 3:
+            prompt = f"Choose a musical instrument from the following list ({', '.join(instruments)}): "
+            user_input = input(prompt).strip().lower()
+            if user_input in instruments and user_input not in selected_instruments:
+                selected_instruments.append(user_input)
+                instruments.remove(user_input)  # Remove the selected instrument from the options
+            else:
+                print("Invalid choice or instrument already selected. Please choose a different instrument.")
+        return selected_instruments
                     
     # def college feature function    
             #self.college_features.append

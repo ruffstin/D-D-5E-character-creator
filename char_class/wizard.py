@@ -30,6 +30,8 @@ class Wizard(CharClass):
         self.skills_proficient = {"Arcana", "History", "Insight", 
                                   "Investigation", "Medicine", "Religion"}
         
+        self.weapons_proficient = ["daggers", "darts", "slings", "quarterstaffs", "light_crossbows"]
+        
         # Equipment choices and static items
         self.equipment_choices = [
             {

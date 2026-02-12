@@ -30,6 +30,9 @@ class Warlock(CharClass):
         self.skills_proficient = {"Arcana", "Deception", "History", "Intimidation", 
                                   "Investigation", "Nature", "Religion"}
         
+        self.armor_proficient = ["light armor"]
+        self.weapons_proficient = ["simple weapons"]
+        
         # Equipment choices and static items
         self.equipment_choices = [
             {

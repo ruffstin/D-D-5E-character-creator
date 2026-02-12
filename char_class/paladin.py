@@ -20,6 +20,9 @@ class Paladin(CharClass):
         self.skills_proficient = {"Athletics", "Insight", "Intimidation", 
                                   "Medicine", "Persuasion", "Religion"}
         
+        self.armor_proficient = ["light armor", "medium armor", "heavy armor", "shields"] # paladins are proficient with all armor and shields
+        self.weapons_proficient = ["simple weapons", "martial weapons"]
+        
         # Equipment choices and static items
         self.equipment_choices = [
             {

@@ -18,12 +18,14 @@ class Monk(CharClass):
         }
         self.hit_die_value = 8
         self.proficient_saving_throws = ["STR", "DEX"]
-        # choose 2
+        
         self.skills_proficient = {"Acrobatics", "Athletics", "History", "Insight", 
                                   "Religion", "Stealth"}
         self.martial_arts_die = MARTIAL_ARTS_DIE[level]
-        # tool proficiency - Tools: Choose one type of artisan's tools or one musical instrument
-        
+
+        self.weapons_proficient = ["simple weapons", "shortswords"]
+        self.tools_proficient = self.get_tool_proficiency()
+
         # Define equipment choices at level 1
         self.equipment_choices = [
             {
@@ -166,6 +168,24 @@ class Monk(CharClass):
         subclass_choice = self.subclass_options[user_input]
         self.subclass = subclass_choice
         return subclass_choice
+    
+    def get_tool_proficiency(self):
+        artisans_tools = ["alchemist's supplies", "brewer's supplies", "calligrapher's supplies", "carpenter's tools", "cartographer's tools", "cobbler's tools", "cook's utensils", "glassblower's tools", "jeweler's tools", "leatherworker's tools", "mason's tools", "painter's supplies", "potter's tools", "smith's tools", "tinker's tools", "weaver's tools", "woodcarver's tools"]
+        musical_instruments = ["bagpipes", "drum", "dulcimer", "flute", "lute", "lyre", "horn", "pan flute", "shawm", "viol"]
+        prompt = "Choose a tool proficiency (artisan's tools or musical instrument): "
+        user_input = input(prompt).strip().lower()
+        while user_input not in ["artisan's tools", "musical instrument"]:
+            user_input = input("Invalid choice. Please choose either 'artisan's tools' or 'musical instrument': ").strip().lower()
+        if user_input == "artisan's tools":
+            tool_choice = input("Choose one type of artisan's tools from the following list: " + ", ".join(artisans_tools) + ": ").strip().lower()
+            while tool_choice not in artisans_tools:
+                tool_choice = input("Invalid choice. Please choose a valid artisan's tool: ").strip().lower()
+            return [tool_choice]
+        else:
+            instrument_choice = input("Choose one musical instrument from the following list: " + ", ".join(musical_instruments) + ": ").strip().lower()
+            while instrument_choice not in musical_instruments:
+                instrument_choice = input("Invalid choice. Please choose a valid musical instrument: ").strip().lower()
+            return [instrument_choice]
             
         # def monastic_tradition feature function    
             #self.monastic_tradition_features.append

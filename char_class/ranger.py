@@ -19,6 +19,9 @@ class Ranger(CharClass):
         self.skills_proficient = {"Animal Handling", "Athletics", "Insight", "Investigation", 
                                    "Nature", "Perception", "Stealth", "Survival"}
         
+        self.armor_proficient = ["light armor", "medium armor", "shields"]
+        self.weapons_proficient = ["simple weapons", "martial weapons"]
+        
         # Equipment choices and static items
         self.equipment_choices = [
             {

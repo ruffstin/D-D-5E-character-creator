@@ -15,8 +15,11 @@ class Druid(CharClass):
         self.proficient_saving_throws = ["INT", "WIS"]
         self.skills_proficient = {"Animal Handling", "Arcana", "History", "Insight", 
                                   "Medicine", "Nature", "Perception", "Religion"}
-        # tool proficiencies herbalism kit
-        
+
+        self.armor_proficient = ["light armor", "medium armor", "shields", "druids will not wear armor or use shields made of metal"]
+        self.weapons_proficient = ["clubs", "daggers", "darts", "javelins", "maces", "quarterstaffs", "scimitars", "sickles", "slings", "spears"]
+        self.tools_proficient = ["Herbalism kit"]
+
         # Define equipment choices at level 1
         self.equipment_choices = [
             {

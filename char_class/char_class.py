@@ -27,6 +27,9 @@ class CharClass:
         self.proficient_saving_throws = []
         self.features = []
         self.expertise1 = False
+        self.armor_proficient = set()
+        self.weapons_proficient = set()
+        self.tools_proficient = set()
 
     def get_subclass(self) -> str:
         return self.subclass or "None"
@@ -103,7 +106,6 @@ class CharClass:
                 self.num_hit_die += 1
                 if self.level in self.ABILITY_SCORE_IMPROVEMENT:
                     self.ability_score_improve(stats, char_features, char_hp)
-
             # Add features based on level
                 
     def ability_score_improve(self, stats: list[int], char_features, char_hp):
@@ -226,12 +228,13 @@ class CharClass:
         If tools=False, prompts user to select 2 skills as expertise from proficient skills.
         Selected skills are added to expertise and removed from the selection pool.
         """
+        expertise_count = 0
+
         if tools:
             # TODO: Implement thieves tools expertise selection in future
             return
         
         # Prompt user to select 2 expertise skills
-        expertise_count = 0
         while expertise_count < 2:
             print(f"\nSelect expertise skill {expertise_count + 1} of 2")
             available_skills = char_proficient_skills - char_expertise_skills

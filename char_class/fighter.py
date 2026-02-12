@@ -20,6 +20,8 @@ class Fighter(CharClass):
         self.skills_proficient = {"Athletics", "Acrobatics", "Animal Handling", "History", 
                                   "Insight", "Intimidation", "Perception", "Survival"}
         
+        self.armor_proficient = ["light armor", "medium armor", "heavy armor", "shields"] # fighters are proficient in all armor and shields
+        self.weapons_proficient = ["simple weapons", "martial weapons"]
         # Equipment choices and static items
         self.equipment_choices = [
             {

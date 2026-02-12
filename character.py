@@ -72,7 +72,11 @@ class Character:
         self.skills_expert: set[str] = set()
         self.saving_throws_proficient: set[str] = set()
 
-        self.other_proficiencies: set[str] = set() # tools and items
+        self.other_proficiencies: list[str] = [] # weapons, tools, armor
+        ###self.armor_proficient = set()
+        ###self.weapons_proficient = set()
+        ###self.tools_proficient = set()
+        
         self.languages: set[str] = set()
         self.language_order = []
 
@@ -125,6 +129,8 @@ class Character:
         self.exhaustion = 0
         self.level_up()
 
+    
+
     def get_proficiency_bonus(self) -> int:
         if self.level < 5:
             return 2
@@ -137,6 +143,10 @@ class Character:
         else:
             return 6
     
+    def add_proficiency(self, proficiency: str):
+        if proficiency not in self.other_proficiencies:
+            self.other_proficiencies.append(proficiency)
+
     def apply_racial_features(self):
          if self.race:
             for lang in self.race.get_languages():
@@ -156,14 +166,18 @@ class Character:
 
             # Apply skill proficiencies
             self.choose_class_skills()   
-            # self.skills_expert.add(skill)  # for expertise note for later
 
             self.maxhp = self.char_class.hit_die_value + ((self.stats[2] // 2) - 5)
             self.currhp = self.maxhp
 
             # Apply features
             self.features.extend(self.char_class.get_features())
-
+            for armor in self.char_class.armor_proficient:
+                self.add_proficiency(armor)
+            for weapon in self.char_class.weapons_proficient:
+                self.add_proficiency(weapon)
+            for tool in self.char_class.tools_proficient:
+                self.add_proficiency(tool)
             for lang in self.char_class.get_languages():
                 self.add_language(lang)
 
@@ -491,6 +505,10 @@ class Character:
                 if shield_bonus == 0:
                     return base_ac + ((self.stats[1] // 2) - 5) + ((self.stats[4] // 2) - 5)
 
+        # Dragonic soul sorcerers get a base AC of 13 when not wearing armor, and can use a shield without losing this benefit.
+        if self.char_class.name == "Sorcerer" and "Draconic Resilience" in self.features and (self.armor == "None" or not self.armor):
+            return 13 + ((self.stats[1] // 2) - 5) + shield_bonus
+
         dex_mod = (self.stats[1] // 2) - 5
 
         # If no armor equipped, return 10 + Dex
@@ -521,7 +539,7 @@ class Character:
 
     def get_movement_speed(self):
         current_speed = self.speed
-        # if wearing heavy armor that you are not strong enough to waer, reduce your speed by 10 feet.
+        # if wearing heavy armor that you are not strong enough to wear, reduce your speed by 10 feet.
 
         if self.char_class.name == "Monk" and "Unarmored Movement" in self.features:
             # if self.armor == "None" and self.off_hand.equals("Shield") == False and self.main_hand.equals("Shield"): # implement checking for armor and shield later, for now just assume monk is not wearing armor or using a shield
@@ -632,7 +650,7 @@ class Character:
         print("Features:")
         for feature in self.features:
             print(f"  - {feature}")
-        print() # for visual clarity
+        print() 
 
     def show_character(self):
         self.print_essentials()

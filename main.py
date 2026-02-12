@@ -10,6 +10,9 @@ def main():
     '''
     # Examples for simple character creation and level up
     '''
+    ### Autogenerate a saved character WIP
+    ## Create presets for each class for quick character creation
+
     # character = Character(name, stats, char_class, race, background)
     # character.level_up(new_level)
     # character.show_character()

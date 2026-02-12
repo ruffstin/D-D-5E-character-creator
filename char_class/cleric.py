@@ -26,6 +26,10 @@ class Cleric(CharClass):
         self.proficient_saving_throws = ["WIS", "CHA"]
         self.skills_proficient = {"History", "Insight", "Medicine", "Persuasion", 
                                   "Religion"}
+        
+        self.armor_proficient = ["light armor", "medium armor", "shields"]
+        self.weapons_proficient = ["simple weapons"]
+        
         # Equipment choices and static items
         self.equipment_choices = [
             {

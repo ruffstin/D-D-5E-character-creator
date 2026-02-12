@@ -18,8 +18,9 @@ class Barbarian(CharClass):
         self.proficient_saving_throws = ["STR", "CON"]
         self.skills_proficient = {"Animal Handling", "Athletics", "Intimidation", "Nature", 
                                   "Perception", "Survival"}
-        # proficient items/tools= ["light armor", "medium armor", "shields"]  # ADD ALL PROFICEINCIES
-        
+        self.armor_proficient = ["light armor", "medium armor", "shields"]
+        self.weapons_proficient = ["simple weapons", "martial weapons"]
+
         # Define equipment choices at level 1
         self.equipment_choices = [
             {

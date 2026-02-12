@@ -18,6 +18,8 @@ class Sorcerer(CharClass):
         self.skills_proficient = {"Arcana", "Deception", "Insight", "Intimidation", 
                                   "Persuasion", "Religion"}
         
+        self.weapons_proficient = ["daggers", "darts", "slings", "quarterstaffs", "light crossbows"]
+        
         # Equipment choices and static items
         self.equipment_choices = [
             {

@@ -27,6 +27,10 @@ class Rogue(CharClass):
                                   "Performance", "Persuasion", "Sleight of Hand", 
                                   "Stealth"}
         self.expertise1 = True
+
+        self.armor_proficient = ["light armor"]
+        self.weapons_proficient = ["simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
+        self.tools_proficient = ["thieves tools"]
         
         # Equipment choices and static items
         self.equipment_choices = [
@@ -77,18 +81,12 @@ class Rogue(CharClass):
         self.sneak_attack_die = 6
         self.secret_languages = ["Thieves' Cant"]
         self.roguish_features = {}
-        self.expertise = set()
-        # def set expertise, 2 skills your proficient in, or 1 and thieves tools
 
     def get_sneak_attack(self, level):    
         return SNEAK_ATTACK_DICE[level] #d6 implement more clear return?
         
     def get_languages(self):
-        return self.secret_languages
-        
-    # def set expertise(self, current list of proficient skills, current list of expertise skills, tool list)
-    
-
+        return self.secret_languages 
 
     def level_up(self, current_level, stats: list[int], char_features: list[str], char_hp) -> None:
         while self.level < current_level:
@@ -120,6 +118,7 @@ class Rogue(CharClass):
                         self.features.append("Additional Expertise")
                         char_features.append("Additional Expertise")
                         # implement expertise choice function
+                        self.apply_expertise()
 
                 if self.level == 7: 
                     if "Evasion" not in self.features: 
