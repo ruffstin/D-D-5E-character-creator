@@ -229,21 +229,22 @@ class CharClass:
         Selected skills are added to expertise and removed from the selection pool.
         """
         expertise_count = 0
-
-        if tools:
-            # TODO: Implement thieves tools expertise selection in future
-            return
+        temp_char_proficient = char_proficient_skills.copy()
+        if tools: # reserved for thieves tools expertise from Rogue class
+            temp_char_proficient.add("Thieves' Tools")
         
         # Prompt user to select 2 expertise skills
         while expertise_count < 2:
             print(f"\nSelect expertise skill {expertise_count + 1} of 2")
-            available_skills = char_proficient_skills - char_expertise_skills
+            available_skills = temp_char_proficient - char_expertise_skills
             
             if not available_skills:
                 print("No more skills available for expertise.")
                 break
             
             print("Available skills:")
+            if tools and "Thieves' Tools" in available_skills: 
+                print("As a Rogue expertise in Thieves' Tools is also an option")
             skills_list = sorted(list(available_skills))
             for i, skill in enumerate(skills_list):
                 print(f"  {i}: {skill}")

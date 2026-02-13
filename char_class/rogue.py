@@ -30,7 +30,7 @@ class Rogue(CharClass):
 
         self.armor_proficient = ["light armor"]
         self.weapons_proficient = ["simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
-        self.tools_proficient = ["Thieves' tools"]
+        self.tools_proficient = ["Thieves' Tools"]
         
         # Equipment choices and static items
         self.equipment_choices = [
@@ -117,8 +117,6 @@ class Rogue(CharClass):
                     if "Additional Expertise" not in self.features:
                         self.features.append("Additional Expertise")
                         char_features.append("Additional Expertise")
-                        # implement expertise choice function
-                        self.apply_expertise()
 
                 if self.level == 7: 
                     if "Evasion" not in self.features: 

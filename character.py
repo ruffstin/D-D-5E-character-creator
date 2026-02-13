@@ -119,19 +119,16 @@ class Character:
         self.apply_racial_features()  
         self.apply_class_features()
         self.apply_background_features()
-        # replace expert_Tools = False with self.char_class.name == "Rogue"
-        expert_tools = False
         if self.char_class.expertise1:
-            self.char_class.apply_expertise(self.skills_proficient, self.skills_expert, expert_tools)
+            # if you are a rogue you can have expertise in thieves tools 
+            self.char_class.apply_expertise(self.skills_proficient, self.skills_expert, self.char_class.name == "Rogue")
             self._expertise_applied = True  # Mark that first expertise has been applied
         # Prompt to equip from starting inventory (armor / shields)
         self.prompt_equip_initial()
         # instead of attacks, implement weapons in mainhand/offhand and calculate attack bonus/damage
         self.deathsaves = {"success": 0, "failure": 0}
         self.exhaustion = 0
-        self.level_up()
-
-    
+        self.level_up()    
 
     def get_proficiency_bonus(self) -> int:
         if self.level < 5:
@@ -165,7 +162,7 @@ class Character:
             for tool in self.race.tools_proficient:
                 if tool and not "Dwarven tools" in self.race.tools_proficient:
                     self.add_proficiency(tool)
-                else: #Dwarven tools
+                else: # Dwarven tools
                     # let the user choose one of smith's tools, brewer's supplies, or mason's tools
                     options = ["Smith's Tools", "Brewer's Supplies", "Mason's Tools"]
                     while True:
@@ -447,11 +444,11 @@ class Character:
         expert_tools = False
         # Apply expertise if this is the first level with the feature
         if "Expertise" in self.features and not self._expertise_applied:
-            self.char_class.apply_expertise(self.skills_proficient, self.skills_expert, expert_tools)
+            self.char_class.apply_expertise(self.skills_proficient, self.skills_expert, self.char_class.name == "Rogue")
             self._expertise_applied = True
         # Apply additional expertise (higher level expertise for Bards, etc.)
         if "Additional Expertise" in self.features and not self._additional_expertise_applied:
-            self.char_class.apply_expertise(self.skills_proficient, self.skills_expert, expert_tools)
+            self.char_class.apply_expertise(self.skills_proficient, self.skills_expert, self.char_class.name == "Rogue")
             self._additional_expertise_applied = True
 
         while times_to_roll > 0:
@@ -665,14 +662,14 @@ class Character:
         armor_item, _ = self.get_item(self.armor)
         if not armor_item:
             return False
+        
+        # if skill is not a strength or dexterity skill/ saving throw, there is no armor check penalty
+        if skill not in ["Athletics", "Acrobatics", "Sleight of Hand", "Stealth", "STR", "DEX", "Strength", "Dexterity"]:
+            return False
 
         # if armor has armor check penalty, return True
         if armor_item.get_armor_type() not in self.other_proficiencies:
             return True
-
-        # if skill is not a strength or dexterity skill/ saving throw, there is no armor check penalty
-        if skill not in ["Athletics", "Acrobatics", "Sleight of Hand", "Stealth", "STR", "DEX"]:
-            return False
     
     def print_essentials (self):
         print(f"Name: {self.name}")
@@ -707,12 +704,16 @@ class Character:
         }
         for stat, value in zip(STAT_NAMES, self.stats):
             bonus = value // 2 - 5
-            # disadv on str and dex saves if wearing armor you are not proficient in. 
+            penalty = ""
+            # disadv on str and dex saves if wearing armor you are not proficient in.
+            if self.has_armor_penalty(stat):
+                penalty = " disadvantage"
+
             if stat in self.char_class.get_proficient_saving_throws():
                 bonus += self.proficiency_bonus
-                print(f"  {STAT_TO_NAME[stat]:<16}: {bonus:+2} *")
+                print(f"  {STAT_TO_NAME[stat]:<16}: {bonus:+2} * {penalty}")
             else:
-                print(f"  {STAT_TO_NAME[stat]:<16}: {bonus:+2}")
+                print(f"  {STAT_TO_NAME[stat]:<16}: {bonus:+2}   {penalty}")
 
         print()
         print("Skills:")
@@ -720,12 +721,12 @@ class Character:
             bonus = self.get_skill_bonus(skill)
             suffix = " "
             if self.is_proficient(skill):
-                suffix = "*"
+                suffix = suffix + "*"
             if self.has_expertise(skill): # you must be proficient to have expertise
                 suffix = suffix + "*"
 
             if self.has_armor_penalty(skill):
-                suffix = suffix + " disadvantage" # for strength and dexterity skills if wearing armor 
+                suffix = suffix + " disadvantage" # for strength and dexterity skills if wearing armor that you are not proficient in
             
             print(f"  {skill:<16}: {bonus:+2}{suffix}")
         print()
@@ -745,7 +746,10 @@ class Character:
         
         print("Other Proficiencies (Armor, Weapons, Tools):")
         for other in self.other_proficiencies:
-            print(f"  - {other}")
+            if other == "Thieves' Tools" and self.has_expertise(other): # if the rogue has gained expertise in thieves tools show on sheet
+                    print(f"  - {other} **")
+            else:  
+                print(f"  - {other}")
         print()
 
         print("Languages:")
