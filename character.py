@@ -670,6 +670,9 @@ class Character:
         # if armor has armor check penalty, return True
         if armor_item.get_armor_type() not in self.other_proficiencies:
             return True
+
+        if armor_item.get_disadvantage_stealth() and skill in ["Stealth"]:
+            return True    
     
     def print_essentials (self):
         print(f"Name: {self.name}")

@@ -144,8 +144,12 @@ class Barbarian(CharClass):
         self.subclass = subclass_choice
         return subclass_choice
 
-    # def primal_path feature function    
-            #self.primal_path_features.append
-            # char_features.append
-
-            #which if statement will depend on sublcass chosen
+    def apply_primal_path_features(self, char_features: list[str], level: int):
+        if self.subclass == "Berserker":
+            self.primal_path_features.append("Berserker Rage")
+            char_features.append("Berserker Rage")
+        
+        
+        elif self.subclass == "Totem Warrior":
+            self.primal_path_features.append("Totem Spirit")
+            char_features.append("Totem Spirit")

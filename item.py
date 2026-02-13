@@ -46,6 +46,11 @@ class Item:
             return self.armor_type
         return None
     
+    def get_disadvantage_stealth(self):
+        if self.armor_type:
+            return self.disadvantage_stealth
+        return False
+    
 
     def __str__(self):
         s = f"{self.name} ({self.weight} lb, {self.cost} {self.currency})"
