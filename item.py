@@ -41,6 +41,10 @@ class Item:
             return self.armor_class
         return 0
     
+    def get_armor_type(self):
+        if self.armor_type:
+            return self.armor_type
+        return None
     
 
     def __str__(self):

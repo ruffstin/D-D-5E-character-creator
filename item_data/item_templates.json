@@ -479,7 +479,7 @@
         "description": "Padded armor comprises quilted layers of cloth and batting.",
         "weight": 8.0,
         "cost": 5,
-        "armor_type": "light",
+        "armor_type": "light armor",
         "armor_class": 11,
         "add_dex_to_ac": true,
         "disadvantage_stealth": true
@@ -489,7 +489,7 @@
         "description": "The breastplate and shoulder protection of this armor are made of leather that has been stiffened by being boiled in oil.",
         "weight": 10.0,
         "cost": 10,
-        "armor_type": "light",
+        "armor_type": "light armor",
         "armor_class": 11,
         "add_dex_to_ac": true,
         "disadvantage_stealth": false
@@ -499,7 +499,7 @@
         "description": "Made from tough but flexible leather, studded leather is reinforced with close-set rivets or spikes.",
         "weight": 13.0,
         "cost": 45,
-        "armor_type": "light",
+        "armor_type": "light armor",
         "armor_class": 12,
         "add_dex_to_ac": true,
         "disadvantage_stealth": false
@@ -511,7 +511,7 @@
         "description": "This crude armor consists of thick furs and pelts.",
         "weight": 12.0,
         "cost": 10,
-        "armor_type": "medium",
+        "armor_type": "medium armor",
         "armor_class": 12,
         "add_dex_to_ac": true,
         "dex_modifier_max": 2,
@@ -522,7 +522,7 @@
         "description": "Made of interlocking metal rings, a chain shirt is worn between layers of clothing or leather.",
         "weight": 20.0,
         "cost": 50,
-        "armor_type": "medium",
+        "armor_type": "medium armor",
         "armor_class": 13,
         "add_dex_to_ac": true,
         "dex_modifier_max": 2,
@@ -533,7 +533,7 @@
         "description": "This armor consists of a coat and leggings of leather covered with overlapping pieces of metal, much like fish scales.",
         "weight": 45.0,
         "cost": 50,
-        "armor_type": "medium",
+        "armor_type": "medium armor",
         "armor_class": 14,
         "add_dex_to_ac": true,
         "dex_modifier_max": 2,
@@ -544,7 +544,7 @@
         "description": "Spiked armor is leather armor covered with protruding spikes.",
         "weight": 45.0,
         "cost": 75,
-        "armor_type": "medium",
+        "armor_type": "medium armor",
         "armor_class": 14,
         "add_dex_to_ac": true,
         "dex_modifier_max": 2,
@@ -555,7 +555,7 @@
         "description": "This armor consists of a fitted metal chest piece worn with supple leather.",
         "weight": 20.0,
         "cost": 400,
-        "armor_type": "medium",
+        "armor_type": "medium armor",
         "armor_class": 14,
         "add_dex_to_ac": true,
         "dex_modifier_max": 2,
@@ -566,7 +566,7 @@
         "description": "Half plate consists of shaped metal plates that cover most of the wearer's body.",
         "weight": 40.0,
         "cost": 750,
-        "armor_type": "medium",
+        "armor_type": "medium armor",
         "armor_class": 15,
         "add_dex_to_ac": true,
         "dex_modifier_max": 2,
@@ -579,7 +579,7 @@
         "description": "This armor is leather armor covered with close-fitting rings that offer excellent protection.",
         "weight": 40.0,
         "cost": 30,
-        "armor_type": "heavy",
+        "armor_type": "heavy armor",
         "armor_class": 14,
         "add_dex_to_ac": false,
         "str_requirement": 0,
@@ -590,7 +590,7 @@
         "description": "Made of interlocking metal rings, chain mail includes a layer of quilted fabric worn underneath the mail to prevent chafing and to cushion the impact of blows.",
         "weight": 55.0,
         "cost": 75,
-        "armor_type": "heavy",
+        "armor_type": "heavy armor",
         "armor_class": 16,
         "add_dex_to_ac": false,
         "str_requirement": 13,
@@ -601,7 +601,7 @@
         "description": "This armor is made of narrow vertical strips of metal riveted to a backing of leather that is worn over cloth padding.",
         "weight": 60.0,
         "cost": 200,
-        "armor_type": "heavy",
+        "armor_type": "heavy armor",
         "armor_class": 17,
         "add_dex_to_ac": false,
         "str_requirement": 15,
@@ -612,7 +612,7 @@
         "description": "Plate consists of shaped, interlocking metal plates to cover the entire body.",
         "weight": 65.0,
         "cost": 1500,
-        "armor_type": "heavy",
+        "armor_type": "heavy armor",
         "armor_class": 18,
         "add_dex_to_ac": false,
         "str_requirement": 15,
@@ -778,7 +778,7 @@
         "weight": 1.0,
         "cost": 35
       },
-      "lyre": {
+      "lyre": { 
         "name": "Lyre",
         "weight": 2.0,
         "cost": 30
@@ -1201,3 +1201,4 @@
     }
   }
 }
+

@@ -15,4 +15,4 @@ class Entertainer(Background):
         }
         self.currency = 15
         self.features = ["Entertainer Routines", "By Popular Demand"]
-        self.tools_proficient = {"Disguise kit", "Musical instrument (one of your choice)"}
+        self.tools_proficient = {"Disguise kit", "Musical Instrument"}

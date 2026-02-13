@@ -15,5 +15,5 @@ class Outlander(Background):
         }
         self.currency = 10
         self.features = ["Origin", "Wanderer"]
-        self.tools_proficient = {"Musical instrument (one of your choice)"}
+        self.tools_proficient = {"Musical Instrument"}
         self.num_languages = 1

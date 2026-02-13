@@ -15,5 +15,5 @@ class Folk_Hero(Background):
         }
         self.currency = 10
         self.features = ["Defining Event", "Rustic Hospitality"]
-        self.tools_proficient = {"One type of artisan's tools", "Vehicles (land)"}
+        self.tools_proficient = {"Artisan Tools", "Vehicles (land)"} # 1 set of artisans tools and one land vehicle
         

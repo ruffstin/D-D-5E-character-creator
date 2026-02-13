@@ -23,5 +23,5 @@ class Gnome(Race):
             self.bonuses["CON"] = 1
             self.features.append("Artificer's Lore")
             self.features.append("Tinker")
-            self.other_proficiencies = ["Tinker’s tools"]
+            self.tools_proficient = ["Tinker’s tools"]
         # else: no additional bonuses

@@ -30,7 +30,7 @@ class Rogue(CharClass):
 
         self.armor_proficient = ["light armor"]
         self.weapons_proficient = ["simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
-        self.tools_proficient = ["thieves tools"]
+        self.tools_proficient = ["Thieves' tools"]
         
         # Equipment choices and static items
         self.equipment_choices = [

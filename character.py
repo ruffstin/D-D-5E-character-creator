@@ -28,10 +28,12 @@ GAMING_SETS = [
 ]
 
 MUSICAL_INSTRUMENTS = [
-    "Bagpipes", "Drum", "Dulcimer", "Flute", "Lute", "Lyre", "Horn", "Pan Flute",
-    "Shawm", "Viol"
+    "bagpipes", "drum", "dulcimer", "flute", "lute", "lyre", "horn", "pan flute",
+    "shawm", "viol"
 ]
 
+from matplotlib.style import available
+from matplotlib.style import available
 from race.race import Race
 from background.background import Background
 from char_class.char_class import CharClass
@@ -156,7 +158,27 @@ class Character:
             for skill in self.race.get_skills():
                 self.skills_proficient.add(skill)
             self.size = self.race.size
+            for other_prof in self.race.other_proficiencies:
+                self.add_proficiency(other_prof)
+            
             # Apply tool proficiencies
+            for tool in self.race.tools_proficient:
+                if tool and not "Dwarven tools" in self.race.tools_proficient:
+                    self.add_proficiency(tool)
+                else: #Dwarven tools
+                    # let the user choose one of smith's tools, brewer's supplies, or mason's tools
+                    options = ["Smith's Tools", "Brewer's Supplies", "Mason's Tools"]
+                    while True:
+                        print("\nChoose a specific Dwarven tool proficiency:")
+                        print("Options:", ", ".join(options))
+                        choice_input = input("Enter tool: ").strip()
+                        # Find matching tool in available (case-insensitive)
+                        choice = next((t for t in options if t.lower() == choice_input.lower()), None)
+                        if choice and choice not in self.other_proficiencies:
+                            self.add_proficiency(choice)  # Add to character proficiencies
+                            break
+                        else:
+                            print("Invalid choice. Try again.")
 
     def apply_class_features(self):
         if self.char_class:
@@ -261,6 +283,7 @@ class Character:
             for lang in self.background.get_languages():
                 self.add_language(lang)
             # Apply tool proficiencies
+            self.choose_background_tools()
 
     def choose_background_skills(self):
         """
@@ -302,7 +325,69 @@ class Character:
                     print("Invalid choice. Try again.")
         
         self.skills_proficient.update(chosen)
+    
+    def choose_background_tools(self):
+        proficient_tools = set(self.other_proficiencies)
 
+        for tool in self.background.get_tools_proficient():
+            if tool not in proficient_tools:
+                if tool not in {"Artisan Tools", "Gaming Set", "Musical Instrument"}:
+                    proficient_tools.add(tool)
+                    self.add_proficiency(tool)  # Add to character proficiencies
+                
+                else:
+                    options = []
+                    
+                    if tool == "Artisan Tools":
+                        for t in ARTISAN_TOOLS:
+                            if t not in proficient_tools:
+                                options.append(t)
+                    
+                    elif tool == "Gaming Set":
+                        for t in GAMING_SETS:
+                            if t not in proficient_tools:
+                                options.append(t)
+                    
+                    elif tool == "Musical Instrument":
+                        for t in MUSICAL_INSTRUMENTS:
+                            if t not in proficient_tools:
+                                options.append(t)
+                    
+                    while True:    
+                        print(f"\nChoose a specific {tool} proficiency:")
+                        print("Options:", ", ".join(options))
+                        choice_input = input("Enter tool: ").strip()
+                        # Find matching tool in available (case-insensitive)
+                        choice = next((t for t in options if t.lower() == choice_input.lower()), None)
+                        if choice in options and choice not in proficient_tools:
+                            proficient_tools.add(choice)
+                            self.add_proficiency(choice)  # Add to character proficiencies
+                            break
+                        else:
+                            print("Invalid choice. Try again.")
+
+            else: # if the character is already proficient in the tool let them pick a different proficiency
+                pool_of_tools  = (
+                    ARTISAN_TOOLS +
+                    GAMING_SETS +
+                    MUSICAL_INSTRUMENTS +
+                    [t for t in ALL_TOOLS if t not in ["Artisan Tools", "Gaming Set", "Musical Instrument"]]
+                )
+                while True:     
+                    print(f"\nChoose a tool proficiency to substitute for {tool}:")
+                    print("Options:", ", ".join(pool_of_tools))
+                    choice_input = input("Enter tool: ").strip()
+                    # Find matching tool in available (case-insensitive)
+                    choice = next((t for t in pool_of_tools if t.lower() == choice_input.lower()), None)
+                    if choice:
+                        proficient_tools.add(choice)
+                        self.add_proficiency(choice)  # Add to character proficiencies
+                        break
+                    else:
+                        print("Invalid choice. Try again.")
+                
+
+    
     def is_proficient(self, skill: str) -> bool:
         return skill in self.skills_proficient
 
@@ -456,7 +541,7 @@ class Character:
     def prompt_equip_initial(self) -> None:
         """Prompt the user to equip armor and shield from starting inventory."""
         # Armor choices
-        armor_items = [name for name, (it, q) in self.inventory.items() if it and it.armor_type in ('light', 'medium', 'heavy')]
+        armor_items = [name for name, (it, q) in self.inventory.items() if it and it.armor_type in ('light armor', 'medium armor', 'heavy armor')]
         if armor_items:
             print('\nYou have the following armor in your inventory:')
             print(', '.join(armor_items))
@@ -540,6 +625,12 @@ class Character:
     def get_movement_speed(self):
         current_speed = self.speed
         # if wearing heavy armor that you are not strong enough to wear, reduce your speed by 10 feet.
+        if self.armor and self.armor != "None":
+            armor_item, _ = self.get_item(self.armor)
+            if armor_item and armor_item.armor_type in ('heavy', 'medium'):
+                strength_score = self.stats[0]
+                if (armor_item.armor_type == 'heavy' and strength_score < 15) or (armor_item.armor_type == 'medium' and strength_score < 13):
+                    current_speed -= 10
 
         if self.char_class.name == "Monk" and "Unarmored Movement" in self.features:
             # if self.armor == "None" and self.off_hand.equals("Shield") == False and self.main_hand.equals("Shield"): # implement checking for armor and shield later, for now just assume monk is not wearing armor or using a shield
@@ -564,6 +655,24 @@ class Character:
         if lang not in self.languages:
             self.languages.add(lang)
             self.language_order.append(lang)
+    
+    def has_armor_penalty(self, skill):
+        # if the character is not wearing armor, there is no armor check penalty
+        if not self.armor or self.armor == "None":
+            return False
+        
+        # Get equipped armor item
+        armor_item, _ = self.get_item(self.armor)
+        if not armor_item:
+            return False
+
+        # if armor has armor check penalty, return True
+        if armor_item.get_armor_type() not in self.other_proficiencies:
+            return True
+
+        # if skill is not a strength or dexterity skill/ saving throw, there is no armor check penalty
+        if skill not in ["Athletics", "Acrobatics", "Sleight of Hand", "Stealth", "STR", "DEX"]:
+            return False
     
     def print_essentials (self):
         print(f"Name: {self.name}")
@@ -609,15 +718,14 @@ class Character:
         print("Skills:")
         for skill in ALL_SKILLS:
             bonus = self.get_skill_bonus(skill)
-            suffix = ""
+            suffix = " "
             if self.is_proficient(skill):
-                suffix = " *"
+                suffix = "*"
             if self.has_expertise(skill): # you must be proficient to have expertise
                 suffix = suffix + "*"
 
-            # if self.has_armor_penalty(skill):
-            #      suffix = suffix + " disadvantage" # for strength and dexterity skills if wearing armor 
-            # you are not proficient in. Implement armor check penalty later.
+            if self.has_armor_penalty(skill):
+                suffix = suffix + " disadvantage" # for strength and dexterity skills if wearing armor 
             
             print(f"  {skill:<16}: {bonus:+2}{suffix}")
         print()

@@ -15,4 +15,4 @@ class Noble(Background):
         self.currency = 25
         self.features = ["Position of Privilege"]
         self.num_languages = 1
-        self.tools_proficient = {"One gaming set of your choice"}
+        self.tools_proficient = {"Gaming Set"}

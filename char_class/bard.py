@@ -143,7 +143,7 @@ class Bard(CharClass):
         return subclass_choice
 
     def select_instruments(self):
-        instruments = ["bagpipes", "drum", "dulcimer", "flute", "lyre", "horn", "pan_flute", "shawm"]
+        instruments = ["bagpipes", "drum", "dulcimer", "flute", "lyre", "horn", "pan flute", "shawm"]
         selected_instruments = []
         while len(selected_instruments) < 3:
             prompt = f"Choose a musical instrument from the following list ({', '.join(instruments)}): "

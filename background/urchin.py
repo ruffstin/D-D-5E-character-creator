@@ -15,4 +15,4 @@ class Urchin(Background):
         }
         self.currency = 10
         self.features = ["City Secrets"]
-        self.tools_proficient = {"Disguise kit", "Thieves' tools"}
+        self.tools_proficient = {"Disguise Kit", "Thieves' Tools"}

@@ -15,4 +15,4 @@ class Sailor(Background):
         }
         self.currency = 10
         self.features = ["Ship's Passage"]
-        self.tools_proficient = {"Navigator's tools", "Vehicles (water)"}
+        self.tools_proficient = {"Navigator's Tools", "Vehicles (water)"}

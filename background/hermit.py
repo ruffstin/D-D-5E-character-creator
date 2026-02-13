@@ -15,5 +15,5 @@ class Hermit(Background):
         }
         self.currency = 5
         self.features = ["Life of Seclusion", "Discovery"]
-        self.tools_proficient = {"Herbalism kit"}
+        self.tools_proficient = {"Herbalism Kit"}
         self.num_languages = 1

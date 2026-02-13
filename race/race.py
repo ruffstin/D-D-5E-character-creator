@@ -15,6 +15,7 @@ class Race:
         self.spells_known: set[str] = set()
         self.size = "Medium"
         self.other_proficiencies = set()
+        self.tools_proficient = set()
 
     def apply_racial_bonuses(self, stats: list[int]) -> list[int]:
         updated_stats = stats.copy()

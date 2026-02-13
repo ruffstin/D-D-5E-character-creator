@@ -15,3 +15,4 @@ class Soldier(Background):
         }
         self.currency = 10
         self.features = ["Specialty", "Military Rank"]
+        self.tools_proficient = {"Gaming Set", "Vehicles (land)"} # 1 gaming set and one land vehicle

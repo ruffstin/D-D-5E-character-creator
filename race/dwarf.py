@@ -8,8 +8,8 @@ class Dwarf(Race):
         self.speed = 25
         self.features = ["Darkvision", "Dwarven Resilience", "Dwarven Combat Training", "Stonecunning"]
         self.languages = ["Common", "Dwarvish"]
-        self.other_proficiencies = {"Battleaxe", "Handaxe", "Light hammer", "Warhammer", 
-                                    "Pick one of Smith's tools, Brewer's supplies, or Mason's tools"}
+        self.other_proficiencies = {"Battleaxe", "Handaxe", "Light hammer", "Warhammer"}
+        self.tools_proficient = {"Dwarven tools"} # e.g. "Smith's tools", "Brewer's supplies", "Mason's tools"
     
     def set_bonuses(self):
         # All dwarves get +2 CON

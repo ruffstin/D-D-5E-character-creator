@@ -13,4 +13,4 @@ class Criminal(Background):
         }
         self.currency = 15 
         self.features = ["Criminal Specialty", "Criminal Contact"]
-        self.tools_proficient = {"One gaming set", "Thieves' tools"}
+        self.tools_proficient = {"Gaming Set", "Thieves' tools"}
