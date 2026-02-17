@@ -48,7 +48,7 @@ class Druid(CharClass):
         # Apply level 1 features
         self.features = ["Druidic", "Spellcasting"] 
         self.secret_languages = ["Druidic"]
-        self.circle_features = {}
+        self.circle_features = []
 
     def get_languages(self):
         return self.secret_languages
@@ -87,7 +87,9 @@ class Druid(CharClass):
                         self.features.append("Archdruid")
                         char_features.append("Archdruid")
                 
-                # if self.level in {} call circle feature
+                if self.level in {2, 3, 5, 6, 7, 9, 10, 14}:
+                    self.apply_circle_features(self.level, char_features)
+
 
     def pick_circle(self):
         prompt = "Choose a Druid Circle(Circle of the Land or Circle of the Moon): "
@@ -98,8 +100,57 @@ class Druid(CharClass):
         self.subclass = subclass_choice
         return subclass_choice
     
-    # def circle feature function    
-            #self.circle_features.append
-            # char_features.append
+    def apply_circle_features(self, level, char_features):
+        if self.subclass == "Circle of the Land":
+            if level == 2:
+                if "Natural Explorer" not in self.circle_features:  
+                    self.circle_features.append("Natural Explorer")
+                    char_features.append("Natural Explorer")
 
-            #which if statement will depend on sublcass chosen
+                if "Bonus Cantrip" not in self.circle_features:
+                    self.circle_features.append("Bonus Cantrip")
+                    char_features.append("Bonus Cantrip")
+
+            if level == 3 and "Circle Spells" not in self.circle_features:
+                self.circle_features.append("Circle Spells")
+                input = input("Choose a land type for your Circle of the Land spells (Arctic, Coast, Desert, Forest, Grassland, Mountain, Swamp, Underdark): ").strip().lower()
+                while input not in ["arctic", "coast", "desert", "forest", "grassland", "mountain", "swamp", "underdark"]:
+                    input = input("Invalid choice. Please choose a valid land type (Arctic, Coast, Desert, Forest, Grassland, Mountain, Swamp, Underdark): ").strip().lower()
+                
+                char_features.append("Circle Spells: " + input.capitalize())
+
+                ## additional flags in place for more circle spells at higher levels, but for now just add the one feature for circle spells at level 3 and then add the specific spells to the spellcasting feature when we implement that
+
+            elif level == 6 and "Land's Stride" not in self.circle_features:
+                self.circle_features.append("Land's Stride")
+                char_features.append("Land's Stride")
+            
+            elif level == 10 and "Nature's Ward" not in self.circle_features:
+                self.circle_features.append("Nature's Ward")
+                char_features.append("Nature's Ward")
+            
+            elif level == 14 and "Nature's Sanctuary" not in self.circle_features:
+                self.circle_features.append("Nature's Sanctuary")
+                char_features.append("Nature's Sanctuary")
+
+        elif self.subclass == "Circle of the Moon":
+            if level == 2:
+                if "Combat Wild Shape" not in self.circle_features:
+                    self.circle_features.append("Combat Wild Shape")
+                    char_features.append("Combat Wild Shape")
+
+                if "Circle Forms" not in self.circle_features:
+                    self.circle_features.append("Circle Forms")
+                    char_features.append("Circle Forms")
+
+            if level == 6 and "Primal Strike" not in self.circle_features:
+                self.circle_features.append("Primal Strike")
+                char_features.append("Primal Strike")
+
+            if level == 10 and "Elemental Wild Shape" not in self.circle_features:
+                self.circle_features.append("Elemental Wild Shape")
+                char_features.append("Elemental Wild Shape")
+
+            if level == 14 and "Thousand Forms" not in self.circle_features:
+                self.circle_features.append("Thousand Forms")
+                char_features.append("Thousand Forms")

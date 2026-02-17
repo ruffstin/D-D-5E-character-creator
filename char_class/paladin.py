@@ -78,7 +78,7 @@ class Paladin(CharClass):
 
         # Apply level 1 features
         self.features = ["Divine Sense", "Lay on Hands"] 
-        self.sacred_oath_features = {}
+        self.sacred_oath_features = []
 
     def level_up(self, current_level, stats: list[int], char_features: list[str], char_hp) -> None:
         while self.level < current_level:
@@ -142,9 +142,9 @@ class Paladin(CharClass):
                     if "Cleansing Touch" not in self.features:
                         self.features.append("Cleansing Touch")
                         char_features.append("Cleansing Touch")
-
-
-    # if self.level in {} call sacred_oath feature
+                
+                if self.level in {3, 7, 15, 20}:
+                    self.apply_oath_features(self.level, char_features)
 
     def pick_sacred_oath(self):
         prompt = "Choose a Sacred Oath (Oath of Devotion, Oath of the Ancients, Oath of Vengeance): "
@@ -155,4 +155,88 @@ class Paladin(CharClass):
         self.subclass = subclass_choice
         return subclass_choice
 
-    # oath-specific feature functions can be added later
+    def apply_oath_features(self, level, char_features):
+        if self.subclass == "Oath of Devotion":
+            if level == 3:
+                if "Tenets of Devotion" not in self.sacred_oath_features:
+                    self.sacred_oath_features.append("Tenets of Devotion")
+                    char_features.append("Tenets of Devotion")
+
+                if "Oath Spells" not in self.sacred_oath_features:
+                    self.sacred_oath_features.append("Oath of Devotion: Oath Spells")
+                    char_features.append("Oath of Devotion: Oath Spells")
+                    # apply additional oath spells at higher levels
+                
+                if "Channel Divinity" not in self.sacred_oath_features:
+                    self.sacred_oath_features.append("Channel Divinity")
+                    char_features.append("Channel Divinity: Sacred Weapon")
+                    char_features.append("Channel Divinity: Turn the Unholy")
+                
+            if level == 7 and "Aura of Devotion" not in self.sacred_oath_features:
+                self.sacred_oath_features.append("Aura of Devotion")
+                char_features.append("Aura of Devotion")
+                # increases at level 18
+
+            if level == 15 and "Purity of Spirit" not in self.sacred_oath_features:
+                self.sacred_oath_features.append("Purity of Spirit")
+                char_features.append("Purity of Spirit")
+
+            if level == 20 and "Holy Nimbus" not in self.sacred_oath_features:
+                self.sacred_oath_features.append("Holy Nimbus")
+                char_features.append("Holy Nimbus")
+
+        if self.subclass == "Oath of the Ancients":
+            if level == 3:
+                if "Tenets of the Ancients" not in self.sacred_oath_features:
+                    self.sacred_oath_features.append("Tenets of the Ancients")
+                    char_features.append("Tenets of the Ancients")
+
+                if "Oath Spells" not in self.sacred_oath_features:
+                    self.sacred_oath_features.append("Oath of the Ancients: Oath Spells")
+                    char_features.append("Oath of the Ancients: Oath Spells")
+
+                if "Channel Divinity" not in self.sacred_oath_features:
+                    self.sacred_oath_features.append("Channel Divinity")
+                    char_features.append("Channel Divinity: Nature's Wrath")
+                    char_features.append("Channel Divinity: Turn the Faithless")
+
+            if level == 7 and "Aura of Warding" not in self.sacred_oath_features:
+                self.sacred_oath_features.append("Aura of Warding")
+                char_features.append("Aura of Warding")
+                # increases at level 18
+
+            if level == 15 and "Undying Sentinel" not in self.sacred_oath_features:
+                self.sacred_oath_features.append("Undying Sentinel")
+                char_features.append("Undying Sentinel")
+
+            if level == 20 and "Elder Champion" not in self.sacred_oath_features:
+                self.sacred_oath_features.append("Elder Champion")
+                char_features.append("Elder Champion")
+
+        if self.subclass == "Oath of Vengeance":
+            if level == 3: 
+                if "Tenets of Vengeance" not in self.sacred_oath_features:
+                    self.sacred_oath_features.append("Tenets of Vengeance")
+                    char_features.append("Tenets of Vengeance")
+
+                if "Oath Spells" not in self.sacred_oath_features:
+                    self.sacred_oath_features.append("Oath of Vengeance: Oath Spells")
+                    char_features.append("Oath of Vengeance: Oath Spells")
+
+                if "Channel Divinity" not in self.sacred_oath_features:
+                    self.sacred_oath_features.append("Channel Divinity")
+                    char_features.append("Channel Divinity: Abjure Enemy")
+                    char_features.append("Channel Divinity: Vow of Enmity")
+            
+            if level == 7 and "Relentless Avenger" not in self.sacred_oath_features:
+                self.sacred_oath_features.append("Relentless Avenger")
+                char_features.append("Relentless Avenger")
+
+            if level == 15 and "Soul of Vengeance" not in self.sacred_oath_features:
+                self.sacred_oath_features.append("Soul of Vengeance")
+                char_features.append("Soul of Vengeance")
+
+            if level == 20 and "Avenging Angel" not in self.sacred_oath_features:
+                self.sacred_oath_features.append("Avenging Angel")
+                char_features.append("Avenging Angel")           
+                    

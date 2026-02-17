@@ -63,7 +63,7 @@ class Bard(CharClass):
         
         # make visable to character sheet
         self.bardic_inspiration_dice = "d6" # uses is your charisma modifier per long rest
-        self.college_features = {}
+        self.college_features = []
         self.expertise = set()
 
     def level_up(self, current_level, stats: list[int], char_features: list[str], char_hp) -> None:
@@ -131,7 +131,9 @@ class Bard(CharClass):
                     if "Superior Inspiration" not in self.features: 
                         self.features.append("Superior Inspiration")
                         char_features.append("Superior Inspiration")
-                # if self.level in {} call college feature
+
+                if self.level in {3, 6, 14}:
+                    self.apply_college_features(char_features, self.level)
 
     def pick_college(self):
         prompt = "Choose a Bard College (College of Lore or College of Valor): "
@@ -155,11 +157,44 @@ class Bard(CharClass):
                 print("Invalid choice or instrument already selected. Please choose a different instrument.")
         return selected_instruments
                     
-    # def college feature function    
-            #self.college_features.append
-            # char_features.append
+    def apply_college_features(self, char_features, level):
+        if self.subclass == "College of Lore":
+            if level == 3:
+                if "Bonus Proficiencies" not in self.college_features:
+                    self.college_features.append("Bonus Proficiencies")
+                    char_features.append("Bonus Proficiencies")
+                    # choose 3 skills to gain proficiency in
+                if "Cutting Words" not in self.college_features:
+                    self.college_features.append("Cutting Words")
+                    char_features.append("Cutting Words")
 
-            #which if statement will depend on sublcass chosen
+            elif level == 6 and "Additional Magical Secrets" not in self.college_features:
+                self.college_features.append("Additional Magical Secrets")
+                char_features.append("Additional Magical Secrets")
+
+            elif level == 14 and "Peerless Skill" not in self.college_features:
+                self.college_features.append("Peerless Skill")
+                char_features.append("Peerless Skill")
+        
+        if self.subclass == "College of Valor":
+            if level == 3:
+                if "Bonus Proficiencies" not in self.college_features:
+                    self.college_features.append("Bonus Proficiencies")
+                    char_features.append("Bonus Proficiencies")
+                    # gain proficiency with medium armor, shields, and martial weapons
+
+                if "Combat Inspiration" not in self.college_features:
+                    self.college_features.append("Combat Inspiration")
+                    char_features.append("Combat Inspiration")
+
+            if level == 6 and "Extra Attack" not in self.college_features:
+                self.college_features.append("Extra Attack")
+                char_features.append("Extra Attack")
+
+            if level == 14 and "Battle Magic" not in self.college_features:
+                self.college_features.append("Battle Magic")
+                char_features.append("Battle Magic")
+
 
               
                     

@@ -65,11 +65,12 @@ class Sorcerer(CharClass):
 
         # Apply level 1 features
         self.features = ["Spellcasting"]
-        self.origin_features = {}
-        # call sorcerous_origin since subclass is chosen at level 1
+        self.origin_features = []
         if not self.subclass:
             self.pick_sorcerous_origin()
             self.features.append("Sorcerous Origin: " + self.subclass)
+        
+        self.apply_origin_features(self.level, self.features)
         
     def get_max_sorcery_points(self, level):
         if "Font of Magic" in self.features:
@@ -103,17 +104,54 @@ class Sorcerer(CharClass):
                     if "Sorcerous Restoration" not in self.features:
                         self.features.append("Sorcerous Restoration")
                         char_features.append("Sorcerous Restoration")     
-
-
-        # if self.level in {} call sorcerous_origin feature
-
-        # def pick sorcerous_origin function 
+                
+                if self.level in {6, 14, 18}:
+                    self.apply_origin_features(self.level, char_features)
             
-        # def sorcerous_origin feature function    
-            #self.sorcerous_origin_features.append
-            # char_features.append
+    def apply_origin_features(self, level, char_features):
+        if self.subclass == "Draconic Bloodline":
+            if level == 1:
+                if "Draconic Resilience" not in self.origin_features:
+                    self.origin_features.append("Draconic Resilience")
+                    char_features.append("Draconic Resilience")
+               
+                if "Draconic Ancestry" not in self.origin_features:
+                    self.origin_features.append("Draconic Ancestry")
+                    char_features.append("Draconic Ancestry")
 
-            #which if statement will depend on sublcass chosen
+            if level == 6 and "Elemental Affinity" not in self.origin_features:
+                self.origin_features.append("Elemental Affinity")
+                char_features.append("Elemental Affinity")
+
+            if level == 14 and "Dragon Wings" not in self.origin_features:
+                self.origin_features.append("Dragon Wings")
+                char_features.append("Dragon Wings")
+
+            if level == 18 and "Dragon's Wrath" not in self.origin_features:
+                self.origin_features.append("Dragon's Wrath")
+                char_features.append("Dragon's Wrath")
+
+        if self.subclass == "Wild Magic":
+                if level == 1:
+                    if "Wild Magic Surge" not in self.origin_features:
+                        self.origin_features.append("Wild Magic Surge")
+                        char_features.append("Wild Magic Surge")
+                        
+                    if "Tides of Chaos" not in self.origin_features:
+                        self.origin_features.append("Tides of Chaos")
+                        char_features.append("Tides of Chaos")
+                
+                if level == 6 and "Bend Luck" not in self.origin_features:
+                    self.origin_features.append("Bend Luck")
+                    char_features.append("Bend Luck")
+                
+                if level == 14 and "Controlled Chaos" not in self.origin_features:
+                    self.origin_features.append("Controlled Chaos")
+                    char_features.append("Controlled Chaos")
+
+                if level == 18 and "Spell Bombardment" not in self.origin_features:
+                    self.origin_features.append("Spell Bombardment")
+                    char_features.append("Spell Bombardment")
 
     def pick_sorcerous_origin(self):
         prompt = "Choose a Sorcerous Origin (Draconic Bloodline or Wild Magic): "

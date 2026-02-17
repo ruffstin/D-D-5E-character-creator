@@ -77,7 +77,7 @@ class Ranger(CharClass):
         # Apply level 1 features
         self.features = ["Favored Enemy", "Natural Explorer"] 
         self.language = "" # set language based off favored enemy
-        self.enclave_features = {}
+        self.enclave_features = []
 
     def get_langauge(self) -> str:
         return self.language
@@ -140,7 +140,8 @@ class Ranger(CharClass):
                         self.features.append("Foe Slayer")
                         char_features.append("Foe Slayer")
                 
-                # if self.level in {} call enclave feature
+                if self.level in {3, 7, 11, 15}:
+                    self.apply_enclave_features(self.level, char_features)
 
     def pick_ranger_enclave(self):
         prompt = "Choose a Ranger Enclave (Hunter or Beast Master): "
@@ -151,4 +152,42 @@ class Ranger(CharClass):
         self.subclass = subclass_Choice
         return subclass_Choice
 
-    # enclave-specific feature functions can be added later
+    def apply_enclave_features(self, level, char_features):
+        if self.subclass == "Hunter":
+            if level == 3 and "Hunter's Prey" not in self.enclave_features:
+                self.enclave_features.append("Hunter's Prey")
+                char_features.append("Hunter's Prey")
+                # implement options for Hunter's Prey (Colossus Slayer, Giant Killer, Horde Breaker)
+        
+            if level == 7 and "Defensive Tactics" not in self.enclave_features:
+                self.enclave_features.append("Defensive Tactics")
+                char_features.append("Defensive Tactics")
+        
+            if level == 11 and "Multiattack" not in self.enclave_features:
+                self.enclave_features.append("Multiattack")
+                char_features.append("Multiattack")
+                # implement options for multiattack (Volley or Whirlwind Attack)
+
+            if level == 15 and "Superior Hunter's Defense" not in self.enclave_features:
+                self.enclave_features.append("Superior Hunter's Defense")
+                char_features.append("Superior Hunter's Defense")
+                # implement options for Superior Hunter's Defense (Evasion, Stand Against the Tide, Uncanny Dodge)
+
+        if self.subclass == "Beast Master":
+            if level == 3 and "Ranger's Companion" not in self.enclave_features:
+                self.enclave_features.append("Ranger's Companion")
+                char_features.append("Ranger's Companion")
+            
+            if level == 7 and "Exceptional Training" not in self.enclave_features:
+                self.enclave_features.append("Exceptional Training")
+                char_features.append("Exceptional Training")
+            
+            if level == 11 and "Bestial Fury" not in self.enclave_features:
+                self.enclave_features.append("Bestial Fury")
+                char_features.append("Bestial Fury")
+
+            if level == 15 and "Share Spells" not in self.enclave_features:
+                self.enclave_features.append("Share Spells")
+                char_features.append("Share Spells")
+
+            

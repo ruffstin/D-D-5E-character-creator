@@ -60,7 +60,7 @@ class Barbarian(CharClass):
 
         # Apply level 1 features
         self.features = ["Rage", "Unarmored Defense"]
-        self.primal_path_features = {}
+        self.primal_path_features = []
     
     # make our getters visable to character sheet
     def get_rage_damage(self, level):
@@ -132,8 +132,8 @@ class Barbarian(CharClass):
                         self.features.append("Primal Champion")
                         char_features.append("Primal Champion")
                         # pass in stats to increase STR and CON by 4 each, max 24
-                
-                # if self.level in {} call path feature
+                if self.level in {3, 6, 10, 14}:
+                    self.apply_primal_path_features(char_features, self.level)
 
     def pick_primal_path(self):
         prompt = "Choose a Primal Path (Berserker or Totem Warrior): "
@@ -146,10 +146,52 @@ class Barbarian(CharClass):
 
     def apply_primal_path_features(self, char_features: list[str], level: int):
         if self.subclass == "Berserker":
-            self.primal_path_features.append("Berserker Rage")
-            char_features.append("Berserker Rage")
-        
+            if level == 3 and "Frenzy" not in self.primal_path_features:
+                self.primal_path_features.append("Frenzy")
+                char_features.append("Frenzy")
+
+            if level == 6 and "Mindless Rage" not in self.primal_path_features:
+                self.primal_path_features.append("Mindless Rage")
+                char_features.append("Mindless Rage")
+            
+            if level == 10 and "Intimidating Presence" not in self.primal_path_features:
+                self.primal_path_features.append("Intimidating Presence")
+                char_features.append("Intimidating Presence")
+
+            if level == 14 and "Retaliation" not in self.primal_path_features:
+                self.primal_path_features.append("Retaliation")
+                char_features.append("Retaliation")
         
         elif self.subclass == "Totem Warrior":
-            self.primal_path_features.append("Totem Spirit")
-            char_features.append("Totem Spirit")
+            if level == 3:
+                if "Spirit Seeker" not in self.primal_path_features:
+                    self.primal_path_features.append("Spirit Seeker")
+                    char_features.append("Spirit Seeker")
+                
+                if "Totem Spirit" not in self.primal_path_features:
+                    self.primal_path_features.append("Totem Spirit")
+                    totem = input("Choose a Totem Spirit (Bear, Eagle, Wolf): ").strip().lower()
+                    while totem not in ["bear", "eagle", "wolf"]:
+                        totem = input("Invalid choice. Please choose 'Bear', 'Eagle', or 'Wolf': ").strip().lower()
+                    
+                    char_features.append("Totem Spirit: " + totem.capitalize())            
+
+            if level == 6 and "Aspect of the Beast" not in self.primal_path_features:
+                self.primal_path_features.append("Aspect of the Beast")
+                totem = input("Choose an Aspect of the Beast (Bear, Eagle, Wolf): ").strip().lower()
+                while totem not in ["bear", "eagle", "wolf"]:
+                    totem = input("Invalid choice. Please choose 'Bear', 'Eagle', or 'Wolf': ").strip().lower()
+
+                char_features.append("Aspect of the Beast: " + totem.capitalize())
+            
+            if level == 10 and "Spirit Walker" not in self.primal_path_features:
+                self.primal_path_features.append("Spirit Walker")
+                char_features.append("Spirit Walker")
+
+            if level == 14 and "Totemic Attunement" not in self.primal_path_features:
+                self.primal_path_features.append("Totemic Attunement")
+                totem = input("Choose a Totemic Attunement (Bear, Eagle, Wolf): ").strip().lower()
+                while totem not in ["bear", "eagle", "wolf"]:
+                    totem = input("Invalid choice. Please choose 'Bear', 'Eagle', or 'Wolf': ").strip().lower()
+
+                char_features.append("Totemic Attunement: " + totem.capitalize()) 

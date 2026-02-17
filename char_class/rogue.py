@@ -80,7 +80,7 @@ class Rogue(CharClass):
         self.features = ["Sneak Attack", "Thieves' Cant", "Expertise"]
         self.sneak_attack_die = 6
         self.secret_languages = ["Thieves' Cant"]
-        self.roguish_features = {}
+        self.roguish_features = []
 
     def get_sneak_attack(self, level):    
         return SNEAK_ATTACK_DICE[level] #d6 implement more clear return?
@@ -148,7 +148,8 @@ class Rogue(CharClass):
                         self.features.append("Stroke of Luck")
                         char_features.append("Stroke of Luck")
                 
-                # if self.level in {} call roguish_archetype feature
+                if self.level in {3, 9, 13, 17}:
+                    self.apply_roguish_archetype_features(self.level, char_features)
 
     def pick_roguish_archetype(self):
         prompt = "Choose a Roguish Archetype (Thief, Assassin, Arcane Trickster): "
@@ -159,4 +160,70 @@ class Rogue(CharClass):
         self.subclass = subclass_choice
         return subclass_choice
 
-    # roguish archetype-specific features can be added later
+    def apply_roguish_archetype_features(self, level, char_features):
+        if self.subclass == "Thief":
+            if level == 3:
+                if "Fast Hands" not in self.roguish_features:
+                    self.roguish_features.append("Fast Hands")
+                    char_features.append("Fast Hands")
+
+                if "Second-Story Work" not in self.roguish_features:
+                    self.roguish_features.append("Second-Story Work")
+                    char_features.append("Second-Story Work")
+
+            if level == 9 and "Supreme Sneak" not in self.roguish_features:
+                self.roguish_features.append("Supreme Sneak")
+                char_features.append("Supreme Sneak")
+
+            if level == 13 and "Use Magic Device" not in self.roguish_features:
+                self.roguish_features.append("Use Magic Device")
+                char_features.append("Use Magic Device")
+
+            if level == 17 and "Thief's Reflexes" not in self.roguish_features:
+                self.roguish_features.append("Thief's Reflexes")
+                char_features.append("Thief's Reflexes")
+
+        if self.subclass == "Assassin":
+            if level == 3:
+                if "Bonus Proficiencies" not in self.roguish_features:
+                    self.roguish_features.append("Bonus Proficiencies")
+                    char_features.append("Bonus Proficiencies: Disguise Kit, Poisoner's Kit")
+
+                if "Assassinate" not in self.roguish_features:
+                    self.roguish_features.append("Assassinate")
+                    char_features.append("Assassinate")
+
+            if level == 9 and "Infiltration Expertise" not in self.roguish_features:
+                self.roguish_features.append("Infiltration Expertise")
+                char_features.append("Infiltration Expertise")
+
+            if level == 13 and "Impostor" not in self.roguish_features:
+                self.roguish_features.append("Impostor")
+                char_features.append("Impostor")
+                
+            if level == 17 and "Death Strike" not in self.roguish_features:
+                self.roguish_features.append("Death Strike")
+                char_features.append("Death Strike")
+
+        if self.subclass == "Arcane Trickster":
+            if level == 3:
+                if "Spellcasting" not in self.features:
+                    self.features.append("Spellcasting")
+                    char_features.append("Spellcasting")
+
+                if "Mage Hand Legerdemain" not in self.roguish_features:
+                    self.roguish_features.append("Mage Hand Legerdemain")
+                    char_features.append("Mage Hand Legerdemain")
+
+
+            if level == 9 and "Magical Ambush" not in self.roguish_features:
+                self.roguish_features.append("Magical Ambush")
+                char_features.append("Magical Ambush")
+
+            if level == 13 and "Versatile Trickster" not in self.roguish_features:
+                self.roguish_features.append("Versatile Trickster")
+                char_features.append("Versatile Trickster")
+            
+            if level == 17 and "Spell Thief" not in self.roguish_features:
+                self.roguish_features.append("Spell Thief")
+                char_features.append("Spell Thief")

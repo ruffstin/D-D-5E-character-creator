@@ -58,7 +58,7 @@ class Monk(CharClass):
                 
         # Apply level 1 features
         self.features = ["Unarmored Defense", "Martial Arts"]
-        self.monastic_tradition_features = {}
+        self.monastic_tradition_features = []
     
     def get_max_ki_points(self, level):
         if "Ki" in self.features:
@@ -158,7 +158,9 @@ class Monk(CharClass):
                     if "Perfect Self" not in self.features:
                         self.features.append("Perfect Self")
                         char_features.append("Perfect Self")    
-            # if self.level in {} call monastic_tradition feature
+            
+                if self.level in {3, 6, 11, 17}:
+                    self.apply_monastic_tradition_feature(self.level, char_features)
 
     def pick_monastic_tradition(self):
         prompt = "Choose a Monastic Tradition (Way of the Open Hand, Way of Shadow, Way of the Four Elements): "
@@ -187,8 +189,55 @@ class Monk(CharClass):
                 instrument_choice = input("Invalid choice. Please choose a valid musical instrument: ").strip().lower()
             return [instrument_choice]
             
-        # def monastic_tradition feature function    
-            #self.monastic_tradition_features.append
-            # char_features.append
+    def apply_monastic_tradition_feature(self, level, char_features):
+        if self.subclass == "Way of the Open Hand":
+                if level == 3 and "Open Hand Technique" not in self.monastic_tradition_features:
+                        self.monastic_tradition_features.append("Open Hand Technique")
+                        char_features.append("Open Hand Technique")
 
-            #which if statement will depend on sublcass chosen
+                if level == 6 and "Wholeness of Body" not in self.monastic_tradition_features:
+                    self.monastic_tradition_features.append("Wholeness of Body")
+                    char_features.append("Wholeness of Body")
+
+                if level == 11 and "Tranquility" not in self.monastic_tradition_features:
+                    self.monastic_tradition_features.append("Tranquility")
+                    char_features.append("Tranquility")
+                
+                if level == 17 and "Quivering Palm" not in self.monastic_tradition_features:
+                    self.monastic_tradition_features.append("Quivering Palm")
+                    char_features.append("Quivering Palm")
+
+        if self.subclass == "Way of Shadow":
+                if level == 3 and "Shadow Arts" not in self.monastic_tradition_features:
+                        self.monastic_tradition_features.append("Shadow Arts")
+                        char_features.append("Shadow Arts")
+
+                if level == 6 and "Shadow Step" not in self.monastic_tradition_features:
+                    self.monastic_tradition_features.append("Shadow Step")
+                    char_features.append("Shadow Step")
+
+                if level == 11 and "Cloak of Shadows" not in self.monastic_tradition_features:
+                    self.monastic_tradition_features.append("Cloak of Shadows")
+                    char_features.append("Cloak of Shadows")
+                
+                if level == 17 and "Opportunist" not in self.monastic_tradition_features:
+                    self.monastic_tradition_features.append("Opportunist")
+                    char_features.append("Opportunist")
+
+        if self.subclass == "Way of the Four Elements":
+            if level == 3 and "Disciple of the Elements" not in self.monastic_tradition_features:
+                self.monastic_tradition_features.append("Disciple of the Elements")
+                char_features.append("Disciple of the Elements")
+            
+            if level == 6 and "Additional Elemental Displine x1" not in self.monastic_tradition_features:
+                self.monastic_tradition_features.append("Additional Elemental Displine x1")
+                char_features.append("Additional Elemental Displine x1")
+            
+            if level == 11 and "Additional Elemental Discipline x2" not in self.monastic_tradition_features:
+                self.monastic_tradition_features.append("Additional Elemental Discipline x2")
+                char_features.append("Additional Elemental Discipline x2")
+
+            if level == 17 and "Additional Elemental Discipline x3" not in self.monastic_tradition_features:
+                self.monastic_tradition_features.append("Additional Elemental Discipline x3")
+                char_features.append("Additional Elemental Discipline x3")
+            

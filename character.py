@@ -441,7 +441,6 @@ class Character:
         self.race.level_up(self.level, self.features)
         
         # Handle expertise features gained from leveling up
-        expert_tools = False
         # Apply expertise if this is the first level with the feature
         if "Expertise" in self.features and not self._expertise_applied:
             self.char_class.apply_expertise(self.skills_proficient, self.skills_expert, self.char_class.name == "Rogue")
@@ -450,6 +449,16 @@ class Character:
         if "Additional Expertise" in self.features and not self._additional_expertise_applied:
             self.char_class.apply_expertise(self.skills_proficient, self.skills_expert, self.char_class.name == "Rogue")
             self._additional_expertise_applied = True
+
+        #if "Bonus Proficiencies" in self.features:
+            # if you are a college of lore bard you get 3 additional proficiencies at level 3, and if you are a valor bard you get medium armor, shields, and martial weapons at level 3
+
+        if "Primal Champion" in self.features:
+            # if you are a barbarian and reach level 20, increase your STR and CON by 4 each, max 24
+            self.stats[0] = min(self.stats[0] + 4, 24)  # STR
+            self.stats[2] = min(self.stats[2] + 4, 24)  # CON
+            self.maxhp += 2  # barbarian HP increases by 2 due to CON increase and hp after level one accounted for the modifier
+            # at level 1 you get 12 + CON mod, but the current logic isn't accounting for the jump to 24 CON at level 20, so add 2 extra HP to account for that increase in CON
 
         while times_to_roll > 0:
             while True: 

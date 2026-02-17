@@ -92,7 +92,7 @@ class Fighter(CharClass):
 
         # Apply level 1 features
         self.features = ["Fighting Style", "Second Wind"] # implement choices for fighting style
-        self.martial_archetype_features = {}
+        self.martial_archetype_features = []
 
     def level_up(self, current_level, stats: list[int], char_features: list[str], char_hp) -> None:
         while self.level < current_level:
@@ -135,7 +135,8 @@ class Fighter(CharClass):
                         char_features.append("Indomitable")
                         # implement number of uses based on level
 
-                # if self.level in {} call martial_archetype feature
+                if self.level in {3, 7, 10, 15, 18}:
+                    self.apply_martial_archetype_features(self.level, char_features)
 
     def pick_martial_archetype(self):
         prompt = "Choose a Martial Archetype (Champion, Battle Master, Eldritch Knight): "
@@ -146,4 +147,74 @@ class Fighter(CharClass):
         self.subclass = subclass_choice
         return subclass_choice
 
-    # archetype-specific feature functions can be implemented later
+    def apply_martial_archetype_features(self, level, char_features):
+        if self.subclass == "Champion":
+            if level == 3 and "Improved Critical" not in self.martial_archetype_features:
+                self.martial_archetype_features.append("Improved Critical")
+                char_features.append("Improved Critical")
+
+            if level == 7 and "Remarkable Athlete" not in self.martial_archetype_features:
+                self.martial_archetype_features.append("Remarkable Athlete")
+                char_features.append("Remarkable Athlete")
+
+            if level == 10 and "Additional Fighting Style" not in self.martial_archetype_features:
+                self.martial_archetype_features.append("Additional Fighting Style")
+                char_features.append("Additional Fighting Style")
+
+            if level == 15 and "Superior Critical" not in self.martial_archetype_features:
+                self.martial_archetype_features.append("Superior Critical")
+                char_features.append("Superior Critical")
+
+            if level == 18 and "Survivor" not in self.martial_archetype_features:
+                self.martial_archetype_features.append("Survivor")
+                char_features.append("Survivor")
+
+        if self.subclass == "Battle Master":
+            if level == 3:
+                if "Combat Superiority" not in self.martial_archetype_features:
+                    self.martial_archetype_features.append("Combat Superiority")
+                    char_features.append("Combat Superiority")
+                    # implement superiority dice and maneuvers known based on level
+                
+                if "Student of War" not in self.martial_archetype_features:
+                    self.martial_archetype_features.append("Student of War")
+                    char_features.append("Student of War")
+
+            if level == 7 and "Know Your Enemy" not in self.martial_archetype_features:
+                    self.martial_archetype_features.append("Know Your Enemy")
+                    char_features.append("Know Your Enemy")
+
+            if level == 10 and "Improved Combat Superiority" not in self.martial_archetype_features:
+                self.martial_archetype_features.append("Improved Combat Superiority")
+                char_features.append("Improved Combat Superiority")
+
+            if level == 15 and "Relentless" not in self.martial_archetype_features:
+                self.martial_archetype_features.append("Relentless")
+                char_features.append("Relentless")
+        
+        if self.subclass == "Eldritch Knight":
+            if level == 3:
+                if "Spellcasting" not in self.martial_archetype_features:
+                    self.martial_archetype_features.append("Spellcasting")
+                    char_features.append("Spellcasting")
+                    # implement spellcasting feature, cantrips known, spells known, spell slots based on level
+
+                if "Weapon Bond" not in self.martial_archetype_features:
+                    self.martial_archetype_features.append("Weapon Bond")
+                    char_features.append("Weapon Bond")
+
+            if level == 7 and "War Magic" not in self.martial_archetype_features:
+                self.martial_archetype_features.append("War Magic")
+                char_features.append("War Magic")
+
+            if level == 10 and "Eldritch Strike" not in self.martial_archetype_features:
+                self.martial_archetype_features.append("Eldritch Strike")
+                char_features.append("Eldritch Strike")
+
+            if level == 15 and "Arcane Charge" not in self.martial_archetype_features:
+                self.martial_archetype_features.append("Arcane Charge")
+                char_features.append("Arcane Charge")
+
+            if level == 18 and "Improved War Magic" not in self.martial_archetype_features:
+                self.martial_archetype_features.append("Improved War Magic")
+                char_features.append("Improved War Magic")
