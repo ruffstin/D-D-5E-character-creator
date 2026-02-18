@@ -43,7 +43,10 @@ Character holds Race and Class and Background
 open up the main function and start creating characters! 
 Next open up a powershell terminal and run this line: 
 "python main.py" and that will start the program
-***NEW INSTRUCTIONS!***
 After booting up "python main.py" in your terminal you will be prompted to answer 
 questions about your new character! Options are limited for now but will be updated 
 with more functionality soon! It is advised to fill in the prompt fully to avoid crashes
+***NEW INSTRUCTIONS!***
+Run "python app.py" to open up the application GUI. Currently Settings and basic dice 
+roller are operational. Will implement the back end in the coming weeks
+
