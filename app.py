@@ -11,8 +11,7 @@ from PySide6.QtWidgets import (
     QDialog,
     QScrollArea,
     QComboBox,
-    QLineEdit,
-    QGraphicsDropShadowEffect 
+    QLineEdit
 )
 
 from PySide6.QtCore import (
@@ -21,12 +20,11 @@ from PySide6.QtCore import (
     QPropertyAnimation, 
     QTimer,
     QSize, 
-    QUrl
+    QUrl,
 )
 from PySide6.QtGui import (
     QFont, 
-    QPixmap,
-    QColor
+    QPixmap
 )
 
 from PySide6.QtMultimedia import QSoundEffect
@@ -66,6 +64,9 @@ class MainWindow(QMainWindow):
         self.dice_sound = QSoundEffect()
         self.dice_sound.setSource(QUrl.fromLocalFile("assets/sounds/dice_roll.wav"))
         self.dice_sound.setVolume(0.7)  # range 0.0 to 1.0
+        self.sound_enabled = self.settings_store.value("sound_enabled", True, type=bool)
+        if not self.sound_enabled:
+            self.sound_button.setText("Sound: OFF")
 
         self.roll_page = QWidget()
         self.stack.addWidget(self.roll_page)
@@ -197,7 +198,14 @@ class MainWindow(QMainWindow):
         layout.addSpacing(20)
         layout.addWidget(theme_button)
 
-        layout.addStretch()
+        self.sound_button = QPushButton("Sound: ON")
+        self.sound_button.setFixedHeight(60)
+        self.sound_button.clicked.connect(self.toggle_sound)
+
+        layout.addSpacing(20)
+        layout.addWidget(self.sound_button)
+
+        layout.addStretch()    
 
         return page
 
@@ -308,7 +316,11 @@ class MainWindow(QMainWindow):
         right_layout = QVBoxLayout()
 
         self.advantage_box = QComboBox()
-        self.advantage_box.addItems(["Normal", "Advantage (d20)", "Disadvantage (d20)"])
+        self.advantage_box.addItems([
+            "Normal", 
+            "Advantage (roll twice and take the higher number)", 
+            "Disadvantage (roll twice and take the lowest number)"
+            ])
         self.advantage_box.setFixedHeight(40)
 
         right_layout.addWidget(self.advantage_box)
@@ -326,24 +338,27 @@ class MainWindow(QMainWindow):
         self.total_label = QLabel("Total:")
         self.total_label.setStyleSheet("font-size: 20px;")
 
-        # Dice Tray
+        # Dice Tray Container
+        dice_tray_container = QWidget()
+        dice_tray_container.setFixedHeight(100)  # room for bounce
+        dice_tray_layout = QHBoxLayout(dice_tray_container)
+        dice_tray_layout.setSpacing(20)
+        dice_tray_layout.setContentsMargins(20, 10, 20, 10)
+
+        # Add 6 dice labels
         self.dice_tray_images = []
         self.dice_base_geometries = []
-
-        self.dice_tray = QHBoxLayout()
-        self.dice_tray.setSpacing(20)
-        self.dice_tray.setContentsMargins(20, 10, 20, 10)
 
         for _ in range(6):
             label = QLabel()
             label.setFixedSize(70, 70)
             label.setScaledContents(True)
-            label.setVisible(False)
-
+            label.setVisible(False)  # only show when dice > 0
             self.dice_tray_images.append(label)
-            self.dice_tray.addWidget(label)
+            dice_tray_layout.addWidget(label)
 
-        right_layout.addLayout(self.dice_tray)
+        # Add container to layout
+        right_layout.addWidget(dice_tray_container)
 
         self.history_area = QScrollArea()
         self.history_area.setWidgetResizable(True)
@@ -357,11 +372,15 @@ class MainWindow(QMainWindow):
         right_layout.addWidget(self.history_area)
 
         self.reset_button = QPushButton("Reset")
-        self.reset_button.setVisible(False)
+        self.reset_button.setFixedHeight(50)
+        self.reset_button.setEnabled(False)
+        self.reset_button.setStyleSheet("color: transparent; background: transparent; border: none;")
         self.reset_button.clicked.connect(self.reset_dice)
 
         self.clear_history_button = QPushButton("Clear History")
-        self.clear_history_button.setVisible(False)
+        self.clear_history_button.setFixedHeight(50)
+        self.clear_history_button.setEnabled(False)
+        self.clear_history_button.setStyleSheet("color: transparent; background: transparent; border: none;")
         self.clear_history_button.clicked.connect(self.clear_history)
 
         right_layout.addWidget(self.roll_button)
@@ -375,15 +394,12 @@ class MainWindow(QMainWindow):
 
         QTimer.singleShot(0, self.store_dice_positions)
 
-
     def store_dice_positions(self):
         self.dice_base_geometries = [
             label.geometry() for label in self.dice_tray_images
         ]
 
     def roll_dice(self):
-        # Play dice sound
-        self.dice_sound.play()
         total = 0
         roll_summary = []
         dice_flags = []
@@ -392,6 +408,14 @@ class MainWindow(QMainWindow):
         for field in self.dice_inputs:
             if field.text().strip() == "":
                 field.setText("0")
+
+        total_dice = sum(int(field.text() or 0) for field in self.dice_inputs)
+
+        if total_dice == 0:
+            return # Nothing to roll
+
+        if total_dice > 0 and self.sound_enabled:
+            self.dice_sound.play()
 
         modifier_text = self.modifier_input.text().strip()
         modifier = int(modifier_text) if modifier_text else 0
@@ -402,42 +426,44 @@ class MainWindow(QMainWindow):
 
             if count > 0:
                 dice_flags.append(True)
+                rolls = []
 
-                if sides == 20 and self.advantage_box.currentText() != "Normal":
-                    roll1 = random.randint(1, 20)
-                    roll2 = random.randint(1, 20)
+                for _ in range(count):
 
-                    if "Advantage" in self.advantage_box.currentText():
-                        chosen = max(roll1, roll2)
-                    else:
-                        chosen = min(roll1, roll2)
-
-                    if chosen == 20:
-                        self.glow_nat20(self.dice_tray_images[index])
-
-                    total += chosen
-                    roll_summary.append(f"d20({roll1},{roll2}) → {chosen}")
-
-                else:
-                    rolls = []
-                    for _ in range(count):
+                    if self.advantage_box.currentText() == "Normal":
                         roll = random.randint(1, sides)
-                        if sides == 20 and roll == 20:
-                            self.glow_nat20(self.dice_tray_images[index])
-                        rolls.append(roll)
-                        total += roll
 
-                    roll_summary.append(f"{count}d{sides}: {rolls}")
+                    else:
+                        roll1 = random.randint(1, sides)
+                        roll2 = random.randint(1, sides)
+
+                        if "Advantage" in self.advantage_box.currentText():
+                            roll = max(roll1, roll2)
+                        else:
+                            roll = min(roll1, roll2)
+
+                        rolls.append(f"{roll1},{roll2}→{roll}")
+                        total += roll
+                        continue  # skip normal append below
+
+                    rolls.append(roll)
+                    total += roll
+
+                roll_summary.append(f"{count}d{sides}: {rolls}")
+
             else:
                 dice_flags.append(False)
+
 
         total += modifier
 
         if total != 0:
             self.total_label.setText(f"Total: {total}")
-            self.reset_button.setVisible(True)
+            self.reset_button.setEnabled(True)
+            self.reset_button.setStyleSheet("")
             self.animate_dice(dice_flags)
             self.add_to_history(roll_summary, modifier, total)
+
 
     def add_to_history(self, summary, modifier, total):
         entry_text = " | ".join(summary)
@@ -452,10 +478,10 @@ class MainWindow(QMainWindow):
         label.setStyleSheet("font-size: 14px;")
 
         self.history_layout.insertWidget(0, label)
-        self.clear_history_button.setVisible(True)
+        self.clear_history_button.setEnabled(True)
+        self.clear_history_button.setStyleSheet("")
 
     def animate_dice(self, dice_flags):
-
         if self.is_animating:
             return
 
@@ -489,7 +515,7 @@ class MainWindow(QMainWindow):
                 self.active_animations.append(shrink)
 
                 grow.start()
-
+                
                 last_animation = shrink
 
             else:
@@ -501,18 +527,7 @@ class MainWindow(QMainWindow):
             self.is_animating = False
 
     def animation_finished(self):
-        self.is_animating = False
-
-    def glow_nat20(self, label):
-        glow = QGraphicsDropShadowEffect()
-        glow.setBlurRadius(40)
-        glow.setColor(QColor(255, 215, 0))  # Gold
-        glow.setOffset(0)
-
-        label.setGraphicsEffect(glow)
-
-        # Remove glow after 1.5 seconds
-        QTimer.singleShot(1500, lambda: label.setGraphicsEffect(None))
+        self.is_animating = False        
 
     def reset_dice(self):
         for input_field in self.dice_inputs:
@@ -524,7 +539,8 @@ class MainWindow(QMainWindow):
             image.setVisible(False) 
 
         self.total_label.setText("Total:")
-        self.reset_button.setVisible(False)
+        self.reset_button.setEnabled(False)
+        self.reset_button.setStyleSheet("color: transparent; background: transparent; border: none;")
 
     def clear_history(self):
         for i in reversed(range(self.history_layout.count())):
@@ -532,7 +548,10 @@ class MainWindow(QMainWindow):
             if widget:
                 widget.deleteLater()
 
-        self.clear_history_button.setVisible(False)
+        #self.clear_history_button.setVisible(False)
+        self.clear_history_button.setEnabled(False)
+        self.clear_history_button.setStyleSheet("opacity: 0;")
+        self.clear_history_button.setStyleSheet("color: transparent; background: transparent; border: none;")
 
 
     # ==================================
@@ -561,6 +580,15 @@ class MainWindow(QMainWindow):
         self.dark_mode = not self.dark_mode
         self.settings_store.setValue("dark_mode", self.dark_mode)
         self.apply_theme()
+
+    def toggle_sound(self):
+        self.sound_enabled = not self.sound_enabled
+        self.settings_store.setValue("sound_enabled", self.sound_enabled)
+
+        if self.sound_enabled:
+            self.sound_button.setText("Sound: ON")
+        else:
+            self.sound_button.setText("Sound: OFF")
 
     def open_theme_dialog(self):
         dialog = QDialog(self)
