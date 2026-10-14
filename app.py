@@ -13,7 +13,6 @@ from PySide6.QtWidgets import (
     QComboBox,
     QLineEdit
 )
-
 from PySide6.QtCore import (
     Qt, 
     QSettings, 
@@ -26,11 +25,11 @@ from PySide6.QtGui import (
     QFont, 
     QPixmap
 )
-
+import os # avoid multimedia warning in terminal
+os.environ["QT_LOGGING_RULES"] = "*.warning=false"
 from PySide6.QtMultimedia import QSoundEffect
-
 import random
-
+from character_creation_wizard import CharacterCreationWizard
 
 
 class MainWindow(QMainWindow):
@@ -151,7 +150,7 @@ class MainWindow(QMainWindow):
 
         new_char_button = QPushButton("New Character")
         new_char_button.setFixedHeight(70)
-        new_char_button.clicked.connect(self.create_dummy_character)
+        new_char_button.clicked.connect(self.open_character_creation)
 
         right_layout.addWidget(new_char_button)
         right_layout.addSpacing(20)
@@ -515,7 +514,7 @@ class MainWindow(QMainWindow):
                 self.active_animations.append(shrink)
 
                 grow.start()
-                
+
                 last_animation = shrink
 
             else:
@@ -548,7 +547,6 @@ class MainWindow(QMainWindow):
             if widget:
                 widget.deleteLater()
 
-        #self.clear_history_button.setVisible(False)
         self.clear_history_button.setEnabled(False)
         self.clear_history_button.setStyleSheet("opacity: 0;")
         self.clear_history_button.setStyleSheet("color: transparent; background: transparent; border: none;")
@@ -632,6 +630,13 @@ class MainWindow(QMainWindow):
 
     def go_to_roll_page(self):
         self.stack.setCurrentWidget(self.roll_page)
+
+    def open_character_creation(self):
+        if not hasattr(self, "creation_page"):
+            self.creation_page = CharacterCreationWizard(self)
+            self.stack.addWidget(self.creation_page)
+
+        self.stack.setCurrentWidget(self.creation_page)
 
 
 if __name__ == "__main__":

@@ -10,84 +10,55 @@ ALL_SKILLS = [
 ]
 
 class HalfElf(Race):
-    def __init__(self):
-        super().__init__("Half-Elf", None)
-        self.set_bonuses()
-        self.features = ["Darkvision", "Fey Ancestry", "Skill Versatility"]
-        self.languages = ["Common", "Elvish"]
-        extra_lang = self.choose_languages(set(self.languages), 1)
-        for lang in extra_lang: 
-            self.languages.append(lang)
-    
-        self.skills = set()
-        chosen_skills = self.choose_skills(set(), 2)
-        for skill in chosen_skills:
-            self.skills.add(skill)
 
-    def set_bonuses(self):
+    SUBRACES = {}
+
+    def __init__(self, subrace: str = None):
+        super().__init__("Half-Elf", subrace)
+
         # All half-elves get +2 CHA and +1 to two other stats
-        self.bonuses = {"CHA": 2}
-        available_stats = ["STR", "DEX", "CON", "INT", "WIS"]
-        chosen = 0
-        print("As a Half-Elf, you get +1 to two different ability scores (other than CHA).")
-        while chosen < 2:
-            print("Available stats:", ", ".join(available_stats))
-            choice = input(f"Choose stat {chosen+1}/2 to receive +1: ").strip().upper()
-            if choice in available_stats:
-                self.bonuses[choice] = 1
-                available_stats.remove(choice)
-                chosen += 1
-            else:
-                print("Invalid or duplicate choice. Please try again.")
+        self.base_bonuses = {"CHA": 2}
 
-    def choose_languages(self, known_languages: set, n: int) -> list:
-        # Filter out already known and secret languages        
-        chosen = []
-        current_known = set(known_languages)
-        while len(chosen) < n:
-            available = [name for name, lang in LANGUAGES.items()
-                if lang.lang_type != "secret" and name not in current_known]
-            standard = [name for name in available if LANGUAGES[name].lang_type == "standard"]
-            exotic = [name for name in available if LANGUAGES[name].lang_type == "exotic"]
-            print("\nChoose a language you do not already know:")
-            print("Standard Languages:")
-            for i, lang in enumerate(standard):
-                print(f"  {i+1}. {lang}")
-            print("Exotic Languages:")
-            for i, lang in enumerate(exotic):
-                print(f"  {i+1+len(standard)}. {lang}")
+        self.features = {
+            "Darkvision": "You can see in dim light within 60 feet as if it were bright light.",
+            "Fey Ancestry": "You have advantage on saving throws against being charmed.",
+            "Skill Versatility": "You gain proficiency in two skills of your choice."
+        }
 
-            all_options = standard + exotic
-            choice = input(f"Enter the name or number of language {len(chosen)+1}/{n}: ").strip()
-            selected_lang = None
-            if choice.isdigit():
-                idx = int(choice) - 1
-                if 0 <= idx < len(all_options):
-                    selected_lang = all_options[idx]
-            else:
-                selected_lang = next((lang for lang in available if lang.lower() == choice.lower()), None)
-            if selected_lang and selected_lang not in chosen:
-                chosen.append(selected_lang)
-                current_known.add(selected_lang)
-            else:
-                print("Invalid or duplicate choice. Please try again.")
-        return chosen
+        # -----------------------------
+        # Languages
+        # -----------------------------
+        self.add_language("Common")
+        self.add_language("Elvish")
 
-    def get_skills(self, known_skills: set = None) -> set:
-        return set(self.skills)
+        # -----------------------------
+        # All choices handled in Wizard
+        # -----------------------------
 
-    def choose_skills(self, known_skills: set, n: int = 2) -> list:
-        available = [s for s in ALL_SKILLS if s not in known_skills]
-        chosen = []
-        print(f"As a Half-Elf, you gain proficiency in {n} skills of your choice.")
-        while len(chosen) < n:
-            print("Available skills:", ", ".join(available))
-            choice_input = input(f"Choose skill {len(chosen)+1}/{n}: ").strip()
-            # Find matching skill in available (case-insensitive)
-            choice = next((s for s in available if s.lower() == choice_input.lower()), None)
-            if choice and choice not in chosen:
-                chosen.append(choice)
-                available.remove(choice)
-            else:
-                print("Invalid or duplicate choice. Please try again.")
-        return chosen
+        # +1 to two ability scores (not CHA)
+        STAT_NAMES = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
+
+        self.choice_options["stat bonus"] = {
+            "type": "stat bonus",
+            "options": [stat for stat in STAT_NAMES if stat != "CHA"],
+            "choose": 2
+        }
+
+        # One extra language
+        self.choice_options["language"] = {
+            "type": "language",
+            "options": list(LANGUAGES.keys()),
+            "choose": 1
+        }
+
+        # Two skills
+        self.choice_options["skill_proficiency"] = {
+            "type": "skill",
+            "options": ALL_SKILLS,
+            "choose": 2,
+        }
+
+        self._initialize_fixed_traits()
+
+    def _initialize_fixed_traits(self):
+        self.bonuses = self.base_bonuses.copy()

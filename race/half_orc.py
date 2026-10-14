@@ -2,15 +2,26 @@
 from .race import Race
 
 class HalfOrc(Race):
-    def __init__(self):
-        super().__init__("Half-Orc", None)
-        self.set_bonuses()
-        self.features = ["Darkvision", "Menacing", "Relentless Endurance", "Savage Attacks"]
-        self.skills_proficient = {"Intimidation"}
-        self.languages = ["Common", "Orc"]
 
+    SUBRACES = {}
+    
+    def __init__(self, subrace: str = None):
+        super().__init__("Half-Orc", subrace)
+        self.features = {
+            "Darkvision": "", 
+            "Menacing": "", 
+            "Relentless Endurance": "", 
+            "Savage Attacks": ""
+        }
+        # Skill Proficiency:
+        self.fixed_skills = {"Intimidation"}
 
-    def set_bonuses(self):
+        # -----------------------------
+        # Languages
+        # -----------------------------
+        self.add_language("Common")
+        self.add_language("Orc")
+        
         # All half-orcs get +2 STR and +1 CON
         self.bonuses = {"STR": 2, "CON": 1}
-
+        

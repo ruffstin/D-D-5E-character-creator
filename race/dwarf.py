@@ -2,27 +2,61 @@
 from .race import Race
 
 class Dwarf(Race):
+    SUBRACES = {
+        "Hill Dwarf": "",
+        "Mountain Dwarf": ""
+    }
+
     def __init__(self, subrace: str = "Hill Dwarf"):
         super().__init__("Dwarf", subrace)
-        self.set_bonuses()
+        
         self.speed = 25
-        self.features = ["Darkvision", "Dwarven Resilience", "Dwarven Combat Training", "Stonecunning"]
-        self.languages = ["Common", "Dwarvish"]
-        self.other_proficiencies = {"Battleaxe", "Handaxe", "Light hammer", "Warhammer"}
-        self.tools_proficient = {"Dwarven tools"} # e.g. "Smith's tools", "Brewer's supplies", "Mason's tools"
-    
+
+        # -----------------------------
+        # Languages
+        # -----------------------------
+        self.add_language("Common")
+        self.add_language("Dwarvish")
+
+        self.features = {
+            "Darkvision": "",
+            "Dwarven Resilience": "",
+            "Dwarven Combat Training": "",
+            "Stonecunning": "",
+            "Tool Proficiency": ""
+        }
+
+        self.other_proficiencies = {
+            "Battleaxe", "Handaxe", "Light hammer", "Warhammer"
+        }
+        
+        self.choice_options["tool_proficiency"] = {
+            "type": "tool",
+            "options": [
+            "Smith's Tools",
+            "Brewer's Supplies",
+            "Mason's Tools"
+            ],
+            "choose": 1
+        }
+
+        # -----------------------------
+        # Apply Subrace
+        # -----------------------------
+        self.set_bonuses()
+
     def set_bonuses(self):
-        # All dwarves get +2 CON
+        #  Base dwarf bonus: All dwarves get +2 CON
         self.bonuses = {"CON": 2}
 
         if self.subrace == "Hill Dwarf":
             self.bonuses["WIS"] = 1
-            self.features.append("Dwarven Toughness") # plus 1 HP per level
-
+            self.features["Dwarven Toughness"] = "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level."
+            
         elif self.subrace == "Mountain Dwarf":
             self.bonuses["STR"] = 2
-            self.other_proficiencies.add("light armor")
-            self.other_proficiencies.add("medium armor")    
+            self.features["Dwarven Armor Training"] = ""
+            self.other_proficiencies.update({"Light armor", "Medium armor"})   
 
         # else: no extra subrace bonus
 

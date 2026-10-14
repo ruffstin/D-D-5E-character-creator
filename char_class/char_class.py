@@ -88,7 +88,14 @@ class CharClass:
                     else:
                         print("Invalid choice. Please enter 'a' or 'b'.")
     
+    def get_available_skill_choices(self, existing_skills: set[str]) -> list[str]:
+        """Returns skill options excluding ones already known (e.g., from race)."""
+        return [
+            skill for skill in self.skills_proficient
+            if skill not in existing_skills
+        ]
     
+    #def set_class_skills(self, selected_skills: list[str], existing_skills:set[str]) -> bool:
     
     def get_inventory(self) -> dict[str, tuple[Item, int]]:
         return self.inventory

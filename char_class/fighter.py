@@ -5,7 +5,7 @@ from item import Item
 class Fighter(CharClass):
     ABILITY_SCORE_IMPROVEMENT = {4, 6, 8, 12, 14, 16, 19}
 
-    def __init__(self, level: int = 1, subclass: str = None):
+    def __init__(self, level: int = 1, subclass: str  = None):
         super().__init__(level, subclass)
         self.name = "Fighter"
         self.subclass_options = {
